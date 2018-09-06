@@ -1,0 +1,107 @@
+@import "variables";
+
+[ns-tooltip]{
+  position: relative;
+}
+[ns-tooltip]::before{
+  content: "";
+  width: 0;
+  height: 0;
+  position: absolute;
+  opacity: 0;
+  border-style: solid;
+  z-index: 9999;
+}
+[ns-tooltip]::after{
+  content: attr(ns-tooltip) !important;
+  line-height: 1.5;
+  position: absolute;
+  background: rgba(0,0,0,0.7);
+  text-align: center;
+  color: #FFF;
+  padding: 4px 2px;
+  min-width: 100px;
+  border-radius: 5px;
+  pointer-events: none;
+  opacity: 0;
+  font-size: $fs_smaller;
+  font-weight: normal;
+  text-transform: none;
+  bottom: initial;
+  height: initial;
+  width: initial;
+  border: none;
+  z-index: 9999;
+  white-space: pre-wrap;
+}
+[ns-tooltip]::after,
+[ns-tooltip]::before{
+  transition: all 250ms;
+  transition-delay: 0ms;
+}
+
+[ns-tooltip]:hover::after,
+[ns-tooltip]:hover::before{
+  opacity: 1 !important;
+  transition-delay: 1500ms;
+}
+
+[ns-tooltip][ns-tooltip-position="bottom"]::after,
+[ns-tooltip][ns-tooltip-position="bottom"]::before{
+  transform: translate(-50%, 0);
+  left: 50%;
+}
+[ns-tooltip][ns-tooltip-position="bottom"]::after{
+  top: calc(100% + 5px);
+}
+[ns-tooltip][ns-tooltip-position="bottom"]::before{
+  border-color: transparent transparent rgba(0,0,0,0.7) transparent;
+  border-width: 0 6px 6px 6px;
+  top: calc(100% - 1px);
+}
+
+
+[ns-tooltip][ns-tooltip-position="top"]::after,
+[ns-tooltip][ns-tooltip-position="top"]::before{
+  transform: translate(-50%, 0);
+  left: 50%;
+}
+[ns-tooltip][ns-tooltip-position="top"]::after{
+  bottom: calc(100% + 5px);
+}
+[ns-tooltip][ns-tooltip-position="top"]::before{
+  border-color: rgba(0,0,0,0.7) transparent transparent transparent;
+  border-width: 6px 6px 0 6px;
+  bottom: calc(100% - 1px);
+}
+
+
+[ns-tooltip][ns-tooltip-position="left"]::after,
+[ns-tooltip][ns-tooltip-position="left"]::before{
+  top: 50%;
+  transform: translate(0, -50%);
+}
+[ns-tooltip][ns-tooltip-position="left"]::after{
+  right: calc(100% + 5px);
+}
+[ns-tooltip][ns-tooltip-position="left"]::before{
+  border-color: transparent transparent transparent rgba(0,0,0,0.7);
+  border-width: 4px 0 4px 4px;
+  right: calc(100% + 1px);
+}
+
+
+[ns-tooltip][ns-tooltip-position="right"]::after,
+[ns-tooltip][ns-tooltip-position="right"]::before{
+  top: 50%;
+  transform: translate(0, -50%);
+}
+[ns-tooltip][ns-tooltip-position="right"]::after{
+  left: calc(100% + 5px);
+}
+[ns-tooltip][ns-tooltip-position="right"]::before{
+  border-color: transparent rgba(0,0,0,0.7) transparent transparent;
+  border-width: 4px 4px 4px 0;
+  left: calc(100% + 1px);
+
+}

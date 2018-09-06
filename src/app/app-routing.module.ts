@@ -8,9 +8,13 @@ import {
   NbRequestPasswordComponent,
   NbResetPasswordComponent,
 } from '@nebular/auth';
+import {LoginComponent} from "./pages/auth/login/login.component";
+import {MatchesComponent} from "./pages/matches/matches.component";
+import {AuthGuard} from "./@core/services/auth.guard";
+import {LogoutComponent} from "./pages/auth/logout/logout.component";
 
 const routes: Routes = [
-  { path: 'pages', loadChildren: 'app/pages/pages.module#PagesModule' },
+  { path: 'pages', loadChildren: 'app/pages/pages.module#PagesModule', canActivate:[AuthGuard] },
   {
     path: 'auth',
     component: NbAuthComponent,
@@ -20,8 +24,12 @@ const routes: Routes = [
         component: NbLoginComponent,
       },
       {
+        path: 'matches',
+        component: MatchesComponent
+      },
+      {
         path: 'login',
-        component: NbLoginComponent,
+        component: LoginComponent,
       },
       {
         path: 'register',
@@ -29,7 +37,7 @@ const routes: Routes = [
       },
       {
         path: 'logout',
-        component: NbLogoutComponent,
+        component: LogoutComponent,
       },
       {
         path: 'request-password',
@@ -41,13 +49,14 @@ const routes: Routes = [
       },
     ],
   },
-  { path: '', redirectTo: 'pages', pathMatch: 'full' },
+  { path: '', redirectTo: 'pages', pathMatch: 'full'},
   { path: '**', redirectTo: 'pages' },
 ];
 
 const config: ExtraOptions = {
   useHash: true,
 };
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, config)],

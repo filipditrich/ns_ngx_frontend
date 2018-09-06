@@ -1,33 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { LoginService } from './login.service';
 import { AlertsService } from "../../../@core/services/alerts/alerts.service";
-// import { DialogsService } from '../../services/dialogs/dialogs.service';
+// import { DialogsService } from '../../@core/services/dialogs/dialogs.service';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ActivatedRoute, Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { AuthService } from "../../../@core/services/auth/auth.service";
 
-// import * as codeConfig from '../../config/codes.config';
 import * as codeConfig from '../../../@core/config/codes.config';
 import { ErrorHelper } from "../../../@core/helpers/error.helper";
 
 @Component({
   selector: 'ns-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
 
-  public form: FormGroup;
-  public submitted = false;
+   public form: FormGroup;
+   public submitted = false;
 
   constructor(private httpClient: HttpClient,
               private loginService: LoginService,
               private authService: AuthService,
               private alertsService: AlertsService,
-              private modalService: NgbModal,
+              // private dialogService: DialogsService,
               private fb: FormBuilder,
               private router: Router,
               private route: ActivatedRoute,
@@ -46,8 +45,8 @@ export class LoginComponent implements OnInit {
   get username() { return this.form.get('username'); }
   get password() { return this.form.get('password'); }
 
-  ngOnInit() {
-  }
+   ngOnInit() {
+   }
 
   onSubmit(input) {
 
@@ -66,22 +65,21 @@ export class LoginComponent implements OnInit {
   // TODO - interface
   callLoginSvc(input) {
     this.loginService.logInRequest(input).subscribe(response => {
-
       if (response.response.success && response.token) {
         AuthService.storeUserData(response.user, response.token);
-        this.alertsService.alertSuccess({
-          title: 'Logged In',
-          body: 'You\'ve been successfully logged in!'
-        }, 2500);
+        // this.alertsService.alertSuccess({
+        //   title: 'Logged In',
+        //   body: 'You\'ve been successfully logged in!'
+        // }, 2500);
         const returnUrl = this.route.snapshot.queryParamMap.has('return') ? this.route.snapshot.queryParamMap.get('return') : false;
         this.router.navigate([returnUrl || '/']);
       } else {
         // no token or success
         this.submitted = false;
-        this.alertsService.alertDanger({
-          title: response.response.name || 'Unexpected',
-          body: response.response.message || 'Unexpected error occurred.'
-        }, 5000);
+        // this.alertsService.alertDanger({
+        //   title: response.response.name || 'Unexpected',
+        //   body: response.response.message || 'Unexpected error occurred.'
+        // }, 5000);
       }
 
     }, err => {

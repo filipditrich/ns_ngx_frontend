@@ -17,7 +17,7 @@ import {
   NbCheckboxModule,
   NbPopoverModule,
   NbContextMenuModule,
-  NbProgressBarModule,
+  NbProgressBarModule, NbAccordionComponent, NbAccordionModule,
 } from '@nebular/theme';
 
 import { NbSecurityModule } from '@nebular/security';
@@ -49,10 +49,13 @@ import {
 import { DEFAULT_THEME } from './styles/theme.default';
 import { COSMIC_THEME } from './styles/theme.cosmic';
 import { CORPORATE_THEME } from './styles/theme.corporate';
+import {NbAuthModule} from "@nebular/auth";
+import {RouterModule} from "@angular/router";
 
 const BASE_MODULES = [CommonModule, FormsModule, ReactiveFormsModule];
 
 const NB_MODULES = [
+  NbAuthModule,
   NbCardModule,
   NbLayoutModule,
   NbTabsetModule,
@@ -68,6 +71,7 @@ const NB_MODULES = [
   NgbModule,
   NbSecurityModule, // *nbIsGranted directive,
   NbProgressBarModule,
+  NbAccordionModule
 ];
 
 const COMPONENTS = [
@@ -101,16 +105,14 @@ const PIPES = [
 const NB_THEME_PROVIDERS = [
   ...NbThemeModule.forRoot(
     {
-      name: 'cosmic',
-    },
-    [ DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME ],
-  ).providers,
+      name: 'default'
+    }).providers,
   ...NbSidebarModule.forRoot().providers,
   ...NbMenuModule.forRoot().providers,
 ];
 
 @NgModule({
-  imports: [...BASE_MODULES, ...NB_MODULES],
+  imports: [...BASE_MODULES, ...NB_MODULES, RouterModule],
   exports: [...BASE_MODULES, ...NB_MODULES, ...COMPONENTS, ...PIPES],
   declarations: [...COMPONENTS, ...PIPES],
   entryComponents: [...ENTRY_COMPONENTS],

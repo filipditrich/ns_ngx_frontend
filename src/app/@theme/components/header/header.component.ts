@@ -4,6 +4,8 @@ import { NbMenuService, NbSidebarService } from '@nebular/theme';
 import { UserService } from '../../../@core/data/users.service';
 import { AnalyticsService } from '../../../@core/utils/analytics.service';
 import { LayoutService } from '../../../@core/data/layout.service';
+import { Router } from "@angular/router";
+import { filter } from "rxjs/operators";
 
 @Component({
   selector: 'ngx-header',
@@ -22,12 +24,21 @@ export class HeaderComponent implements OnInit {
               private menuService: NbMenuService,
               private userService: UserService,
               private analyticsService: AnalyticsService,
-              private layoutService: LayoutService) {
+              private layoutService: LayoutService,
+              private router: Router) {
+    menuService.onItemClick()
+      .pipe(filter(({ tag }) => tag === tag))
+      .subscribe(bag => {
+        if (bag.item.title == "Log out"){
+          this.router.navigate(['/logout']);
+          location.reload();
+        }
+  });
   }
 
   ngOnInit() {
-    this.userService.getUsers()
-      .subscribe((users: any) => this.user = users.nick);
+    this.user = JSON.parse(sessionStorage.getItem('user'));
+    console.log(this.user);
   }
 
   toggleSidebar(): boolean {

@@ -1,3 +1,8 @@
+/**
+ * @license
+ * Copyright Akveo. All Rights Reserved.
+ * Licensed under the MIT License. See License.txt in the project root for license information.
+ */
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build ---prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
@@ -8,7 +13,7 @@ export const environment = {
 };
 
 export const APIRoot = 'http://localhost:4000';
-export const APIVersion = 'v1';
+// export const APIVersion = 'v1';
 
 /*
  * In development mode, to ignore zone related error stack frames such as

@@ -5,7 +5,7 @@ import { AlertsService } from "./alerts/alerts.service";
 import { ErrorHelper } from '../helpers/error.helper';
 import { PreviousRouteService } from './previous-route.service';
 import {HttpClient} from '@angular/common/http';
-import {APIRoot, APIVersion} from '../../../environments/environment';
+import {APIRoot} from '../../../environments/environment';
 import {getUrl} from '../config/endpoints.config';
 import {findByProp} from '../helpers/functions.helper';
 import {UserRoles} from '../enums/user.enum';
@@ -25,7 +25,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     if (this.authService.isTokenValid()) {
       return true;
     } else {
-      this.router.navigate(['/login'], { queryParams: { return: state.url } })
+      this.router.navigate(['/auth/login'], { queryParams: { return: state.url } })
         .then(() => {
           const hasBeenLogged = sessionStorage.getItem('user') || false;
           if (hasBeenLogged) {

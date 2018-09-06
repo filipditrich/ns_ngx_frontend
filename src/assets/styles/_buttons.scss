@@ -1,0 +1,89 @@
+@import "variables";
+
+button{
+  &.reset{
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: auto;
+    overflow: visible;
+    text-align: inherit;
+    outline: none;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    line-height: normal;
+    -webkit-font-smoothing: inherit;
+    -moz-osx-font-smoothing: inherit;
+    -webkit-appearance: none;
+    cursor: pointer;
+    &:focus, &:active {
+      outline: none;
+    }
+  }
+  &.button{
+    @extend .button;
+  }
+}
+
+.button{
+  cursor: pointer;
+  background: $main;
+  border-radius: 5px;
+  color: $white;
+  font-size: $fs_smaller;
+  text-transform: uppercase;
+  opacity: 0.85;
+  box-shadow: 0 2px 25px rgba($main, 0.1);
+  transition: all 250ms;
+
+  &.large{
+    padding: 10px 45px;
+  }
+  &.medium{
+    padding: 5px 25px;
+  }
+
+  &:hover {
+    opacity: 1;
+    box-shadow: 0 2px 25px rgba($main, 0.5);
+  }
+
+  &.btn-cancel {
+    background: $grey;
+    box-shadow: 0 2px 25px rgba($grey, 0.1);
+    &:hover {
+      box-shadow: 0 2px 25px rgba($grey, 0.5);
+    }
+  }
+
+  &.btn-danger {
+    background: $error_dark;
+    box-shadow: 0 2px 25px rgba($error_dark, 0.1);
+    &:hover {
+      box-shadow: 0 2px 25px rgba($error_dark, 0.5);
+    }
+  }
+
+  &.btn-disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  &.btn-action {
+    background: white;
+    box-shadow: none;
+    margin: 0 5px;
+    opacity: 0.75;
+
+    &:hover {
+      box-shadow: none;
+      opacity: 1;
+    }
+    i {
+      font-size: $fs_biggest;
+    }
+  }
+
+}

@@ -1,0 +1,45 @@
+@import "variables";
+
+.dialog-window {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  overflow: scroll;
+  top: 0;
+  left: 0;
+  z-index: $zi-modals;
+  background: rgba(black, 0.75);
+  display: flex;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .modal-dialog {
+    min-width: 300px;
+
+    .modal-header {
+      background: $main;
+      color: white;
+      align-items: center;
+      button {
+        font-size: $fs_bigger;
+        &:hover, &:focus, &:active {
+          color: white
+        }
+      }
+    }
+
+    &.modal-danger {
+      .modal-header {
+        background: $error_dark;
+      }
+      .modal-body, .modal-footer {
+        background: rgba($error_dark, 0.1);
+        border-color: rgba($error_light, 0.1);
+      }
+    }
+
+  }
+
+}

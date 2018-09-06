@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IResource } from '../models/config.interface';
-import { APIRoot, APIVersion } from "../../../environments/environment";
+import { APIRoot } from "../../../environments/environment";
 import { forEach } from 'lodash';
 
 import * as codes from '../config/codes.config';
@@ -29,7 +29,7 @@ export class PreloadInitializer {
       .append('X-Secret', '937a43fc73c501dfa94d7dcf0cf668e0x7');
 
     // TODO - <any> => resource interface
-    return this.http.get<IResource>(`${APIRoot}/api/${APIVersion}/config/export/codes`, { headers })
+    return this.http.get<IResource>(`${APIRoot}/api/sys/codes`, { headers })
       .toPromise()
       .then(result => {
         if (result.output) {
@@ -49,7 +49,7 @@ export class PreloadInitializer {
       .append('X-Secret', '937a43fc73c501dfa94d7dcf0cf668e0x7');
 
 
-    return this.http.get<IResource>(`${APIRoot}/api/${APIVersion}/config/export/routes`, { headers })
+    return this.http.get<IResource>(`${APIRoot}/api/sys/routes`, { headers })
       .toPromise()
       .then(result => {
         if (result.output) {

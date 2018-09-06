@@ -6,15 +6,24 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import {APP_INITIALIZER, ErrorHandler, NgModule} from '@angular/core';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { CoreModule } from './@core/core.module';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ThemeModule } from './@theme/theme.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {PagesModule} from "./pages/pages.module";
+import {NbAlertModule} from "@nebular/theme";
+import {HttpHeadersInterceptor} from "./@core/services/http.interceptor";
+import {PreloadInitializer} from "./@core/services/preload.initializer";
+import {GlobalErrorHandler} from "./@core/services/error-handler.provider";
 
+
+export function PreloadInitializerProviderFactory(provider: PreloadInitializer) {
+  return () => provider.startupConfig();
+}
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,6 +32,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
+    PagesModule,
+    HttpClientModule,
 
     NgbModule.forRoot(),
     ThemeModule.forRoot(),
@@ -31,6 +42,15 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
   bootstrap: [AppComponent],
   providers: [
     { provide: APP_BASE_HREF, useValue: '/' },
+    { provide: HTTP_INTERCEPTORS,
+      useClass: HttpHeadersInterceptor,
+      multi: true },
+    { provide: APP_INITIALIZER,
+      useFactory: PreloadInitializerProviderFactory,
+      deps: [PreloadInitializer],
+      multi: true},
+    { provide: ErrorHandler,
+      useClass: GlobalErrorHandler }
   ],
 })
 export class AppModule {

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { ToasterService } from "angular2-toaster";
 
 @Component({
   selector: 'ngx-buttons',
@@ -7,7 +6,4 @@ import { ToasterService } from "angular2-toaster";
   templateUrl: './buttons.component.html',
 })
 export class ButtonsComponent {
-  constructor (notification: ToasterService) {
-    notification.pop('deafult', 'Test', 'Test');
-  }
 }

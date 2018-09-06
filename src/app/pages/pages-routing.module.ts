@@ -5,6 +5,10 @@ import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
+import {MatchesComponent} from "./matches/matches.component";
+import {MatchesResultsComponent} from "./matches/matches-results/matches-results.component";
+
+
 
 const routes: Routes = [{
   path: '',
@@ -15,6 +19,12 @@ const routes: Routes = [{
   }, {
     path: 'iot-dashboard',
     component: DashboardComponent,
+  }, {
+    path: 'matches',
+    component: MatchesComponent,
+  }, {
+    path: 'matches-results',
+    component: MatchesResultsComponent,
   }, {
     path: 'ui-features',
     loadChildren: './ui-features/ui-features.module#UiFeaturesModule',

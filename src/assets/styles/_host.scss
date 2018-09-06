@@ -1,0 +1,12 @@
+@import "variables";
+
+@mixin classicHost() {
+  width: 100%;
+  max-height: calc(100vh - #{$menu_height});
+  min-height: calc(100vh - #{$menu_height});
+  overflow: scroll;
+  background: #F5F7FA;
+  box-sizing: border-box;
+  padding: 0 2rem;
+  @media only screen and (max-width: 768px) { padding: 0 1rem }
+}

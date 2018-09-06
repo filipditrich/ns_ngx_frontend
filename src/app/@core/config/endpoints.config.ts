@@ -1,5 +1,5 @@
 import { findByProp } from '../helpers/functions.helper';
-import { APIRoot, APIVersion } from '../../../environments/environment';
+import { APIRoot } from '../../../environments/environment';
 
 export let ENDPOINTS = {};
 
@@ -19,5 +19,5 @@ export function getUrlById(id: string, service: string) {
 export function getUrl(id: string, service) {
   const endpoint = getUrlById(id, service);
   console.log(endpoint);
-  return endpoint === undefined ?  `${APIRoot}` : `${APIRoot}/api/${APIVersion}/${service}${endpoint}`;
+  return endpoint === undefined ?  `${APIRoot}` : `${APIRoot}/api/${service}/${endpoint}`;
 }

@@ -13,7 +13,7 @@ export class LoginService {
   constructor(private http: HttpClient) { }
 
   logInRequest(credentials: ICredentials): Observable<ILoginResponse> {
-    return this.http.post<ILoginResponse>(getUrl('LOGIN', 'auth'), credentials);
+    return this.http.post<ILoginResponse>('http://localhost:4000/api/auth/login', credentials);
   }
 
 }
