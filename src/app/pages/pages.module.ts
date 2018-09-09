@@ -23,6 +23,7 @@ import {Ng2SmartTableModule} from "ng2-smart-table";
 import { MatchesResultsComponent } from './matches/matches-results/matches-results.component';
 import { RoleCheckService } from "../@core/services/roleCheck.service";
 import { MomentModule } from "angular2-moment";
+import { JerseysService } from "../@core/services/jerseys.service";
 
 const PAGES_COMPONENTS = [
   LoginComponent, AlertsComponent, DialogsComponent, LogoutComponent, PagesComponent
@@ -49,6 +50,7 @@ const PAGES_COMPONENTS = [
     DialogsService,
     PreviousRouteService,
     RoleCheckService,
+    JerseysService,
 
     [PreventLogged],
     [AuthGuard],

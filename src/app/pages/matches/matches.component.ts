@@ -25,12 +25,11 @@ export class MatchesComponent implements OnInit {
       title: new FormControl(null, [Validators.required]),
       date: new FormControl(null, [Validators.required]),
       place: new FormControl(null, [Validators.required]),
-      info: new FormControl(null, [Validators.required])
+      note: new FormControl(null, [Validators.required])
     });
 
     this.matchesService.getAllMatchesRequest().subscribe(matches => {
-      this.matchArray = matches;
-      this.matchArray = this.matchArray;
+      this.matchArray = matches["response"];
     }, err => {
       this.errorHelper.handleGenericError(err);
     });
@@ -40,13 +39,11 @@ export class MatchesComponent implements OnInit {
   get title() { return this.form.get('title'); }
   get date() { return this.form.get('date'); }
   get place() { return this.form.get('place'); }
-  get info() { return this.form.get('info'); }
+  get note() { return this.form.get('note'); }
 
 
   ngOnInit() {
     this.roleCheck.isAdmin();
-    console.log(this.matchArray);
-
   }
 
   addMatch(value) {
@@ -54,7 +51,7 @@ export class MatchesComponent implements OnInit {
       this.title.markAsTouched();
       this.date.markAsTouched();
       this.place.markAsTouched();
-      this.info.markAsTouched();
+      this.note.markAsTouched();
     } else {
       if (!this.submitted) {
         this.callAddMatchSvc(value);
