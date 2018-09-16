@@ -1,0 +1,43 @@
+<div class="container-fluid page-wrapper-c-all">
+  <div class="col-lg-10 bg-white p-5 packix-tile">
+    <div class="loader-container" *ngIf="submitted">
+      <div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div>
+    </div>
+    <header>
+      <h1 class="text-center text-uppercase color-main">Reset</h1>
+    </header>
+    <form [formGroup]="resetReqForm" (submit)="onSubmit(resetReqForm.value)" class="form login-form row">
+      <div class="group form-group col-sm-12 d-flex flex-wrap align-items-center justify-content-between">
+        <label for="cred-reset" class="">I forgot my: </label>
+        <select class="form-control col-sm-12 col-md-8" id="cred-reset" [formControlName]="'type'" (change)="onChange()">
+          <option value="password">Password</option>
+          <option value="username">Username</option>
+        </select>
+      </div>
+      <hr class="col-md-11">
+      <div class="group d-flex flex-column col-xl-5" [ngClass]="{ 'error' : (username.hasError('req-dup') && username.value) || (username.hasError('not-found') && username.value && type.value !== 'username') || (((!email.value && type.value !== 'username') && !username.value) && (username.dirty || username.touched)) }">
+        <input type="text" id="username" placeholder="Username" formControlName="username" autocomplete="username" [readonly]="email.value || type.value === 'username'" [value]="type.value === 'username' ? null : username.value">
+        <small class="text-danger" *ngIf="((!email.value && type.value !== 'username') && !username.value) && (username.dirty || username.touched)">Username or Email is required</small>
+        <small class="text-danger" *ngIf="username.hasError('not-found') && username.value && type.value !== 'username'">This username matched no results in our database</small>
+        <small class="text-danger" *ngIf="username.hasError('req-dup') && username.value">A reset request has already been made for this account!</small>
+      </div>
+      <div class="group d-flex col-xl-2 text-center flex-column justify-content-center">
+        <p class="m-0">or</p>
+      </div>
+      <div class="group d-flex flex-column col-xl-5" [ngClass]="{ 'error' : (email.hasError('req-dup') && email.value) || (email.hasError('not-found') && email.value) || email.hasError('email') || (!username.value && !email.value) && (email.dirty || email.touched) }">
+        <input type="email" id="email" placeholder="Email" formControlName="email" autocomplete="email" [readonly]="username.value && type.value !== 'username'">
+        <small class="text-danger" *ngIf="(!username.value && !email.value) && (email.dirty || email.touched)">Email or Username is required</small>
+        <small class="text-danger" *ngIf="email.hasError('email') && (email.dirty || email.touched)">Enter valid email</small>
+        <small class="text-danger" *ngIf="email.hasError('not-found') && email.value">This email matched no results in our database</small>
+        <small class="text-danger" *ngIf="email.hasError('req-dup') && email.value">A reset request has already been made for this account!</small>
+      </div>
+      <div class="group d-flex flex-column col-sm-12">
+        <input class="button" [ngClass]="{'btn-disabled': !resetReqForm.valid && resetReqForm.touched}" type="submit" value="Send request">
+      </div>
+    </form>
+    <footer class="row">
+      <a [routerLink]="['/login']" class="col-sm-6 text-muted">Already have an account?</a>
+      <a [routerLink]="['/auth/request-registration']" class="col-sm-6 text-muted text-sm-right">Don't have an Account?</a>
+    </footer>
+  </div>
+</div>

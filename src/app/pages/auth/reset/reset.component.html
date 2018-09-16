@@ -1,0 +1,35 @@
+<div class="container-fluid page-wrapper-c-all">
+  <div class="col-lg-10 bg-white p-5 packix-tile">
+    <div class="loader-container" *ngIf="submitted">
+      <div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div>
+    </div>
+    <header>
+      <h1 class="text-center text-uppercase color-main">Create New Password</h1>
+    </header>
+    <form [formGroup]="newPasswordForm" (submit)="onSubmit(newPasswordForm.value)" class="form login-form row">
+      <div class="group d-flex flex-column col-lg-6" [ngClass]="{ 'error': password.hasError('new-is-old') || password.hasError('required') && (password.dirty || password.touched) }">
+        <input type="password" id="password" formControlName="password">
+        <label for="password">New Password</label>
+        <div class="progress mt-2" style="height: 5px" *ngIf="!password.hasError('required')">
+          <div class="progress-bar"
+               [ngStyle]="{ 'width': 'calc((100% / 3) * ' + (password.getError('passwordStrength') ? password.getError('passwordStrength').strength : 3) }"
+               [ngClass]="{
+               'bg-danger' : password.getError('passwordStrength')?.strength === 1,
+               'bg-warning' : password.getError('passwordStrength')?.strength === 2,
+               'bg-success' : !password.hasError('passwordStrength') }"></div>
+        </div>
+        <small class="text-danger" *ngIf="password.hasError('required') && (password.dirty || password.touched)">Password is required</small>
+        <small class="text-danger" *ngIf="password.hasError('new-is-old')">Password can't be same as your old!</small>
+      </div>
+      <div class="group d-flex flex-column col-lg-6" [ngClass]="{ 'error' : passwordSubmit.invalid && (passwordSubmit.dirty || passwordSubmit.touched) }">
+        <input type="password" id="passwordSubmit" formControlName="passwordSubmit">
+        <label for="passwordSubmit">Confirm Password</label>
+        <small class="text-danger" *ngIf="passwordSubmit.hasError('required') && (passwordSubmit.dirty || passwordSubmit.touched)">Password Confirmation is required</small>
+        <small class="text-danger" *ngIf="newPasswordForm.hasError('passwordConfirmation') && password.value !== null && (passwordSubmit.dirty || passwordSubmit.touched)">Passwords do not match</small>
+      </div>
+      <div class="group d-flex flex-column col-sm-12">
+        <input class="button" [ngClass]="{'btn-disabled': !newPasswordForm.valid && newPasswordForm.touched}" type="submit" value="Save new Password">
+      </div>
+    </form>
+  </div>
+</div>
