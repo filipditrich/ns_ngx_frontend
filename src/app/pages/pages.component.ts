@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { MENU_ITEMS } from './pages-menu';
+// import {RoleCheckService} from "../@core/services/roleCheck.service";
 
 @Component({
   selector: 'ngx-pages',
@@ -13,5 +14,21 @@ import { MENU_ITEMS } from './pages-menu';
 })
 export class PagesComponent {
 
-  menu = MENU_ITEMS;
+  constructor() {
+  }
+
+  menu = [{
+    title: 'Zápasy',
+    icon: 'fa fa-beer',
+    link: '/pages/matches'
+  },
+    {
+      title: 'Zapisování výsledků',
+      icon: 'nb-edit',
+      link: '/pages/matches-results'
+    },
+    {
+      title: 'User',
+      link: '/pages/user/profile'
+    }];
 }

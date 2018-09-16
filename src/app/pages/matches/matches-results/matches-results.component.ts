@@ -1,3 +1,4 @@
+import { CommonModule } from "@angular/common";
 import { Component, OnInit } from '@angular/core';
 import { MatchesService } from "../matches.service";
 import {ErrorHelper} from "../../../@core/helpers/error.helper";
@@ -11,60 +12,65 @@ import {JerseysService} from "../../../@core/services/jerseys.service";
 })
 export class MatchesResultsComponent implements OnInit {
 
-  public matchesArray = [];
-  public jerseysArray = [];
   public form: FormGroup;
   public submitted: boolean = false;
+  public matchArray = [];
 
   constructor(
     private matchesService: MatchesService,
     private errorHelper: ErrorHelper,
-    private jerseysService: JerseysService
   ) {
+
     this.form = new FormGroup({
       result: new FormControl(null, [Validators.required]),
-      jersey: new FormControl(null, [Validators.required])
+      jersey: new FormControl(null, [Validators.required]),
+
     });
-  }
 
-  get result() { return this.form.get('result'); }
-  get jersey() { return this.form.get('jersey'); }
-
-  ngOnInit() {
     this.matchesService.getAllMatchesRequest().subscribe(matches => {
-      this.matchesArray = matches["response"];
-      this.jerseysService.getAllJersey().subscribe(jerseys => {
-        this.jerseysArray = jerseys["response"]
-      }, err => {
-        this.errorHelper.handleGenericError(err);
-      })
+      this.matchArray = matches["response"];
     }, err => {
       this.errorHelper.handleGenericError(err);
-    })
+    });
 
   }
 
-  onSubmit(input) {
+  get jersey() { return this.form.get('jersey'); }
+  get result() { return this.form.get('result'); }
+
+
+  ngOnInit() {
+  }
+
+  onSubmit(value, matchID) {
     if (!this.form.valid) {
-      this.result.markAsTouched();
       this.jersey.markAsTouched();
+      this.result.markAsTouched();
     } else {
       if (!this.submitted) {
-        this.callWriteMatchResultsSvc(input);
+        const matchInfo = {
+            players: {
+              jersey: value["jersey"],
+              status: value["result"]
+            }
+        }
+        const requestBody = {
+          value: value,
+          matchID: matchID,
+          match: matchInfo
+        }
+        this.callWriteMatchResultsSvc(requestBody);
         this.submitted = true;
       }
     }
   }
 
-  callWriteMatchResultsSvc(input) {
-    this.matchesService.writeMatchResultsRequest(input).subscribe(response => {
+  callWriteMatchResultsSvc(requestBody) {
+    this.matchesService.writeMatchResultsRequest(requestBody).subscribe(response => {
       console.log(response);
     }, err => {
       this.errorHelper.handleGenericError(err);
     })
   }
-
-
-
 
 }

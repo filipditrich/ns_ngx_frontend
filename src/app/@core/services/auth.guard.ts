@@ -29,15 +29,15 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         .then(() => {
           const hasBeenLogged = sessionStorage.getItem('user') || false;
           if (hasBeenLogged) {
-            this.alertsService.alertWarning({
-              title: 'Token expired',
-              body: 'Your session token has expired, please log in to revoke it.'
-            }, 5000);
+            // this.alertsService.alertWarning({
+            //   title: 'Token expired',
+            //   body: 'Your session token has expired, please log in to revoke it.'
+            // }, 5000);
           } else {
-            this.alertsService.alertDanger({
-              title: 'You are not logged in',
-              body: 'Please log in before accessing this page'
-            }, 5000);
+            // this.alertsService.alertDanger({
+            //   title: 'You are not logged in',
+            //   body: 'Please log in before accessing this page'
+            // }, 5000);
           }
         })
         .catch(error => {

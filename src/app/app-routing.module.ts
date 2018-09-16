@@ -1,5 +1,7 @@
 import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
+import {AuthGuard} from "./@core/services/auth.guard";
+import {AuthModule} from "./pages/auth/auth.module";
 import {
   NbAuthComponent,
   NbLoginComponent,
@@ -8,13 +10,22 @@ import {
   NbRequestPasswordComponent,
   NbResetPasswordComponent,
 } from '@nebular/auth';
+import {PagesModule} from "./pages/pages.module";
 import {LoginComponent} from "./pages/auth/login/login.component";
-import {MatchesComponent} from "./pages/matches/matches.component";
-import {AuthGuard} from "./@core/services/auth.guard";
 import {LogoutComponent} from "./pages/auth/logout/logout.component";
+import {RegisterComponent} from "./pages/auth/register/register.component";
+import {RegistrationRequestComponent} from "./pages/auth/register/request/request.component";
 
 const routes: Routes = [
-  { path: 'pages', loadChildren: 'app/pages/pages.module#PagesModule', canActivate:[AuthGuard] },
+  {
+    path: 'pages',
+    loadChildren: () => PagesModule,
+    canActivate: [AuthGuard]
+  },
+  // {
+  //   path: 'auth',
+  //   loadChildren: () => AuthModule,
+  // },
   {
     path: 'auth',
     component: NbAuthComponent,
@@ -24,20 +35,12 @@ const routes: Routes = [
         component: NbLoginComponent,
       },
       {
-        path: 'matches',
-        component: MatchesComponent
-      },
-      {
         path: 'login',
         component: LoginComponent,
       },
       {
-        path: 'register',
-        component: NbRegisterComponent,
-      },
-      {
-        path: 'logout',
-        component: LogoutComponent,
+        path: 'request-registration',
+        component: RegistrationRequestComponent
       },
       {
         path: 'request-password',
@@ -62,5 +65,5 @@ const config: ExtraOptions = {
   imports: [RouterModule.forRoot(routes, config)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {
+export class AppRouting {
 }

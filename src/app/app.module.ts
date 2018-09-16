@@ -11,7 +11,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { CoreModule } from './@core/core.module';
 
 import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
+import {AppRouting} from "./app-routing.module";
 import { ThemeModule } from './@theme/theme.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {PagesModule} from "./pages/pages.module";
@@ -19,6 +19,7 @@ import {NbAlertModule} from "@nebular/theme";
 import {HttpHeadersInterceptor} from "./@core/services/http.interceptor";
 import {PreloadInitializer} from "./@core/services/preload.initializer";
 import {GlobalErrorHandler} from "./@core/services/error-handler.provider";
+import {AuthModule} from "./pages/auth/auth.module";
 
 
 export function PreloadInitializerProviderFactory(provider: PreloadInitializer) {
@@ -31,9 +32,10 @@ export function PreloadInitializerProviderFactory(provider: PreloadInitializer) 
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    AppRoutingModule,
+    AppRouting,
     PagesModule,
     HttpClientModule,
+    AuthModule,
 
     NgbModule.forRoot(),
     ThemeModule.forRoot(),

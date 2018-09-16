@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RoleCheckService } from "../../@core/services/roleCheck.service";
+// import { RoleCheckService } from "../../@core/services/roleCheck.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatchesService} from "./matches.service";
 import {ErrorHelper} from "../../@core/helpers/error.helper";
@@ -16,7 +16,6 @@ export class MatchesComponent implements OnInit {
   public matchArray = [];
 
   constructor(
-    private roleCheck: RoleCheckService,
     private matchesService: MatchesService,
     private errorHelper: ErrorHelper
   ) {
@@ -43,7 +42,6 @@ export class MatchesComponent implements OnInit {
 
 
   ngOnInit() {
-    this.roleCheck.isAdmin();
   }
 
   addMatch(value) {
@@ -70,11 +68,10 @@ export class MatchesComponent implements OnInit {
 
   matchParticipation(willParticipate, matchId) {
     console.log(matchId);
-    const user = JSON.parse(sessionStorage.getItem("user"));
+    // const user = this.roleCheck.getUserInfo();
     const requestBody = {
       participation: willParticipate,
-      matchID: matchId,
-      userID: user._id
+      matchID: matchId
     };
     this.matchesService.participationInMatchRequest(requestBody).subscribe( response => {
       console.log(response);

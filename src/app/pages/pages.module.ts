@@ -8,8 +8,7 @@ import { PreventLogged } from "../@core/services/auth.guard";
 import { AuthGuard } from "../@core/services/auth.guard";
 import { RoleGuard } from "../@core/services/auth.guard";
 import { DashboardModule } from './dashboard/dashboard.module';
-import { ECommerceModule } from './e-commerce/e-commerce.module';
-import { PagesRoutingModule } from './pages-routing.module';
+import { PagesRouting } from './pages-routing.module';
 import { ThemeModule } from '../@theme/theme.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import {ToasterModule} from "angular2-toaster";
@@ -21,24 +20,25 @@ import {LogoutComponent} from "./auth/logout/logout.component";
 import { MatchesComponent } from './matches/matches.component';
 import {Ng2SmartTableModule} from "ng2-smart-table";
 import { MatchesResultsComponent } from './matches/matches-results/matches-results.component';
-import { RoleCheckService } from "../@core/services/roleCheck.service";
 import { MomentModule } from "angular2-moment";
 import { JerseysService } from "../@core/services/jerseys.service";
+import {UserModule} from "./user/user.module";
+import { RegisterComponent } from './auth/register/register.component';
 
 const PAGES_COMPONENTS = [
-  LoginComponent, AlertsComponent, DialogsComponent, LogoutComponent, PagesComponent
+  AlertsComponent, DialogsComponent, PagesComponent
 ];
 
 @NgModule({
   imports: [
-    PagesRoutingModule,
+    PagesRouting,
     ThemeModule,
     DashboardModule,
-    ECommerceModule,
     MiscellaneousModule,
     ToasterModule.forRoot(),
     Ng2SmartTableModule,
-    MomentModule
+    MomentModule,
+    UserModule
   ],
   declarations: [
     ...PAGES_COMPONENTS,
@@ -49,7 +49,6 @@ const PAGES_COMPONENTS = [
     AlertsService,
     DialogsService,
     PreviousRouteService,
-    RoleCheckService,
     JerseysService,
 
     [PreventLogged],

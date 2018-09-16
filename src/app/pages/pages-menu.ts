@@ -1,4 +1,5 @@
 import { NbMenuItem } from '@nebular/theme';
+// import {RoleCheckService} from "../@core/services/roleCheck.service";
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
@@ -10,5 +11,9 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'Zapisování výsledků',
     icon: 'nb-edit',
     link: '/pages/matches-results'
+  },
+  {
+    title: 'User',
+    link: '/pages/user/profile'
   }
 ];

@@ -18,7 +18,7 @@ export class HeaderComponent implements OnInit {
 
   user: any;
 
-  userMenu = [{ title: 'Profile' }, { title: 'Log out' }];
+  userMenu = [{ title: 'Profil' }, { title: 'Odhlásit se' }];
 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
@@ -29,16 +29,18 @@ export class HeaderComponent implements OnInit {
     menuService.onItemClick()
       .pipe(filter(({ tag }) => tag === tag))
       .subscribe(bag => {
-        if (bag.item.title == "Log out"){
+        if (bag.item.title == "Odhlásit se"){
           this.router.navigate(['/logout']);
           location.reload();
+        }
+        if (bag.item.title == "Profil"){
+          this.router.navigate(['/user/profile']);
         }
   });
   }
 
   ngOnInit() {
     this.user = JSON.parse(sessionStorage.getItem('user'));
-    console.log(this.user);
   }
 
   toggleSidebar(): boolean {

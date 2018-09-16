@@ -1,32 +1,29 @@
 <div class="row">
-  <div class="col-md-12 col-lg-6" *ngFor="let match of matchesArray">
+  <div class="col-md-12 col-lg-6" *ngFor="let match of matchArray">
     <nb-card>
       <nb-card-header>
         <h2>{{match.title}}</h2>
         <small>Datum: {{match.date | amDateFormat: 'DD.MM.YYYY'}}</small>
       </nb-card-header>
       <nb-card-body>
-        <form autocomplete="nope" novalidate class="ng-touched ng-dirty ng-valid" [formGroup]="form" (submit)="onSubmit(form.value)">
+        <form autocomplete="nope" novalidate class="ng-touched ng-dirty ng-valid" [formGroup]="form" (submit)="onSubmit(form.value, match._id)">
           <div class="form-group">
             <label for="result">Výsledek</label>
-            <select class="form-control" id="result" [formControlName]="result">
+            <select class="form-control" id="result" formControlName="result">
               <option value="won" selected>Vyhrál</option>
               <option value="lost">Prohrál</option>
             </select>
           </div>
           <div class="form-group">
             <label for="jersey">Dres</label>
-            <select class="form-control" id="jersey" [formControlName]="jersey">
+            <select class="form-control" id="jersey" formControlName="jersey">
               <option value='orange'>Oranžový</option>
-              <option value='blue'>Blue</option>
+              <option value='blue'>Modrý</option>
             </select>
           </div>
-
           <button type="submit" class="btn btn-hero-success">Odeslat</button>
-
         </form>
       </nb-card-body>
-
     </nb-card>
   </div>
 </div>
