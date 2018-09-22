@@ -67,6 +67,7 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(input) {
+    console.log(this.form);
 
     if (!this.form.valid) {
       this.username.markAsTouched();

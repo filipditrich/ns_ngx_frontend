@@ -15,6 +15,9 @@ import {LoginComponent} from "./pages/auth/login/login.component";
 import {LogoutComponent} from "./pages/auth/logout/logout.component";
 import {RegisterComponent} from "./pages/auth/register/register.component";
 import {RegistrationRequestComponent} from "./pages/auth/register/request/request.component";
+import {IsRequestHashValid} from "./pages/auth/register/request/request-validator.guard";
+import {DataResolver} from "./pages/auth/register/request/request-validator.guard";
+import {CheckType} from "./@core/enums/check.enum";
 
 const routes: Routes = [
   {
@@ -50,6 +53,13 @@ const routes: Routes = [
         path: 'reset-password',
         component: NbResetPasswordComponent,
       },
+      {
+        path: 'registration/:hash',
+        component: RegisterComponent,
+        canActivate: [IsRequestHashValid],
+        resolve: { request: DataResolver },
+        data: { checkType: CheckType.Registration }
+      }
     ],
   },
   { path: '', redirectTo: 'pages', pathMatch: 'full'},

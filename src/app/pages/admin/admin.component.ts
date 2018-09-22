@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'ns-admin',
-  template: `
-    <router-outlet></router-outlet>
-  `
+  template: `<p>Admin works</p>`
 })
 
 export class AdminComponent implements OnInit{

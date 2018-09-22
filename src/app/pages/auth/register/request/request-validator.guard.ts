@@ -30,7 +30,7 @@ export class IsRequestHashValid implements CanActivate {
       case CheckType.Registration: {
         return new Observable<boolean>(observer => {
           this.registrationSvc.checkRegistrationRequest(hash).subscribe(response => {
-            if (response.response.success) {
+            if (response.success) {
               observer.next(true);
               observer.complete();
             } else {

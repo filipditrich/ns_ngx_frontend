@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from './auth/auth.service';
-import { AlertsService } from "./alerts/alerts.service";
+// import { AlertsService } from "./alerts/alerts.service";
 import { ErrorHelper } from '../helpers/error.helper';
 import { PreviousRouteService } from './previous-route.service';
 import {HttpClient} from '@angular/common/http';
@@ -15,8 +15,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
   constructor(private authService: AuthService,
               private router: Router,
-              private errorHelper: ErrorHelper,
-              private alertsService: AlertsService) { }
+              private errorHelper: ErrorHelper) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) { return this.resolve(route, state); }
   canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) { return this.resolve(route, state); }
@@ -55,17 +54,16 @@ export class PreventLogged implements CanActivate {
   constructor(private authService: AuthService,
               private router: Router,
               private errorHelper: ErrorHelper,
-              private alertsService: AlertsService,
               private previousRouteSvc: PreviousRouteService) { }
 
   canActivate() {
     if (this.authService.isTokenValid()) {
       console.log(this.previousRouteSvc.getPreviousUrl());
       this.router.navigate(['/user']).then(() => {
-        this.alertsService.alertWarning({
-          title: 'Prevention',
-          body: 'You are already logged in, no need to access this page.'
-        }, 5000);
+        // this.alertsService.alertWarning({
+        //   title: 'Prevention',
+        //   body: 'You are already logged in, no need to access this page.'
+        // }, 5000);
       }).catch(error => {
         this.errorHelper.handleGenericError(error);
       });
@@ -80,7 +78,6 @@ export class PreventLogged implements CanActivate {
 export class RoleGuard implements CanActivate, CanActivateChild {
 
   constructor(private router: Router,
-              private alertsService: AlertsService,
               private errorHelper: ErrorHelper,
               private previousRouteSvc: PreviousRouteService) { }
 
@@ -96,11 +93,12 @@ export class RoleGuard implements CanActivate, CanActivateChild {
       return true;
     } else {
       console.log(this.previousRouteSvc.getPreviousUrl());
-      this.router.navigate(['/user']).then(() => {
-        this.alertsService.alertDanger({
-          title: 'Unauthorized Access',
-          body: 'You have\'nt got enough privileges to make this request.'
-        }, 7500);
+      this.router.navigate(['/pages']).then(() => {
+        // this.alertsService.alertDanger({
+        //   title: 'Unauthorized Access',
+        //   body: 'You have\'nt got enough privileges to make this request.'
+        // }, 7500);
+        console.log('UnAuthorized');
         return false;
       }).catch(error => {
         this.errorHelper.handleGenericError(error);

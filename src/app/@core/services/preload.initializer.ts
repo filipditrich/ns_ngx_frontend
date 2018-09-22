@@ -55,6 +55,7 @@ export class PreloadInitializer {
         if (result.output) {
           endpoints.updateEndpoints(result.output);
           console.log(`[PRELOAD:OK]: ${codes.getCodeByName('RESOURCE_LOADED', 'system').name} - Routes`);
+          console.log(result.output)
         } else {
           console.error('[PRELOAD:FAIL] Haven\'t received any routes!', result);
         }

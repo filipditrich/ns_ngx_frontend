@@ -13,22 +13,34 @@ import { MENU_ITEMS } from './pages-menu';
   `,
 })
 export class PagesComponent {
-
+  public user = sessionStorage.getItem('user');
   constructor() {
+
   }
 
   menu = [{
     title: 'Zápasy',
     icon: 'fa fa-beer',
-    link: '/pages/matches'
-  },
-    {
-      title: 'Zapisování výsledků',
-      icon: 'nb-edit',
-      link: '/pages/matches-results'
-    },
-    {
+    children: [
+      {
+        title: 'Zápasy',
+        link: '/pages/matches'
+      },
+      {
+        title: 'Zapisování výsledků',
+        link: '/pages/matches-results'
+      }],
+    }, {
+    title: 'Admin',
+    icon: 'nb-gear',
+    children: [
+      {
+        title: 'Přijmání registrací',
+        link: '/pages/admin/registration-requests',
+      }
+    ]
+  },{
       title: 'User',
       link: '/pages/user/profile'
-    }];
+  }];
 }

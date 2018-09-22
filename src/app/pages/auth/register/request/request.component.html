@@ -1,33 +1,57 @@
-<div class="container-fluid page-wrapper-c-all">
-  <div class="col-lg-10 bg-white p-5 packix-tile">
-    <div class="loader-container" *ngIf="submitted">
-      <div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div>
-    </div>
-    <header>
-      <h1 class="text-center text-uppercase color-main">Register</h1>
-    </header>
-    <form autocomplete="nope" novalidate="" class="ng-touched ng-dirty ng-valid" [formGroup]="form" (submit)="onSubmit(form.value)">
-      <div class="group d-flex flex-column col-lg-6" [ngClass]="{'error' : name.invalid && (name.dirty || name.touched) }">
-        <input type="text" id="name" formControlName="name" autocomplete="name">
-        <input fullwidth id="input-name" name="username" formControlName="name" autocomplete="name" placeholder="Username" type="text" ng-reflect-name="username" class="input-full-width input-md input-rectangle input-success ng-dirty ng-valid ng-touched" required>
-        <label class="sr-only" for="input-name">Name</label>
-        <small class="text-danger" *ngIf="name.hasError('required') && (name.dirty || name.touched)">Name is required</small>
-        <small class="text-danger" *ngIf="name.hasError('minlength')">Your full name must be at least 5 characters long!</small>
-      </div>
-      <div class="group d-flex flex-column col-lg-6" [ngClass]="{ 'error' : email.invalid && (email.dirty || email.touched) }">
-        <input type="email" id="email" formControlName="email" autocomplete="email">
+<!--<nb-auth-block>-->
+    <!--<header>-->
+      <!--<h2 class="title">Registrace</h2>-->
+    <!--</header>-->
+    <!--<form autocomplete="nope" novalidate="" class="ng-touched ng-dirty ng-valid" [formGroup]="form" (submit)="onSubmit(form.value)">-->
+      <!--<div class="group d-flex flex-column col-lg-6" [ngClass]="{'error' : name.invalid && (name.dirty || name.touched) }">-->
+        <!--<input type="text" id="name" formControlName="name" autocomplete="name">-->
+        <!--<input fullwidth id="input-name" name="username" formControlName="name" autocomplete="name" placeholder="Username" type="text" ng-reflect-name="username" class="input-full-width input-md input-rectangle input-success ng-dirty ng-valid ng-touched" required>-->
+        <!--<label class="sr-only" for="input-name">Name</label>-->
+        <!--<small class="text-danger" *ngIf="name.hasError('required') && (name.dirty || name.touched)">Name is required</small>-->
+        <!--<small class="text-danger" *ngIf="name.hasError('minlength')">Your full name must be at least 5 characters long!</small>-->
+      <!--</div>-->
+      <!--<div class="group d-flex flex-column col-lg-6" [ngClass]="{ 'error' : email.invalid && (email.dirty || email.touched) }">-->
+        <!--<input type="email" id="email" formControlName="email" autocomplete="email">-->
+        <!--<label for="email">Email</label>-->
+        <!--<small class="text-danger" *ngIf="email.hasError('required') && (email.dirty || email.touched)">Email is required</small>-->
+        <!--<small class="text-danger" *ngIf="email.hasError('email')">Invalid Email</small>-->
+        <!--<small class="text-danger" *ngIf="email.hasError('in-use')">Email is already in use</small>-->
+      <!--</div>-->
+      <!--<div class="group d-flex flex-column col-xl-12">-->
+        <!--<input class="button" [ngClass]="{'btn-disabled': !form.valid && form.touched}" type="submit" value="Send Request">-->
+      <!--</div>-->
+    <!--</form>-->
+    <!--<footer class="row">-->
+      <!--<a [routerLink]="['/login']" class="col-sm-6 text-muted">Already have an account?</a>-->
+      <!--<a [routerLink]="['/auth/forgotten-credentials']" class="col-sm-6 text-sm-right text-muted">Forgot Credentials?</a>-->
+    <!--</footer>-->
+<!--</nb-auth-block>>-->
+
+<nb-auth-block>
+  <h2 class="title">Registrace</h2>
+  <form fullwidth autocomplete="nope" novalidate="" class="ng-touched ng-dirty ng-valid" [formGroup]="form" (submit)="onSubmit(form.value)">
+    <div class="form-group">
+        <input type="email" id="email" formControlName="email" autocomplete="email" class="form-control">
         <label for="email">Email</label>
         <small class="text-danger" *ngIf="email.hasError('required') && (email.dirty || email.touched)">Email is required</small>
         <small class="text-danger" *ngIf="email.hasError('email')">Invalid Email</small>
         <small class="text-danger" *ngIf="email.hasError('in-use')">Email is already in use</small>
       </div>
-      <div class="group d-flex flex-column col-xl-12">
-        <input class="button" [ngClass]="{'btn-disabled': !form.valid && form.touched}" type="submit" value="Send Request">
+    <div class="form-group">
+        <input type="text" id="name" formControlName="name" autocomplete="name" class="form-control">
+        <label for="name">Name</label>
+        <small class="text-danger" *ngIf="name.hasError('required') && (name.dirty || name.touched)">Name is required</small>
+        <small class="text-danger" *ngIf="name.hasError('minlength')">Your full name must be at least 5 characters long!</small>
       </div>
-    </form>
-    <footer class="row">
-      <a [routerLink]="['/login']" class="col-sm-6 text-muted">Already have an account?</a>
-      <a [routerLink]="['/auth/forgotten-credentials']" class="col-sm-6 text-sm-right text-muted">Forgot Credentials?</a>
-    </footer>
+    <div class="form-group accept-group col-sm-12">
+      <a class="forgot-password" routerlink="../request-password" ng-reflect-router-link="../request-password" href="#/auth/request-password">Forgot Password?</a>
+    </div>
+    <button fullwidth nbbutton class="btn-success btn-full-width" aria-disabled="false"> Sign In </button>
+  </form>
+  <div class="links">
+    <small class="form-text">
+      <a routerLink="/auth/login"><strong> Už účet máte? </strong></a>
+    </small>
   </div>
-</div>
+</nb-auth-block>
+

@@ -30,7 +30,7 @@ export class HeaderComponent implements OnInit {
       .pipe(filter(({ tag }) => tag === tag))
       .subscribe(bag => {
         if (bag.item.title == "Odhlásit se"){
-          this.router.navigate(['/logout']);
+          this.router.navigate(['/auth/logout']);
           location.reload();
         }
         if (bag.item.title == "Profil"){
