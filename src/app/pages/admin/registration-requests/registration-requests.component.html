@@ -1,0 +1,15 @@
+<nb-card>
+  <nb-card-header>
+    Přijmání uživatelských registrací
+
+    <button class="btn btn-hero btn-hero-success" (click)="openForm = !openForm">Pozvat</button>
+  </nb-card-header>
+
+  <nb-card-body>
+    <form action="" *ngIf="openForm">
+      <p>COck</p>
+    </form>
+    <ng2-smart-table [settings]="settings" [source]="source" (custom)="onCustom($event)">
+    </ng2-smart-table>
+  </nb-card-body>
+</nb-card>
