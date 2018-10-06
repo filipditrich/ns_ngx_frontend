@@ -28,4 +28,8 @@ export class MatchesService {
     return this.http.post<IResponse>('http://localhost:4000/api/core/matches/write-results', input)
   }
 
+  getAllPlaces(): Observable<IResponse> {
+    return this.http.get<IResponse>('http://localhost:4000/api/core/places-all')
+  }
+
 }

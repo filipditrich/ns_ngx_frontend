@@ -9,7 +9,9 @@
           <form autocomplete="nope" novalidate="" class="ng-touched ng-dirty ng-valid" [formGroup]="form" (submit)="addMatch(form.value)">
             <div class="form-group">
               <label for="matchName">Název zápasu</label>
-              <input type="text" class="form-control" formControlName="title" id="matchName" placeholder="Název zápasu">
+              <div class="input-group">
+                <input type="text" class="form-control" formControlName="title" id="matchName" placeholder="Název zápasu">
+              </div>
             </div>
             <div class="form-group">
               <label for="matchDate">Datum konání zápasu</label>
@@ -17,7 +19,9 @@
             </div>
             <div class="form-group">
               <label for="matchPlace">Místo konání zápasu</label>
-              <input type="text" class="form-control" formControlName="place" id="matchPlace" placeholder="Místo konání zápasu">
+              <select class="form-control" formControlName="place" id="matchPlace" placeholder="Místo konání zápasu" [ngModel]="place">
+                <option *ngFor="let place of placeArray" value="{{place.name}}" [ngValue]="place">{{place.name}}</option>
+              </select>
             </div>
             <div class="form-group">
               <label for="matchInfo">Poznámka k zápasu</label>

@@ -15,10 +15,12 @@ export class MatchesResultsComponent implements OnInit {
   public form: FormGroup;
   public submitted: boolean = false;
   public matchArray = [];
+  public jerseyArray = [];
 
   constructor(
-    private matchesService: MatchesService,
+    private  matchesService: MatchesService,
     private errorHelper: ErrorHelper,
+    private jerseyService: JerseysService
   ) {
 
     this.form = new FormGroup({
@@ -40,6 +42,12 @@ export class MatchesResultsComponent implements OnInit {
 
 
   ngOnInit() {
+    this.jerseyService.getAllJersey().subscribe(response => {
+      this.jerseyArray = response["response"];
+      console.log(this.jerseyArray)
+    }, err => {
+      console.log(err);
+    })
   }
 
   onSubmit(value, matchID) {
@@ -48,17 +56,18 @@ export class MatchesResultsComponent implements OnInit {
       this.result.markAsTouched();
     } else {
       if (!this.submitted) {
+
         const matchInfo = {
             players: {
               jersey: value["jersey"],
               status: value["result"]
             }
-        }
+        };
         const requestBody = {
           value: value,
           matchID: matchID,
           match: matchInfo
-        }
+        };
         this.callWriteMatchResultsSvc(requestBody);
         this.submitted = true;
       }

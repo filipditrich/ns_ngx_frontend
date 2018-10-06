@@ -75,6 +75,21 @@ export class PreventLogged implements CanActivate {
 }
 
 @Injectable()
+export class RoleCheck {
+  private user = sessionStorage.getItem('user');
+  // public userRoles = [];
+  //
+  // constructor() {
+  //   this.userRoles = this.user["roles"];
+  // }
+  //
+  // isAdmin() {
+  //   return this.userRoles.indexOf('admin') > 0;
+  // }
+}
+
+
+@Injectable()
 export class RoleGuard implements CanActivate, CanActivateChild {
 
   constructor(private router: Router,

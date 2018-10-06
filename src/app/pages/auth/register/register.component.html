@@ -31,15 +31,12 @@
         <small class="text-danger" *ngIf="username.hasError('in-use')">Username is in use. Please choose different</small>
         <small class="text-danger" *ngIf="username.hasError('is-upper-case') && username.value">For security reasons we only allow lowercase alphanumerics</small>
       </div>
-
       <div class="group d-flex flex-column col-lg-6"
-           [ngClass]="{ 'error' : team.invalid && (team.dirty || team.touched) }">
-        <select class="form-control" id="team" [formControlName]="'team'">
-          <option value="ns">Northern Stars</option>
-          <option value="other">Other</option>
-        </select>
-        <label for="team">Team</label>
-        <small class="text-danger" *ngIf="team.hasError('required')">Team is required</small>
+           [ngClass]="{ 'error' : number.invalid && (number.dirty || number.touched) }">
+        <input type="text" id="number" formControlName="number" required>
+        <label for="username">Číslo dresu</label>
+        <small class="text-danger" *ngIf="number.hasError('required') && (number.dirty || number.touched)">Username is required</small>
+        <small class="text-danger" *ngIf="number.hasError('in-use')">Username is in use. Please choose different</small>
       </div>
 
       <div class="group d-flex flex-column col-lg-6"

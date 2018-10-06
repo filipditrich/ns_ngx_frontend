@@ -17,7 +17,6 @@ export class RegistrationService {
   }
 
   checkRegistrationRequest(hash: string): Observable<any> {
-    const check = { check: { 'registration.registrationHash': hash } };
     const postBody = {hash: hash};
     return this.http.post<any>(`${getUrl('operator','EXIST_CHECK')}`, postBody);
   }
@@ -28,5 +27,6 @@ export class RegistrationService {
 
   registerUser(hash: string, credentials: IRegistrationCredentials): Observable<any> {
     return this.http.post<any>(`${getUrl('operator', 'REG')}/${hash}`, credentials);
+    console.log(getUrl('operator', 'REG'))
   }
 }

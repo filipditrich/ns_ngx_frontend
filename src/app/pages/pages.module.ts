@@ -4,7 +4,7 @@ import { PagesComponent } from './pages.component';
 import { AlertsService } from "../@core/services/alerts/alerts.service";
 import { DialogsService } from "../@core/services/dialogs/dialogs.service";
 import { PreviousRouteService } from "../@core/services/previous-route.service";
-import { PreventLogged } from "../@core/services/auth.guard";
+import {PreventLogged, RoleCheck} from "../@core/services/auth.guard";
 import { AuthGuard } from "../@core/services/auth.guard";
 import { RoleGuard } from "../@core/services/auth.guard";
 import { DashboardModule } from './dashboard/dashboard.module';
@@ -24,6 +24,8 @@ import { MomentModule } from "angular2-moment";
 import { JerseysService } from "../@core/services/jerseys.service";
 import {UserModule} from "./user/user.module";
 import { RegisterComponent } from './auth/register/register.component';
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {HttpHeadersInterceptor} from "../@core/services/http.interceptor";
 
 const PAGES_COMPONENTS = [
   AlertsComponent, DialogsComponent, PagesComponent
@@ -53,7 +55,12 @@ const PAGES_COMPONENTS = [
 
     [PreventLogged],
     [AuthGuard],
-    [RoleGuard]
+    [RoleGuard],
+    [RoleCheck],
+    { provide: HTTP_INTERCEPTORS,
+      useClass: HttpHeadersInterceptor,
+      multi: true
+    }
   ]
 })
 export class PagesModule {

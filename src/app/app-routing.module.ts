@@ -56,7 +56,7 @@ const routes: Routes = [
       {
         path: 'registration/:hash',
         component: RegisterComponent,
-        canActivate: [IsRequestHashValid],
+        // canActivate: [IsRequestHashValid],
         resolve: { request: DataResolver },
         data: { checkType: CheckType.Registration }
       }

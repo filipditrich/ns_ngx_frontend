@@ -29,7 +29,7 @@ const routes: Routes = [{
   },
   {
       path: '',
-      redirectTo: 'matches',
+      redirectTo: 'pages/matches',
       pathMatch: 'full',
   }, {
     path: '**',

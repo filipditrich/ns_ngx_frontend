@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatchesService} from "./matches.service";
 import {ErrorHelper} from "../../@core/helpers/error.helper";
+import { SelectControlValueAccessor } from '@angular/forms';
+
 
 @Component({
   selector: 'ngx-matches',
@@ -14,6 +16,7 @@ export class MatchesComponent implements OnInit {
   public form: FormGroup;
   public submitted: boolean = false;
   public matchArray = [];
+  public placeArray = [];
 
   constructor(
     private matchesService: MatchesService,
@@ -32,6 +35,12 @@ export class MatchesComponent implements OnInit {
     }, err => {
       this.errorHelper.handleGenericError(err);
     });
+
+    this.matchesService.getAllPlaces().subscribe(response => {
+      this.placeArray = response["response"];
+    }, err => {
+      this.errorHelper.handleGenericError(err);
+    })
 
   }
 

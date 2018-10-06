@@ -9,6 +9,7 @@ import {AdminRouting} from "./admin-routing.module";
 import {ThemeModule} from "../../@theme/theme.module";
 import {SmartTableService} from "../../@core/data/smart-table.service";
 import {Ng2SmartTableModule} from "ng2-smart-table";
+import { JerseyComponent } from './jersey/jersey.component';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import {Ng2SmartTableModule} from "ng2-smart-table";
   ],
   declarations: [
     AdminComponent,
-    RegistrationRequestsComponent
+    RegistrationRequestsComponent,
+    JerseyComponent
   ],
   providers: [
     AdminUserManagementService,

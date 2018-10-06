@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
+import {RoleCheck} from "../@core/services/auth.guard";
 
-import { MENU_ITEMS } from './pages-menu';
 // import {RoleCheckService} from "../@core/services/roleCheck.service";
 
 @Component({
@@ -14,7 +14,10 @@ import { MENU_ITEMS } from './pages-menu';
 })
 export class PagesComponent {
   public user = sessionStorage.getItem('user');
-  constructor() {
+  public role = this.user["roles"];
+  constructor(
+    private roleCheck: RoleCheck
+  ) {
 
   }
 
@@ -37,9 +40,13 @@ export class PagesComponent {
       {
         title: 'Přijmání registrací',
         link: '/pages/admin/registration-requests',
+      },
+      {
+        title: 'Dresy',
+        link: '/pages/admin/jersey',
       }
     ]
-  },{
+  }, {
       title: 'User',
       link: '/pages/user/profile'
   }];
