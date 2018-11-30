@@ -1,0 +1,53 @@
+<div class="modal-header">
+  <span>Write result for '{{ match.title }}'</span>
+  <button class="close" aria-label="Close" (click)="closeModal(false)">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form novalidate="" class="ng-touched ng-dirty ng-valid form" [formGroup]="form">
+
+    <div class="row">
+      <!-- Result -->
+      <div class="form-group group d-flex flex-column col-sm-6"
+           [ngClass]="{ 'error' : result.invalid && (result.dirty || result.touched) }">
+        <label for="result">Result*</label>
+        <ng-select
+          #resultID
+          [items]="resultOptions"
+          [multiple]="false"
+          [clearable]="false"
+          [closeOnSelect]="true"
+          bindValue="value"
+          bindLabel="label"
+          id="result" name="result" formControlName="result" ng-reflect-name="result" class="ng-select-input-custom flex-grow-1"
+          (close)="onChangeResult()">
+        </ng-select>
+        <small class="text-danger" *ngIf="result.hasError('required') && (result.dirty || result.touched)">Result is required</small>
+      </div>
+
+      <!-- Jersey -->
+      <div class="form-group group d-flex flex-column col-sm-6"
+           [ngClass]="{ 'error' : jersey.invalid && (jersey.dirty || jersey.touched) }">
+        <label for="jersey">Jersey*</label>
+        <ng-select
+          #jerseyID
+          [items]="jerseys"
+          [multiple]="false"
+          [clearable]="false"
+          [closeOnSelect]="true"
+          bindValue="_id"
+          bindLabel="name"
+          id="jersey" name="jersey" formControlName="jersey" ng-reflect-name="jersey" class="ng-select-input-custom flex-grow-1"
+          (close)="onChangeJersey()">
+        </ng-select>
+        <small class="text-danger" *ngIf="jersey.hasError('required') && (jersey.dirty || jersey.touched)">Jersey is required</small>
+      </div>
+    </div>
+
+  </form>
+</div>
+<div class="modal-footer flex-wrap">
+  <button class="btn btn-md btn-secondary my-1" (click)="closeModal(false)">Close</button>
+  <button class="btn btn-md btn-primary my-1" (click)="onSubmit(form.value)">Submit</button>
+</div>

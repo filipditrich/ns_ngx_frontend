@@ -1,77 +1,69 @@
-import { environment } from "../../../environments/environment";
-import { AlertsService } from "../services/alerts/alerts.service";
+import { environment } from '../../../environments/environment';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import {popup} from "leaflet";
+import { Toast, ToasterService } from 'angular2-toaster';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ErrorHelper {
 
   constructor(private router: Router,
-              private alertsService: AlertsService) {  }
+              private toasterService: ToasterService) {  }
 
   handleGenericError(err) {
     const error = !!err.error ? !!err.error.response ? err.error.response : err.error : err;
 
     if (err.status === 0) {
-      this.alertsService.alertDanger({
-        title: 'Servers Unreachable',
-        body: 'We couldn\'t establish a connection between client and server. Please contact application administrator'
+      this.router.navigate(['/']).then(() => {
+        this.toasterService.popAsync('error', 'Servers Unreachable', 'We couldn\'t establish a connection between client and server. Please contact application administrator');
       });
-
-
     } else {
-      switch (error.status) {
-        case 404: {
-          this.alertsService.alertDanger({
-            title: 'Request not found',
-            body: 'The requested endpoint was not found. Please contact the administrator.'
-          }, 7500);
-          break;
-        }
-        default: {
-          if (error.name === 'INVALID_TOKEN') {
-            this.router.navigate(['/login'], { queryParams: { return: this.router.url } })
-              .then(() => {
-                const hasBeenLogged = sessionStorage.getItem('user') || false;
-                if (hasBeenLogged) {
-                  this.alertsService.alertWarning({
-                    title: 'Token expired',
-                    body: 'Your session token has expired, please log in to revoke it.'
-                  }, 5000);
-                } else {
-                  this.alertsService.alertDanger({
-                    title: 'You are not logged in',
-                    body: 'Please log in before accessing this page'
-                  }, 5000);
-                }
-              })
-              .catch(caught => {
-                this.alertsService.alertDanger({
-                  title: caught.name,
-                  body: !!caught.message ? caught.message : (!!caught.stack && !environment.production) ? caught.stack : null
-                }, 7500);
-              });
-          } else {
-            this.alertsService.alertDanger({
-              title: error.name,
-              body: !!error.message ? error.message : (!!error.stack && !environment.production) ? error.stack : null
-            }, 7500);
-          }
-          break;
-        }
+      if (error.status === 404 && error.name === 'INVALID_ENDPOINT') {
+        this.toasterService.popAsync('error', 'Request not found', 'The requested endpoint was not found. Please contact the administrator.');
+      } else if (error.name === 'AUTH_TOKEN_INVALID') {
+        this.router.navigate(['/auth/login'], { queryParams: { return: this.router.url } })
+          .then(() => {
+            let toast: Toast;
+            const hasBeenLogged = sessionStorage.getItem('user') || false;
+
+            if (hasBeenLogged) {
+              toast = {
+                type: 'warning',
+                title: 'Token expired',
+                body: 'Your session token has expired, please log in to revoke it.',
+              };
+            } else {
+              toast = {
+                type: 'error',
+                title: 'You are not logged in',
+                body: 'Please log in before accessing this page',
+              };
+            }
+            this.toasterService.popAsync(toast);
+          })
+          .catch(caught => {
+            const toast: Toast = {
+              type: 'error',
+              title: caught.name,
+              body: !!caught.message ? caught.message : (!!caught.stack && !environment.production) ? caught.stack : null,
+            };
+            this.toasterService.popAsync(toast);
+          });
+      } else {
+        const toast: Toast = {
+          type: 'error',
+          title: error.name || error.type || 'Error!',
+          body: !!error.message ? error.message : (!!error.stack && !environment.production) ? error.stack : null,
+        };
+        this.toasterService.popAsync(toast);
       }
     }
 
   }
 
   processedButFailed(response) {
-    // this.alertsService.alertDanger({
-    //   title: !!response.response.name ? response.response.name : 'Error',
-    //   body: !!response.response.message ? response.response.message : 'The request processed successfully, but the response failed.'
-    // }, 5000);
+    this.toasterService.popAsync('error', !!response.response.name ? response.response.name : 'Error', !!response.response.message ? response.response.message : 'The request processed successfully, but the response failed.');
   }
 
 }

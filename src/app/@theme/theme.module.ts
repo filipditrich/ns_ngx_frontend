@@ -17,7 +17,7 @@ import {
   NbCheckboxModule,
   NbPopoverModule,
   NbContextMenuModule,
-  NbProgressBarModule, NbAccordionComponent, NbAccordionModule,
+  NbProgressBarModule, NbAccordionModule, NbBadgeModule,
 } from '@nebular/theme';
 
 import { NbSecurityModule } from '@nebular/security';
@@ -46,11 +46,8 @@ import {
   ThreeColumnsLayoutComponent,
   TwoColumnsLayoutComponent,
 } from './layouts';
-import { DEFAULT_THEME } from './styles/theme.default';
-import { COSMIC_THEME } from './styles/theme.cosmic';
-import { CORPORATE_THEME } from './styles/theme.corporate';
-import {NbAuthModule} from "@nebular/auth";
-import {RouterModule} from "@angular/router";
+import { NbAuthModule } from '@nebular/auth';
+import { RouterModule } from '@angular/router';
 
 const BASE_MODULES = [CommonModule, FormsModule, ReactiveFormsModule];
 
@@ -69,9 +66,10 @@ const NB_MODULES = [
   NbPopoverModule,
   NbContextMenuModule,
   NgbModule,
-  NbSecurityModule, // *nbIsGranted directive,
+  NbSecurityModule,
   NbProgressBarModule,
-  NbAccordionModule
+  NbAccordionModule,
+  NbBadgeModule,
 ];
 
 const COMPONENTS = [
@@ -105,7 +103,7 @@ const PIPES = [
 const NB_THEME_PROVIDERS = [
   ...NbThemeModule.forRoot(
     {
-      name: 'default'
+      name: 'corporate',
     }).providers,
   ...NbSidebarModule.forRoot().providers,
   ...NbMenuModule.forRoot().providers,

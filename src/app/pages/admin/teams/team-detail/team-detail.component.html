@@ -1,0 +1,45 @@
+<div class="modal-header">
+  <span>Team detail for '{{ team.name }}'</span>
+  <button class="close" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+
+  <header class="d-flex flex-column justify-content-center text-lg-center">
+    <h1>{{team.name}}</h1>
+  </header>
+
+  <hr>
+
+  <!-- TODO: Only admin -->
+  <section class="row">
+
+    <div class="col-sm-12 col-lg-6 p-3">
+      <h6>Created By:</h6>
+      <span class="text-muted">{{team.createdBy.name}}</span>
+    </div>
+
+    <div class="col-sm-12 col-lg-6 p-3">
+      <h6>Created At:</h6>
+      <span class="text-muted">{{team.createdAt}}</span>
+    </div>
+
+    <div class="col-sm-12 col-lg-6 p-3">
+      <h6>Updated By:</h6>
+      <span class="text-muted">{{team.updatedBy.name}}</span>
+    </div>
+
+    <div class="col-sm-12 col-lg-6 p-3">
+      <h6>Updated At:</h6>
+      <span class="text-muted">{{team.updatedAt}}</span>
+    </div>
+
+  </section>
+
+</div>
+<div class="modal-footer flex-wrap">
+  <button class="btn btn-md btn-danger my-1" (click)="deleteTeam()">Delete</button>
+  <button class="btn btn-md btn-primary my-1" (click)="editTeam()">Edit</button>
+  <button class="btn btn-md btn-secondary my-1" (click)="closeModal()">Close</button>
+</div>

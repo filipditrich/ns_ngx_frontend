@@ -13,6 +13,44 @@
 
 @import './bootstrap-rtl';
 
+// ng-pick-datetime
+@import '~ng-pick-datetime/assets/style/picker.min.css';
+
+// pretty checkbox
+@import '~pretty-checkbox/src/pretty-checkbox.scss';
+
+// context menu
+@import '~@angular/cdk/overlay-prebuilt.css';
+.cdk-overlay-container { z-index: 9999999 !important; }
+
+// custom form styling (ns)
+@import '../../../assets/styles/forms';
+@import '../../../assets/styles/buttons';
+@import '../../../assets/styles/profile-picture';
+@import '../../../assets/styles/smart-table';
+@import '../../../assets/styles/font-size';
+
+.cursor-pointer { cursor: pointer;}
+.cursor-grab { cursor: grab; }
+.data-row-old { background: rgba(0, 0, 0, 0.1) !important; opacity: 0.2; }
+.data-row-locked { background: rgba(0, 0, 0, 0.1) !important; opacity: 0.5; }
+.row-data-rejected { background: rgba(255, 0, 0, 0.15) !important; }
+.row-data-approved { background: rgba(0, 255, 0, 0.15) !important; }
+.row-data-registered { opacity: 0.25; }
+.row-data-written { opacity: 0.5 }
+
+.row-data-danger { background: rgba(255, 0, 0, 0.15) !important; }
+.row-data-warning { background: rgba(255, 205, 75, 0.15) !important; }
+.row-data-success { background: rgba(59, 255, 48, 0.15) !important; }
+.row-data-old { background: rgba(0, 0, 0, 0.05) !important; }
+
+.disabled { pointer-events: none !important; opacity: 0.25; }
+.pointer-events-none { pointer-events: none !important; }
+nb-spinner { z-index: 998 !important; }
+
+// ng-select
+@import '~@ng-select/ng-select/themes/default.theme.css';
+
 // install the framework and custom global styles
 @include nb-install() {
 

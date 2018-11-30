@@ -5,7 +5,7 @@ import { AlertsService } from './alerts.service';
 describe('AlertsService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [AlertsService]
+      providers: [AlertsService],
     });
   });
 

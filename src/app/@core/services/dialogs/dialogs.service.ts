@@ -5,7 +5,7 @@ import { Observable, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DialogsService {
 

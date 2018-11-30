@@ -1,3 +1,5 @@
+import { IUser } from './user.interface';
+
 export interface IResponse {
   name: string;
   message?: string;
@@ -8,5 +10,5 @@ export interface IResponse {
 export interface ILoginResponse {
   response: IResponse;
   token?: string;
-  user?: any;
+  user?: IUser;
 }

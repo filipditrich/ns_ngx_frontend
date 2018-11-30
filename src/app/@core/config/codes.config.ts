@@ -8,5 +8,9 @@ export function updateCodes(input: ICode | ICode[]) {
 }
 
 export function getCodeByName(name: string, service) {
-  return findByProp(CODES[service], 'name', name);
+  let result;
+  if (CODES !== {} && !!CODES[service]) {
+    result = findByProp(CODES[service], 'name', name);
+  } else { result = 'UNDEFINED_ERROR'; }
+  return !!result ? result : 'UNDEFINED';
 }

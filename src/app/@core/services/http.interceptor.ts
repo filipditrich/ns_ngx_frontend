@@ -29,7 +29,6 @@ export class HttpHeadersInterceptor implements HttpInterceptor {
 
 
     const modifiedReq = req.clone({ headers: newHeaders });
-    console.log(next.handle(modifiedReq).toPromise());
 
     // Send out modified request
     return next.handle(modifiedReq).toPromise();

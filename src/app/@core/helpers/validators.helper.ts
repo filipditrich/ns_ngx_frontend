@@ -1,4 +1,5 @@
 import { AbstractControl, ValidatorFn } from '@angular/forms';
+import * as moment from 'moment';
 
 export function passwordStrength(regExp?: RegExp): ValidatorFn {
   const strong = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})');
@@ -53,6 +54,21 @@ export function isEmail(): ValidatorFn {
 
     return valid ? null : { 'email' : true };
 
-  }
+  };
+
+}
+
+export function dateLessThan(first: string, second: string): ValidatorFn {
+
+  return (control: AbstractControl): {[key: string]: any | null} => {
+    const firstDate = control.get(first).value;
+    const secondDate = control.get(second).value;
+
+    let valid = !firstDate && !secondDate ? true : moment(firstDate).isBefore(secondDate);
+    if (firstDate === null || secondDate === null) { valid = true; }
+
+    return valid ? null : { 'dateLessThan' : true };
+
+  };
 
 }

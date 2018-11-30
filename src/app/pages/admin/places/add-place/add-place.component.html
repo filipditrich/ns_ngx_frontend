@@ -1,0 +1,36 @@
+<div class="modal-header">
+  <h3>Create a Place</h3>
+  <button class="close" aria-label="Close" (click)="closeModal(false)">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body row">
+  <div class="col-sm-12">
+    <nb-card>
+
+      <nb-card-body>
+        <form novalidate="" class="ng-touched ng-dirty ng-valid form" [formGroup]="form" (submit)="submitForm(form.value)">
+
+          <!-- Name -->
+          <div class="form-group group d-flex flex-column"
+               [ngClass]="{ 'error' : name.invalid && (name.dirty || name.touched) }">
+            <label for="name">Place Name*</label>
+            <input fullwidth id="name" name="name" nbinput formControlName="name" type="text" ng-reflect-name="name" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+            <small class="text-danger" *ngIf="name.hasError('required') && (name.dirty || name.touched)">Place name is required</small>
+          </div>
+
+          <hr>
+
+          <!-- Submit -->
+          <div class="form-group mt-2">
+            <button nbbutton class="col-sm-12 p-3" [ngClass]="{'btn-disabled': !form.valid }">Create Place</button>
+          </div>
+
+        </form>
+      </nb-card-body>
+
+    </nb-card>
+  </div>
+</div>
+
+

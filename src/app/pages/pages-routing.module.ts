@@ -1,40 +1,56 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-
 import { PagesComponent } from './pages.component';
-import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
-import {MatchesComponent} from "./matches/matches.component";
-import {MatchesResultsComponent} from "./matches/matches-results/matches-results.component";
-import {MiscellaneousModule} from "./miscellaneous/miscellaneous.module";
-import {AdminModule} from "./admin/admin.module";
-import {RoleGuard} from "../@core/services/auth.guard";
+import { MatchesResultsComponent } from './matches/matches-results/matches-results.component';
+import { AdminModule } from './admin';
+import { PlayerEnrollmentComponent } from './matches/player-enrollment/player-enrollment.component';
+import { PrintMatchComponent } from './matches/print-match/print-match.component';
+import { RoleGuard} from '../@core/services/auth.guard';
+import { UserRoles } from '../@core/enums/user.enum';
 
-
-const routes: Routes = [{
-  path: '',
-  component: PagesComponent,
-  children: [{
-      path: 'matches',
-      component: MatchesComponent,
-    }, {
-      path: 'matches-results',
-      component: MatchesResultsComponent,
-    }, {
-      path: 'miscellaneous',
-      loadChildren: () => MiscellaneousModule,
-    }, {
-      path: 'admin',
-      loadChildren: () => AdminModule
-    }]
-  },
+/**
+ * Pages routing settings
+ */
+const routes: Routes = [
   {
-      path: '',
-      redirectTo: 'pages/matches',
-      pathMatch: 'full',
-  }, {
-    path: '**',
-    component: NotFoundComponent,
-  }];
+    path: '',
+    component: PagesComponent,
+    data: { title: 'Home' },
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'matches',
+      },
+      {
+        path: 'matches',
+        children: [
+          {
+            path: '',
+            component: PlayerEnrollmentComponent,
+            data: { title: 'Matches' },
+          },
+          {
+            path: 'results',
+            component: MatchesResultsComponent,
+            data: { title: 'Match Results' },
+          },
+          {
+            path: 'print/:id',
+            component: PrintMatchComponent,
+            data: { title: 'Match Print' },
+          },
+        ],
+      },
+      {
+        path: 'admin',
+        loadChildren: () => AdminModule,
+        canActivate: [ RoleGuard ],
+        data: { roles: [ UserRoles.admin ], title: 'Admin' },
+      },
+    ],
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

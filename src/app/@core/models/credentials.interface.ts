@@ -20,7 +20,11 @@ export interface IRegistrationCredentials {
   password: string;
   name: string;
   email?: string;
-  team: Team;
+  team: string;
   roles?: UserRoles;
+}
 
+export interface ICredentialReset {
+  email?: string;
+  username?: string;
 }

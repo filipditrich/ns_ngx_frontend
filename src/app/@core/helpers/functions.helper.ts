@@ -63,3 +63,13 @@ export function isSame(arrayOne, arrayTwo) {
   }
   return _.isEmpty(_.difference(a.sort(), b.sort()));
 }
+
+export function findInvalidControls(controls) {
+  const invalid = [];
+  for (const name in controls) {
+    if (controls[name].invalid) {
+      invalid.push(name);
+    }
+  }
+  return invalid;
+}

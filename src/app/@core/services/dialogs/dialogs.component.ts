@@ -6,7 +6,7 @@ import { DialogType } from '../../enums/dialogs.enum';
 @Component({
   selector: 'ns-dialogs',
   templateUrl: './dialogs.component.html',
-  styleUrls: ['./dialogs.component.scss']
+  styleUrls: ['./dialogs.component.scss'],
 })
 export class DialogsComponent implements OnInit {
 

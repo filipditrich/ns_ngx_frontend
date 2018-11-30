@@ -1,12 +1,13 @@
 import { UserRoles } from '../enums/user.enum';
-import { Team } from '../enums/team.enum';
+import { ITeam } from './team.interface';
 
 export interface IUser {
-  _id?: string;
-  username: string;
+  _id: string; // TODO: ObjectId?
   token?: string;
   name: string;
+  username: string;
   email: string;
   roles: UserRoles[];
-  team: Team;
+  team: ITeam;
+  number: Number;
 }

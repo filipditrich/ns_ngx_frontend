@@ -7,7 +7,7 @@ import { Subject } from 'rxjs/internal/Subject';
 import { NavigationStart, Router } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AlertsService {
 

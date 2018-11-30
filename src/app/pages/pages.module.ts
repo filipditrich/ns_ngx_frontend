@@ -1,67 +1,92 @@
 import { NgModule } from '@angular/core';
-
 import { PagesComponent } from './pages.component';
-import { AlertsService } from "../@core/services/alerts/alerts.service";
-import { DialogsService } from "../@core/services/dialogs/dialogs.service";
-import { PreviousRouteService } from "../@core/services/previous-route.service";
-import {PreventLogged, RoleCheck} from "../@core/services/auth.guard";
-import { AuthGuard } from "../@core/services/auth.guard";
-import { RoleGuard } from "../@core/services/auth.guard";
-import { DashboardModule } from './dashboard/dashboard.module';
+import { AlertsService } from '../@core/services/alerts/alerts.service';
+import { DialogsService } from '../@core/services/dialogs/dialogs.service';
+import { PreviousRouteService } from '../@core/services/previous-route.service';
+import { PreventLogged, RoleCheck } from '../@core/services/auth.guard';
+import { AuthGuard } from '../@core/services/auth.guard';
+import { RoleGuard } from '../@core/services/auth.guard';
 import { PagesRouting } from './pages-routing.module';
 import { ThemeModule } from '../@theme/theme.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
-import {ToasterModule} from "angular2-toaster";
-import {LoginComponent} from "./auth/login/login.component";
-import {AlertsComponent} from "../@core/services/alerts/alerts.component";
-import {DialogsComponent} from "../@core/services/dialogs/dialogs.component";
-import {NotFoundComponent} from "./miscellaneous/not-found/not-found.component";
-import {LogoutComponent} from "./auth/logout/logout.component";
-import { MatchesComponent } from './matches/matches.component';
-import {Ng2SmartTableModule} from "ng2-smart-table";
+import { ToasterModule } from 'angular2-toaster';
+import { AlertsComponent } from '../@core/services/alerts/alerts.component';
+import { DialogsComponent } from '../@core/services/dialogs/dialogs.component';
+import { Ng2SmartTableExtendedModule} from 'ng2-smart-table-extended';
 import { MatchesResultsComponent } from './matches/matches-results/matches-results.component';
-import { MomentModule } from "angular2-moment";
-import { JerseysService } from "../@core/services/jerseys.service";
-import {UserModule} from "./user/user.module";
-import { RegisterComponent } from './auth/register/register.component';
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
-import {HttpHeadersInterceptor} from "../@core/services/http.interceptor";
+import { MomentModule } from 'angular2-moment';
+import { JerseysService } from '../@core/services/jerseys.service';
+import { UserModule } from './user/user.module';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpHeadersInterceptor } from '../@core/services/http.interceptor';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { HumanizerHelper } from '../@core/helpers/humanizer.helper';
+import { UserService} from './user/user.service';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { SortablejsModule } from 'angular-sortablejs';
+import { PlayerEnrollmentComponent } from './matches/player-enrollment/player-enrollment.component';
+import { NbSpinnerModule } from '@nebular/theme';
+import { PlacesService } from './admin/places';
+import { TeamsService } from './admin/teams';
+import { MatchDetailComponent } from './matches/match-detail/match-detail.component';
+import { EnrolledPlayersComponent } from './matches/enrolled-players/enrolled-players.component';
+import { MatchResultWriteModalComponent } from './matches/matches-results/match-result-write-modal/match-result-write-modal.component';
+import { MatchResultModalComponent } from './matches/matches-results/match-result-modal/match-result-modal.component';
+import { PrintMatchComponent } from './matches/print-match/print-match.component';
 
 const PAGES_COMPONENTS = [
-  AlertsComponent, DialogsComponent, PagesComponent
+  AlertsComponent, DialogsComponent, PagesComponent,
 ];
 
 @NgModule({
   imports: [
     PagesRouting,
     ThemeModule,
-    DashboardModule,
     MiscellaneousModule,
-    ToasterModule.forRoot(),
-    Ng2SmartTableModule,
     MomentModule,
-    UserModule
+    UserModule,
+    Ng2SmartTableExtendedModule,
+    NgSelectModule,
+    ToasterModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
+    SortablejsModule,
+    NbSpinnerModule,
   ],
   declarations: [
     ...PAGES_COMPONENTS,
-    MatchesComponent,
     MatchesResultsComponent,
+    PlayerEnrollmentComponent,
+    MatchDetailComponent,
+    EnrolledPlayersComponent,
+    MatchResultWriteModalComponent,
+    MatchResultModalComponent,
+    PrintMatchComponent,
+  ],
+  entryComponents: [
+    MatchDetailComponent,
+    EnrolledPlayersComponent,
+    MatchResultWriteModalComponent,
+    MatchResultModalComponent,
   ],
   providers: [
     AlertsService,
     DialogsService,
     PreviousRouteService,
     JerseysService,
-
+    HumanizerHelper,
+    UserService,
+    PlacesService,
+    TeamsService,
     [PreventLogged],
     [AuthGuard],
     [RoleGuard],
     [RoleCheck],
     { provide: HTTP_INTERCEPTORS,
       useClass: HttpHeadersInterceptor,
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class PagesModule {
 }

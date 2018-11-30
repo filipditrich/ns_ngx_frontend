@@ -1,7 +1,13 @@
-@import "variables";
+@import 'variables';
 
-button{
-  &.reset{
+.btn-disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none !important;
+}
+
+button {
+  &.reset {
     border: none;
     margin: 0;
     padding: 0;
@@ -21,12 +27,20 @@ button{
       outline: none;
     }
   }
-  &.button{
+  &.button {
     @extend .button;
   }
 }
 
-.button{
+.btn-square {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button {
   cursor: pointer;
   background: $main;
   border-radius: 5px;
@@ -68,7 +82,7 @@ button{
   &.btn-disabled {
     opacity: 0.55;
     cursor: not-allowed;
-    pointer-events: none;
+    pointer-events: none !important;
   }
 
   &.btn-action {

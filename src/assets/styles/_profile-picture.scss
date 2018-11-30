@@ -1,11 +1,31 @@
 @import "variables";
 
+.profile-picture-row {
+
+  display: flex;
+  align-items: center;
+
+  .profile-picture:not(:first-of-type):not(.open-more) {
+    margin-left: -13px;
+  }
+
+  .open-more {
+    font-size: $fs_small;
+  }
+
+  .profile-picture:hover {
+    position: relative;
+    z-index: 3;
+  }
+
+}
+
 .profile-picture{
   position: relative;
   overflow: hidden;
   background: $text_5;
   z-index: 2;
-  border: 2px solid $text_4;
+  border: 1px solid $text_4;
   box-sizing: border-box;
 
   &::after{

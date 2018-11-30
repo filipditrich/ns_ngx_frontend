@@ -16,8 +16,7 @@ export function getUrlById(module: string, id: string) {
   return res ? res.url : undefined;
 }
 
-export function getUrl(module:string ,id: string) {
-  const endpoint = getUrlById(module, id);
-  console.log(endpoint);
+export function getUrl(module: string, id: string) {
+  const endpoint = module === 'operator' ? getUrlById(module, id) : `/${module}${getUrlById(module, id)}`;
   return endpoint === undefined ?  `${APIRoot}` : `${APIRoot}/api${endpoint}`;
 }

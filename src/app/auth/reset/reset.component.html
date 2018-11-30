@@ -1,0 +1,32 @@
+<nb-auth-block>
+  <h2 class="title">Create New Password</h2>
+  <small class="form-text sub-title">Now you can create a new password. Please try to remember it this time!</small>
+  <form fullwidth novalidate="" [formGroup]="form" (submit)="onSubmit(form.value)" class="ng-touched ng-dirty ng-valid form login-form row mx-auto">
+    <div class="group d-flex flex-column col-lg-6" [ngClass]="{ 'error': password.hasError('new-is-old') || password.hasError('required') && (password.dirty || password.touched) }">
+      <input type="password" id="password" formControlName="password">
+      <label for="password">New Password</label>
+      <div class="progress mt-2" style="height: 5px" *ngIf="!password.hasError('required')">
+        <div class="progress-bar"
+             [ngStyle]="{ 'width': 'calc((100% / 3) * ' + (password.getError('passwordStrength') ? password.getError('passwordStrength').strength : 3) }"
+             [ngClass]="{
+               'bg-danger' : password.getError('passwordStrength')?.strength === 1,
+               'bg-warning' : password.getError('passwordStrength')?.strength === 2,
+               'bg-success' : !password.hasError('passwordStrength') }"></div>
+      </div>
+      <small class="text-danger" *ngIf="password.hasError('required') && (password.dirty || password.touched)">Password is required</small>
+      <small class="text-danger" *ngIf="password.hasError('new-is-old')">Password can't be same as your old!</small>
+    </div>
+    <div class="group d-flex flex-column col-lg-6" [ngClass]="{ 'error' : passwordSubmit.invalid && (passwordSubmit.dirty || passwordSubmit.touched) }">
+      <input type="password" id="passwordSubmit" formControlName="passwordSubmit">
+      <label for="passwordSubmit">Confirm Password</label>
+      <small class="text-danger" *ngIf="passwordSubmit.hasError('required') && (passwordSubmit.dirty || passwordSubmit.touched)">Password Confirmation is required</small>
+      <small class="text-danger" *ngIf="form.hasError('passwordConfirmation') && password.value !== null && (passwordSubmit.dirty || passwordSubmit.touched)">Passwords do not match</small>
+    </div>
+    <div class="group d-flex flex-column col-sm-12 mt-4">
+      <button fullwidth nbbutton class="col-sm-12 p-3" [ngClass]="{'btn-disabled': !form.valid && form.touched}" aria-disabled="false">Save new Password</button>
+    </div>
+  </form>
+</nb-auth-block>
+
+
+

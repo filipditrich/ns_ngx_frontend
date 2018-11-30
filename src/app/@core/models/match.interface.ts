@@ -1,28 +1,54 @@
-import { MatchResult } from '../enums/result.enum';
+import { IPlace } from './place.interface';
+import { IUser } from './user.interface';
+import { IJersey } from './jersey.interface';
+import { TimestampInterface } from './timestamp.interface';
 
-export interface IMatch {
-
+export interface IMatch extends TimestampInterface {
+  _id: string;
   title: string;
-  date: string;
-  place?: string;
+  date: Date;
+  place: IPlace;
   note?: string;
-  afterMatch?: {
-    teams: IMatchTeam;
-    winner: string;
+  enrollment: {
+    enrollmentOpens: Date,
+    enrollmentCloses: Date,
+    maxCapacity: Number,
+    players: IEnrollmentPlayer[],
   };
-  cancelled: boolean;
-  cancelledBy: string;
-  cancelledByUser: string;
-  createdBy: string;
-
+  results?: IMatchResult;
+  cancelled?: boolean;
+  cancelledBy?: string;
+  cancelledByUser?: string;
 }
 
-export interface IMatchTeam {
-  team: string;
-  players: string[];
-  goals: {
-    scorers: string[];
-    total: number;
-  };
-  result: MatchResult;
+export interface IMatchResult extends TimestampInterface {
+  _id?: string;
+  match?: string;
+  players: IMatchResultPlayers[];
+}
+
+export interface IMatchResultPlayers {
+  goals?: Number;
+  _id?: string;
+  player: IUser;
+  jersey: IJersey;
+  status: MatchResult;
+}
+
+export interface IEnrollmentPlayer {
+  player: string;
+  enrolledOn: Date;
+  status: EnrollmentStatus;
+  info?: IUser;
+}
+
+export enum EnrollmentStatus {
+  Going = 'going',
+  Skipping = 'skipping',
+}
+
+export enum MatchResult {
+  Win = 'win',
+  Loose = 'loose',
+  Draft = 'draft',
 }

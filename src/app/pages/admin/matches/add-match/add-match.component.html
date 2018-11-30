@@ -1,0 +1,172 @@
+<div class="modal-header">
+  <h3>Create a Match</h3>
+  <button class="close" aria-label="Close" (click)="closeModal(false)">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body row">
+  <div class="col-sm-12">
+    <nb-card>
+
+      <nb-card-body>
+        <form novalidate="" class="ng-touched ng-dirty ng-valid form" [formGroup]="form" (submit)="submitForm(form.value)">
+
+          <!-- Title -->
+          <div class="form-group group d-flex flex-column"
+               [ngClass]="{ 'error' : title.invalid && (title.dirty || title.touched) }">
+            <label for="title">Match Title*</label>
+            <input fullwidth id="title" name="title" nbinput formControlName="title" type="text" ng-reflect-name="title" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+            <small class="text-danger" *ngIf="title.hasError('required') && (title.dirty || title.touched)">Match title is required</small>
+          </div>
+
+          <!-- Date & Place -->
+          <div class="row">
+
+            <!-- Date -->
+            <div class="form-group group d-flex flex-column col-sm-6"
+                 [ngClass]="{ 'error' : date.invalid && (date.dirty || date.touched) }">
+              <label for="title">Match Date*</label>
+              <div class="calendar">
+
+                <input
+                  [owlDateTimeTrigger]="dt"
+                  [owlDateTime]="dt"
+                  [min]="now"
+                  id="date" name="date" formControlName="date" ng-reflect-name="date"
+                  class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+
+                <owl-date-time
+                  autoClose
+                  dataType="string"
+                  pickerMode="dialog"
+                  #dt>
+                </owl-date-time>
+
+                <div class="buttons">
+                  <button type="button"><i class="icon ion-ios-calendar"></i></button>
+                </div>
+
+              </div>
+              <small class="text-danger" *ngIf="date.hasError('required') && (date.dirty || date.touched)">Date is required</small>
+            </div>
+
+            <!-- Place -->
+            <div class="form-group group d-flex flex-column col-sm-6"
+                 [ngClass]="{ 'error' : place.invalid && (place.dirty || place.touched) }">
+              <label for="title">Match Place*</label>
+              <ng-select
+                #placeID
+                [items]="placesArray"
+                [multiple]="false"
+                [closeOnSelect]="true"
+                bindLabel="name"
+                bindValue="_id"
+                id="place" name="place" formControlName="place" ng-reflect-name="place" class="ng-select-input-custom flex-grow-1">
+              </ng-select>
+              <small class="text-danger" *ngIf="place.hasError('required') && (place.dirty || place.touched)">Place is required</small>
+            </div>
+          </div>
+
+          <hr>
+
+          <!-- Enrollment -->
+          <div class="row">
+
+            <!-- Enrollment Opens -->
+            <div class="form-group group d-flex flex-column col-sm-5"
+                 [ngClass]="{
+                 'error' : (enrollmentOpens.invalid && (enrollmentOpens.dirty || enrollmentOpens.touched)) || form.hasError('dateLessThan'),
+                 'disabled' : !date.value }">
+              <label for="enrollmentOpens">Enrollment Opens</label>
+              <div class="calendar">
+
+                <input
+                  [owlDateTimeTrigger]="enrollmentOpensODT"
+                  [owlDateTime]="enrollmentOpensODT"
+                  [min]="now"
+                  [max]="date.value"
+                  id="enrollmentOpens" name="enrollmentOpens" formControlName="enrollmentOpens" ng-reflect-name="enrollmentOpens"
+                  class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+
+                <owl-date-time
+                  autoClose
+                  dataType="string"
+                  pickerMode="dialog"
+                  #enrollmentOpensODT>
+                </owl-date-time>
+
+                <div class="buttons">
+                  <button type="button"><i class="icon ion-ios-calendar"></i></button>
+                </div>
+
+              </div>
+              <small class="text-danger" *ngIf="enrollmentOpens.invalid && (enrollmentOpens.dirty || enrollmentOpens.touched)">This date is invalid</small>
+              <small class="text-danger" *ngIf="form.hasError('dateLessThan')">Enrollment Open date cannot be after or same as the Enrollment Close date!</small>
+            </div>
+
+            <!-- Enrollment Closes -->
+            <div class="form-group group d-flex flex-column col-sm-5"
+                 [ngClass]="{
+                 'error' : (enrollmentCloses.invalid && (enrollmentCloses.dirty || enrollmentCloses.touched)) || form.hasError('dateLessThan'),
+                 'disabled' : !date.value }">
+              <label for="enrollmentCloses">Enrollment Closes</label>
+              <div class="calendar">
+
+                <input
+                  [owlDateTimeTrigger]="enrollmentClosesODT"
+                  [owlDateTime]="enrollmentClosesODT"
+                  [min]="now"
+                  [max]="date.value"
+                  id="enrollmentCloses" name="enrollmentCloses" formControlName="enrollmentCloses" ng-reflect-name="enrollmentCloses"
+                  class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+
+                <owl-date-time
+                  autoClose
+                  dataType="string"
+                  pickerMode="dialog"
+                  #enrollmentClosesODT>
+                </owl-date-time>
+
+                <div class="buttons">
+                  <button type="button"><i class="icon ion-ios-calendar"></i></button>
+                </div>
+
+              </div>
+              <small class="text-danger" *ngIf="enrollmentCloses.invalid && (enrollmentCloses.dirty || enrollmentCloses.touched)">This date is invalid</small>
+              <small class="text-danger" *ngIf="form.hasError('dateLessThan')">Enrollment Close date cannot be before or same as the Enrollment Open date!</small>
+            </div>
+
+            <!-- Enrollment Max Capacity -->
+            <div class="form-group group d-flex flex-column col-sm-2"
+                 [ngClass]="{
+                 'error' : (maxCap.invalid && (maxCap.dirty || maxCap.touched)) || form.hasError('dateLessThan')}">
+              <label for="maxCap">Capacity</label>
+              <input fullwidth id="maxCap" name="maxCap" nbinput formControlName="maxCap" type="number" ng-reflect-name="maxCap" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+              <small class="text-danger" *ngIf="maxCap.hasError('required') && (maxCap.dirty || maxCap.touched)">Capacity is required</small>
+              <small class="text-danger" *ngIf="maxCap.hasError('min') && (maxCap.dirty || maxCap.touched)">Capacity cannot be less than 1!</small>
+            </div>
+          </div>
+
+          <hr>
+
+          <!-- Note -->
+          <div class="form-group group d-flex flex-column">
+            <label for="note">Match Note</label>
+            <textarea fullwidth name="note" nbinput id="note" rows="2" formControlName="note" ng-reflect-name="note" class="input-full-width input-md ng-dirty ng-valid ng-touched"></textarea>
+          </div>
+
+          <hr>
+
+          <!-- Submit -->
+          <div class="form-group mt-2">
+            <button nbbutton class="col-sm-12 p-3" [ngClass]="{'btn-disabled': !form.valid }">Create Match</button>
+          </div>
+
+        </form>
+      </nb-card-body>
+
+    </nb-card>
+  </div>
+</div>
+
+

@@ -1,12 +1,32 @@
-@import "variables";
+@import 'variables';
 
-.form{
+.form {
+
+  &.form-column-preferences {
+    .group {
+      //border-radius: 5px;
+
+      //label {
+      //  font-size: $fs_normal;
+      //}
+      //
+      //&:hover {
+      //  box-shadow: 0 0 36px -10px rgba(0, 0, 0, 0.35);
+      //}
+    }
+  }
+
+
   .group {
+    margin: 5px 0;
 
-    margin: 15px 0;
+    &.disabled {
+      opacity: 0.35;
+      pointer-events: none;
+    }
 
     input {
-      padding: 10px;
+      padding: 0.75rem 1.125rem;
       box-sizing: border-box;
     }
     select {
@@ -22,7 +42,7 @@
       border-radius: 5px;
       transition: all 250ms;
 
-      &[type="reset"], &[type="submit"] {
+      &[type='reset'], &[type='submit'] {
         color: $white;
         border: none;
       }
@@ -39,8 +59,8 @@
         border-color: $main;
       }
 
-      &[readonly] {
-        opacity: 0.45;
+      &[readonly], &[disabled] {
+        opacity: 0.35;
         pointer-events: none;
       }
 
@@ -58,34 +78,62 @@
       font-weight: 400;
       font-size: $fs_small;
       color: $text_2;
-      margin: 5px 0;
+      margin: 10px 0;
       &:not(.non-order) { order: -1; }
     }
 
     small {
-      font-size: $fs_smallest;
+      font-size: $fs_small;
       color: $error_dark;
+      margin-top: 5px;
     }
 
-    .ng-select-input-custom .ng-select-container {
-      height: 46px;
-      outline: none;
-      font-size: $fs_small;
-      color: $black;
-      line-height: 24px;
-      background-color: $text_5;
-      border-radius: 5px;
-      transition: all 250ms;
-      border-color: $text_3;
+    .ng-select-disabled {
+      opacity: 0.35 !important;
+      pointer-events: none !important;
+    }
+
+    .ng-select-input-custom {
+
+      .ng-value-container {
+        margin-top: 10px;
+        padding-left: 1.125em;
+
+        .ng-input {
+          padding-left: 0 !important;
+        }
+
+      }
+
+      .ng-select-container {
+        height: 46px;
+        outline: none;
+        font-size: $fs_small;
+        color: $black;
+        line-height: 24px;
+        background-color: $text_5;
+        border-radius: 5px;
+        transition: all 250ms;
+        border-color: $text_3;
+        display: flex;
+        align-items: stretch;
+      }
+
+      .ng-clear-wrapper, .ng-arrow-wrapper {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+      }
+
     }
 
     &.error {
-      input, select, textarea, .ng-select-input-custom .ng-select-container {
+      input, select, textarea, .ng-select-input-custom .ng-select-container, .calendar input, .calendar .buttons button {
         border-color: $error_dark;
         background-color: rgba($error_dark, 0.02);
-        &:focus{
+        &:focus {
           & ~ label {
-            color: $text_2
+            color: $text_2;
           }
           & ~ small {
             opacity: 0.5;
@@ -95,6 +143,52 @@
       label {
         color: $error_dark;
       }
+    }
+
+    .calendar {
+      display: flex;
+      position: relative;
+
+      input {
+        flex: 1 1 auto;
+        outline: none;
+        font-size: $fs_normal;
+        color: $black;
+        line-height: 24px;
+        background-color: $text_5;
+        border: 1px solid $text_3;
+        border-radius: 5px 0 0 5px;
+      }
+
+      input[readonly] ~ .buttons,
+      input[disabled] ~ .buttons {
+        opacity: 0.35 !important;
+        pointer-events: none !important;
+      }
+
+      .buttons {
+        display: flex;
+
+        button {
+          border-radius: 0;
+          font-size: $fs_large;
+          color: $black;
+          line-height: 24px;
+          background-color: $text_5;
+          border: 1px solid $text_3;
+          padding: 10px;
+        }
+
+        button:first-of-type {
+          border-left: none;
+        }
+
+        button:last-of-type {
+          border-radius: 0 5px 5px 0;
+        }
+
+      }
+
     }
 
   }

@@ -4,7 +4,7 @@ import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-t
 import 'style-loader!angular2-toaster/toaster.css';
 
 @Component({
-  selector: 'ngx-notifications',
+  selector: 'ns-notifications',
   styleUrls: ['./notifications.component.scss'],
   templateUrl: './notifications.component.html',
 })

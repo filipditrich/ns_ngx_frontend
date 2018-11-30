@@ -1,13 +1,13 @@
 export enum MatchResult {
   win = 'Win',
   loose = 'Loose',
-  draft = 'Draft'
+  draft = 'Draft',
 }
 
 export namespace MatchResult {
   export function values() {
     return Object.keys(MatchResult).filter(
-      (type) => isNaN(<any>type) && type !== 'values'
+      (type) => isNaN(<any>type) && type !== 'values',
     );
   }
 }

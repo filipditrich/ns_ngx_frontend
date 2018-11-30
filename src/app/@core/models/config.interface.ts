@@ -4,7 +4,7 @@ import { Method } from '../enums/method.enum';
 
 export interface IResource {
   response: IResponse;
-  output: any;
+  output?: any;
 }
 
 export interface IEndpoint {

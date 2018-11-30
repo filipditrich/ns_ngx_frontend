@@ -1,0 +1,76 @@
+<div class="modal-header">
+  <h3>Table Preferences</h3>
+  <button class="close" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+
+  <section id="options-section">
+
+    <header><h5>Options</h5></header>
+
+    <div class="row align-items-baseline">
+
+      <!-- Show past matches switch -->
+      <div *ngFor="let checkbox of FOCheckbox"
+           class="pretty p-switch p-fill col-sm-6 py-2 mr-0">
+        <input
+          [id]="checkbox.id"
+          [name]="checkbox.id"
+          type="checkbox"
+          [checked]="checkbox.value"
+          (change)="checkboxOnChange(checkbox.value, checkbox.id)">
+        <div class="state">
+          <label>{{checkbox.title}}</label>
+        </div>
+      </div>
+
+      <!-- Rows per page select -->
+      <div *ngFor="let select of FOSelect"
+           class="col-sm-6 d-flex align-items-center py-2">
+        <span class="mr-2">{{select.title}}</span>
+        <ng-select
+          [items]="select.options.items"
+          [multiple]="select.options.multiple"
+          [closeOnSelect]="select.options.closeOnSelect"
+          [clearable]="select.options.clearable"
+          [searchable]="select.options.searchable"
+          [placeholder]="filterOptions.rowsPerPage.value"
+          [id]="select.id"
+          class="ng-select-input-custom flex-grow-1"
+          (change)="selectOnChange($event, select.id)">
+        </ng-select>
+      </div>
+
+    </div>
+
+  </section>
+
+  <section id="columns-section">
+
+    <header><h5>Columns</h5></header>
+
+    <div class="row" [sortablejs]="filters" [sortablejsOptions]="sortableOptions">
+      <!-- Rows -->
+      <div class="pretty p-icon p-smooth d-flex align-items-center col-sm-12" *ngFor="let filter of filters">
+        <input
+          id="{{filter.id}}"
+          name="{{filter.id}}"
+          type="checkbox"
+          [checked]="filter.checked"
+          (click)="selectFilter(filter.id)">
+        <div class="state p-info flex-grow-1">
+          <label for="{{filter.id}}" class="position-relative">{{filter.title}}</label>
+        </div>
+        <span class="icon ion-ios-menu fs-larger"></span>
+      </div>
+    </div>
+
+  </section>
+
+</div>
+<div class="modal-footer">
+  <button class="btn btn-md btn-secondary" (click)="closeModal()">Cancel</button>
+  <button class="btn btn-md btn-primary" (click)="applyChanges()">Apply Changes</button>
+</div>

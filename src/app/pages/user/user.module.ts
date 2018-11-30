@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {UserRoutingModule} from "./user-routing.module";
-import {UserComponent} from "./user.component";
+import { UserRoutingModule } from './user-routing.module';
+import { UserComponent } from './user.component';
 import { ProfileComponent } from './profile/profile.component';
-import {ThemeModule} from "../../@theme/theme.module";
+import { ThemeModule } from '../../@theme/theme.module';
 
 @NgModule({
   imports: [
     CommonModule,
     ThemeModule,
-    UserRoutingModule
+    UserRoutingModule,
   ],
   declarations: [
     UserComponent,
-    ProfileComponent
-  ]
+    ProfileComponent,
+  ],
 })
 export class UserModule { }

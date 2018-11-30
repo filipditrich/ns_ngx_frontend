@@ -1,0 +1,136 @@
+<div class="row">
+  <div class="col-sm-12">
+    <nb-card [nbSpinner]="isLoading" nbSpinnerStatus="primary">
+
+      <nb-card-header>
+        <button [routerLink]="['/pages/admin/places']" class="close float-left mr-3">
+          <i class="icon ion-ios-arrow-back fs-larger"></i>
+        </button>
+        <h2>Edit '{{place?.name}}'</h2>
+      </nb-card-header>
+
+      <nb-card-body>
+
+        <form novalidate="" class="ng-touched ng-dirty ng-valid form" [formGroup]="form">
+
+          <!-- Name -->
+          <div class="form-group group d-flex flex-column"
+               [ngClass]="{ 'error' : name.invalid && (name.dirty || name.touched) }">
+            <label for="name">Place Name*</label>
+            <input fullwidth id="name" name="name" nbinput formControlName="name" type="text" ng-reflect-name="name" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+            <small class="text-danger" *ngIf="name.hasError('required') && (name.dirty || name.touched)">Jersey name is required</small>
+          </div>
+
+          <hr>
+
+          <section>
+            <div class="row">
+
+              <!-- Created At -->
+              <div class="form-group group d-flex flex-column col-sm-6"
+                   [ngClass]="{ 'error' : createdAt.invalid && (createdAt.dirty || createdAt.touched) }">
+                <label for="createdAt">Created At</label>
+                <div class="calendar">
+
+                  <input
+                    [owlDateTimeTrigger]="createdAtODT"
+                    [owlDateTime]="createdAtODT"
+                    [max]="now"
+                    id="createdAt" name="createdAt" formControlName="createdAt" ng-reflect-name="createdAt"
+                    class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+
+                  <owl-date-time
+                    autoClose
+                    dataType="string"
+                    pickerMode="dialog"
+                    #createdAtODT>
+                  </owl-date-time>
+
+                  <div class="buttons">
+                    <button type="button"><i class="icon ion-ios-calendar"></i></button>
+                  </div>
+
+                </div>
+                <small class="text-danger" *ngIf="createdAt.invalid">This date is invalid</small>
+              </div>
+
+              <!-- Created By -->
+              <div class="form-group group d-flex flex-column col-sm-6"
+                   [ngClass]="{ 'error' : createdBy.invalid && (createdBy.dirty || createdBy.touched) }">
+                <label for="createdBy">Created By</label>
+                <ng-select
+                  #createdByID
+                  [multiple]="false"
+                  [closeOnSelect]="true"
+                  bindLabel="name"
+                  bindValue="_id"
+                  id="createdBy" name="createdBy" formControlName="createdBy" ng-reflect-name="createdBy" class="ng-select-input-custom flex-grow-1">
+                </ng-select>
+                <small class="text-danger" *ngIf="createdBy.hasError('required') && (createdBy.dirty || createdBy.touched)">Created By is required</small>
+              </div>
+
+            </div>
+
+            <div class="row">
+
+              <!-- Updated At -->
+              <div class="form-group group d-flex flex-column col-sm-6"
+                   [ngClass]="{ 'error' : updatedAt.invalid && (updatedAt.dirty || updatedAt.touched) }">
+                <label for="updatedAt">Updated At</label>
+                <div class="calendar">
+
+                  <input
+                    [owlDateTimeTrigger]="updatedAtODT"
+                    [owlDateTime]="updatedAtODT"
+                    [min]="createdAt.value"
+                    [max]="now"
+                    id="updatedAt" name="updatedAt" formControlName="updatedAt" ng-reflect-name="updatedAt"
+                    class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+
+                  <owl-date-time
+                    autoClose
+                    dataType="string"
+                    pickerMode="dialog"
+                    #updatedAtODT>
+                  </owl-date-time>
+
+                  <div class="buttons">
+                    <button type="button"><i class="icon ion-ios-calendar"></i></button>
+                  </div>
+
+                </div>
+                <small class="text-danger" *ngIf="updatedAt.invalid">This date is invalid</small>
+              </div>
+
+              <!-- Updated By -->
+              <div class="form-group group d-flex flex-column col-sm-6"
+                   [ngClass]="{ 'error' : updatedBy.invalid && (updatedBy.dirty || updatedBy.touched) }">
+                <label for="updatedBy">Updated By</label>
+                <ng-select
+                  #updatedByID
+                  [multiple]="false"
+                  [closeOnSelect]="true"
+                  bindLabel="name"
+                  bindValue="_id"
+                  id="updatedBy" name="updatedBy" formControlName="updatedBy" ng-reflect-name="updatedBy" class="ng-select-input-custom flex-grow-1">
+                </ng-select>
+                <small class="text-danger" *ngIf="updatedBy.hasError('required') && (updatedBy.dirty || updatedBy.touched)">Updated By is required</small>
+              </div>
+
+            </div>
+          </section>
+
+          <hr>
+
+          <!-- Submit -->
+          <div class="form-group mt-2">
+            <button nbbutton class="col-sm-3 mr-sm-0 mr-md-3 p-3 button btn-danger" aria-disabled="false" (click)="deletePlace()">Delete</button>
+            <button nbbutton class="col-sm-3 p-3 button btn-primary" [ngClass]="{'btn-disabled': !form.valid || isSame() }" aria-disabled="false" (click)="submitForm(form.value)">Save Changes</button>
+          </div>
+
+        </form>
+      </nb-card-body>
+
+    </nb-card>
+  </div>
+</div>

@@ -1,53 +1,19 @@
 import { Component } from '@angular/core';
-import {RoleCheck} from "../@core/services/auth.guard";
+import { getMenuItems } from './pages-menu';
 
-// import {RoleCheckService} from "../@core/services/roleCheck.service";
 
 @Component({
-  selector: 'ngx-pages',
+  selector: 'ns-pages',
   template: `
-    <ngx-sample-layout>
-      <nb-menu [items]="menu"></nb-menu>
+    <ns-sample-layout>
+      <nb-menu [items]='menuItems'></nb-menu>
       <router-outlet></router-outlet>
-    </ngx-sample-layout>
+    </ns-sample-layout>
   `,
 })
 export class PagesComponent {
-  public user = sessionStorage.getItem('user');
-  public role = this.user["roles"];
-  constructor(
-    private roleCheck: RoleCheck
-  ) {
+  public menuItems = getMenuItems();
 
-  }
+  constructor() {}
 
-  menu = [{
-    title: 'Zápasy',
-    icon: 'fa fa-beer',
-    children: [
-      {
-        title: 'Zápasy',
-        link: '/pages/matches'
-      },
-      {
-        title: 'Zapisování výsledků',
-        link: '/pages/matches-results'
-      }],
-    }, {
-    title: 'Admin',
-    icon: 'nb-gear',
-    children: [
-      {
-        title: 'Přijmání registrací',
-        link: '/pages/admin/registration-requests',
-      },
-      {
-        title: 'Dresy',
-        link: '/pages/admin/jersey',
-      }
-    ]
-  }, {
-      title: 'User',
-      link: '/pages/user/profile'
-  }];
 }

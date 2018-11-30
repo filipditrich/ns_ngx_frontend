@@ -1,0 +1,39 @@
+<div class="modal-header">
+  <span>Enrolled Players</span>
+  <button class="close" aria-label="Close" (click)="closeModal()"><span aria-hidden="true">&times;</span></button>
+</div>
+<div class="modal-body position-relative">
+
+  <!-- Loader -->
+  <div class="card-loading" *ngIf="isLoading">
+    <div class="lds-dual-ring"></div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <table class="w-100 table table-responsive d-lg-table">
+
+        <thead>
+          <div class="stc-head d-flex justify-content-end align-items-center">
+            <h2 class="m-0 flex-grow-1">Enrolled Players{{ isAdmin ? ' Manager' : '' }}</h2>
+          </div>
+        </thead>
+
+        <tbody>
+          <ng2-smart-table-extended
+            [settings]="settings"
+            [source]="source"
+            (deleteConfirm)="onDeleteConfirm($event)"
+            (editConfirm)="onEditConfirm($event)"
+            (createConfirm)="onCreateConfirm($event)">
+          </ng2-smart-table-extended>
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+
+</div>
+<div class="modal-footer">
+  <button class="" nbbutton aria-label="Close" (click)="closeModal()"><span aria-hidden="true">Close</span></button>
+</div>

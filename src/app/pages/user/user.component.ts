@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'ngx-ns-user',
+  selector: 'ns-ns-user',
   template: `
     <router-outlet></router-outlet>
   `,

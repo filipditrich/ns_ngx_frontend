@@ -1,0 +1,81 @@
+<div class="modal-header">
+  <span>Match detail for '{{ match.title }}'</span>
+  <button class="close" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+
+  <header class="d-flex flex-column justify-content-center text-lg-center">
+    <h1>{{match.title}}</h1>
+    <span class="text-muted">{{match.place.name}}</span>
+    <span class="text-muted">{{match.date}}</span>
+  </header>
+
+  <hr>
+
+  <section class="row">
+
+    <div class="col-sm-12 col-lg-6 p-3">
+      <h6>Enrollment Opens:</h6>
+      <span class="text-muted">{{match.enrollment.enrollmentOpens || 'not-specified'}}</span>
+    </div>
+
+    <div class="col-sm-12 col-lg-6 p-3">
+      <h6>Enrollment Closes:</h6>
+      <span class="text-muted">{{match.enrollment.enrollmentCloses || 'not-specified'}}</span>
+    </div>
+
+    <div class="col-sm-12 col-lg-6 p-3">
+      <h6>Enrolled Players:</h6>
+      <div class="profile-picture-row d-flex" (click)="openMore()">
+        <ng-container *ngFor="let player of match.enrollment.players; let i = index">
+          <div *ngIf="i < 5"
+               class="profile-picture round small cursor-pointer" title="{{player.info.name}}"
+               [attr.ns-jersey-number]="'#' + player.info.number"></div>
+        </ng-container>
+        <div *ngIf="match.enrollment.players.length > 5" class="cursor-pointer open-more ml-2" (click)="openMore()">+{{match.enrollment.players.length - 5}} more</div>
+        <div *ngIf="match.enrollment.players.length === 0">no players</div>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-lg-6 p-3">
+      <h6>Match note:</h6>
+      <span class="text-muted">{{match.note || '---'}}</span>
+    </div>
+
+  </section>
+
+  <hr>
+
+  <!-- TODO: Only admin -->
+  <section class="row" *ngIf="admin">
+
+    <div class="col-sm-12 col-lg-6 p-3">
+      <h6>Created By:</h6>
+      <span class="text-muted">{{match.createdBy.name}}</span>
+    </div>
+
+    <div class="col-sm-12 col-lg-6 p-3">
+      <h6>Created At:</h6>
+      <span class="text-muted">{{match.createdAt}}</span>
+    </div>
+
+    <div class="col-sm-12 col-lg-6 p-3">
+      <h6>Updated By:</h6>
+      <span class="text-muted">{{match.updatedBy.name}}</span>
+    </div>
+
+    <div class="col-sm-12 col-lg-6 p-3">
+      <h6>Updated At:</h6>
+      <span class="text-muted">{{match.updatedAt}}</span>
+    </div>
+
+  </section>
+
+</div>
+<div class="modal-footer flex-wrap">
+  <button *ngIf="admin" class="btn btn-md btn-danger my-1" (click)="deleteMatch()">Delete</button>
+  <button *ngIf="admin" class="btn btn-md btn-primary my-1" (click)="editMatch()">Edit</button>
+  <button class="btn btn-md btn-secondary my-1" (click)="closeModal()">Close</button>
+</div>

@@ -1,0 +1,58 @@
+<div class="modal-header">
+  <span>Invite people</span>
+  <button class="close" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+
+  <p class="text-muted">Here you can add emails to the list of recipients who are going to receive an invitation to join your Team App.</p>
+
+  <hr>
+
+  <form novalidate="" class="ng-touched ng-dirty ng-valid form" [formGroup]="form">
+      <!-- Email Input -->
+      <div class="form-group group d-flex flex-column"
+           [ngClass]="{ 'error' : email.hasError('empty-list') || email.hasError('duplicate') || email.hasError('email') || (email.hasError('required') && (email.dirty || email.touched) && invitationEmails.length === 0) }">
+
+        <div class="calendar">
+          <input
+            id="email"
+            name="email"
+            formControlName="email"
+            type="email"
+            ng-reflect-name="email"
+            class="input-full-width input-md ng-dirty ng-valid ng-touched"
+            required nbinput fullwidth
+            (keyup.enter)="addEvite(email.value)">
+
+          <div class="buttons">
+            <button type="button" (click)="addEvite(email.value)">
+              <i class="icon ion-ios-add"></i>
+            </button>
+          </div>
+
+        </div>
+        <small class="text-danger" *ngIf="email.hasError('required') && (email.dirty || email.touched) && invitationEmails.length === 0">Email address is required</small>
+        <small class="text-danger" *ngIf="email.hasError('duplicate')">This email is already in your list of recipients</small>
+        <small class="text-danger" *ngIf="email.hasError('email')">This email is invalid</small>
+      </div>
+  </form>
+
+  <hr>
+
+  <!-- Email List -->
+  <ul class="list-group p-0">
+    <li *ngFor="let inv of invitationEmails" class="list-group-item d-flex justify-content-between align-items-center">
+      {{inv}}
+      <button class="reset close-button text-danger" (click)="removeInvEmail(inv)">
+        <span class="icon ion-ios-trash fs-large"></span>
+      </button>
+    </li>
+  </ul>
+
+</div>
+<div class="modal-footer flex-wrap">
+  <button class="btn btn-md btn-secondary my-1" (click)="closeModal()">Close</button>
+  <button class="btn btn-md btn-primary my-1" (click)="submitForm()">Send</button>
+</div>

@@ -1,28 +1,27 @@
-<div class="row">
-  <div class="col-md-12 col-lg-6" *ngFor="let match of matchArray">
-    <nb-card>
-      <nb-card-header>
-        <h2>{{match.title}}</h2>
-        <small>Datum: {{match.date | amDateFormat: 'DD.MM.YYYY'}}</small>
-      </nb-card-header>
-      <nb-card-body>
-        <form autocomplete="nope" novalidate class="ng-touched ng-dirty ng-valid" [formGroup]="form" (submit)="onSubmit(form.value, match._id)">
-          <div class="form-group">
-            <label for="result">Výsledek</label>
-            <select class="form-control" id="result" formControlName="result" placeholder="Zadejte výlsedek vašeho týmu">
-              <option value="won" selected>Vyhrál</option>
-              <option value="lost">Prohrál</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="jersey">Dres</label>
-            <select class="form-control" id="jersey" formControlName="jersey" placeholder="Zadejte barvu vašeho dresu">
-              <option *ngFor="let jersey of jerseyArray" value='{{jersey.color}}'>{{jersey.name}}</option>
-            </select>
-          </div>
-          <button type="submit" class="btn btn-hero-success">Odeslat</button>
-        </form>
-      </nb-card-body>
-    </nb-card>
-  </div>
-</div>
+<nb-card [nbSpinner]="isLoading" nbSpinnerStatus="primary">
+  <nb-card-body>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <table class="w-100 table table-responsive d-lg-table">
+
+          <thead>
+            <div class="stc-head d-flex justify-content-end align-items-center">
+              <h2 class="m-0 flex-grow-1">Played Matches</h2>
+              <i class="icon ion-md-cog cursor-pointer fs-large" (click)="openPreferences()"></i>
+            </div>
+          </thead>
+
+          <tbody>
+            <ng2-smart-table-extended
+              [settings]="settings"
+              [source]="source"
+              (edit)="editResults($event)">
+            </ng2-smart-table-extended>
+          </tbody>
+
+        </table>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IResource } from '../models/config.interface';
-import { APIRoot } from "../../../environments/environment";
-import { forEach } from 'lodash';
+import { APIRoot } from '../../../environments/environment';
 
 import * as codes from '../config/codes.config';
 import * as endpoints from '../config/endpoints.config';
 
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PreloadInitializer {
 
@@ -18,7 +17,7 @@ export class PreloadInitializer {
   startupConfig(): Promise<any> {
     return Promise.all([
       this.obtainCodes(),
-      this.obtainRoutes()
+      this.obtainRoutes(),
     ]);
   }
 
@@ -34,7 +33,6 @@ export class PreloadInitializer {
       .then(result => {
         if (result.output) {
           codes.updateCodes(result.output);
-          console.log(`[PRELOAD:OK]: ${codes.getCodeByName('RESOURCE_LOADED', 'system').name} - Codes`);
         } else {
           console.error('[PRELOAD:FAIL] Haven\'t received any codes!', result);
         }
@@ -54,8 +52,6 @@ export class PreloadInitializer {
       .then(result => {
         if (result.output) {
           endpoints.updateEndpoints(result.output);
-          console.log(`[PRELOAD:OK]: ${codes.getCodeByName('RESOURCE_LOADED', 'system').name} - Routes`);
-          console.log(result.output)
         } else {
           console.error('[PRELOAD:FAIL] Haven\'t received any routes!', result);
         }

@@ -1,92 +1,30 @@
-<!--<div class="container">-->
-
-  <!--<div class="dialog-window dialog-window-secondary" *ngIf="oneEmailOpen">-->
-    <!--<div class="modal-dialog">-->
-      <!--<div class="modal-content">-->
-        <!--<div class="modal-header">-->
-          <!--<h5 class="modal-title">Invite</h5>-->
-          <!--<button type="button" class="reset close" aria-label="Close" (click)="oneEmailOpen = false">-->
-            <!--<span aria-hidden="true">&times;</span>-->
-          <!--</button>-->
-        <!--</div>-->
-        <!--<div class="modal-body text-muted">-->
-          <!--<span>Fill in an email of a person you want to invite and we will send them a registration link!</span>-->
-          <!--<form class="form" [formGroup]="inviteOneForm">-->
-            <!--<div class="group d-flex flex-column" [ngClass]="{ 'error' : oneEmail.hasError('email') || oneEmail.hasError('required') && (oneEmail.dirty || oneEmail.touched) }">-->
-              <!--<input type="email" id="email" formControlName="email">-->
-              <!--<label for="email">Email Address</label>-->
-              <!--<small class="text-danger" *ngIf="oneEmail.hasError('required') && (oneEmail.dirty || oneEmail.touched)">Email address is required</small>-->
-              <!--<small class="text-danger" *ngIf="oneEmail.hasError('email')">This email is invalid</small>-->
-            <!--</div>-->
-          <!--</form>-->
-        <!--</div>-->
-        <!--<div class="modal-footer">-->
-          <!--<button class="button large btn-cancel" (click)="inviteOneForm.reset(); oneEmailOpen = false">Cancel</button>-->
-          <!--<button class="button large btn-primary" (click)="sendEvite(oneEmail.value)">Invite</button>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</div>-->
-
-  <!--<div class="dialog-window dialog-window-secondary" *ngIf="moreEmailOpen">-->
-    <!--<div class="modal-dialog">-->
-      <!--<div class="modal-content">-->
-        <!--<div class="modal-header">-->
-          <!--<h5 class="modal-title">Invite More</h5>-->
-          <!--<button type="button" class="reset close" aria-label="Close" (click)="moreEmailOpen = false">-->
-            <!--<span aria-hidden="true">&times;</span>-->
-          <!--</button>-->
-        <!--</div>-->
-        <!--<div class="modal-body text-muted">-->
-          <!--<span>Fill in an email of a person you want to invite, click on the "+" sign button and then add more emails to send invitation to.</span>-->
-          <!--<form class="form" [formGroup]="inviteMoreForm">-->
-            <!--<div class="group d-flex flex-column" [ngClass]="{ 'error' : moreEmail.hasError('empty-list') || moreEmail.hasError('duplicate') || moreEmail.hasError('email') || (moreEmail.hasError('required') && (moreEmail.dirty || moreEmail.touched) && invitationEmails.length === 0) }">-->
-              <!--<div class="add-input">-->
-                <!--<input type="email" id="email-more" formControlName="email" placeholder="Email Address" (keyup.enter)="addEvite(moreEmail.value)">-->
-                <!--<button class="reset add-input-btn close-button" (click)="addEvite(moreEmail.value)"><span>&#xf102;</span></button>-->
-              <!--</div>-->
-              <!--<small class="text-danger" *ngIf="moreEmail.hasError('required') && (moreEmail.dirty || moreEmail.touched) && invitationEmails.length === 0">Email address is required</small>-->
-              <!--<small class="text-danger" *ngIf="moreEmail.hasError('duplicate')">This email is already in your list of recipients</small>-->
-              <!--<small class="text-danger" *ngIf="moreEmail.hasError('email')">This email is invalid</small>-->
-            <!--</div>-->
-          <!--</form>-->
-          <!--<ul class="list-group">-->
-            <!--<li *ngFor="let inv of invitationEmails" class="list-group-item d-flex justify-content-between align-items-center">-->
-              <!--{{inv}}-->
-              <!--<button class="reset close-button text-danger" (click)="removeInvEmail(inv)"><span>&#xf4c4;</span></button>-->
-            <!--</li>-->
-          <!--</ul>-->
-        <!--</div>-->
-        <!--<div class="modal-footer">-->
-          <!--<button class="button large btn-cancel" (click)="closeMoreEmail()">Cancel</button>-->
-          <!--<button class="button large btn-primary" (click)="sendEvites(invitationEmails)" [ngClass]="{ 'btn-disabled' : invitationEmails.length === 0 }">Invite</button>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</div>-->
-<nb-card>
-  <nb-card-header>
-    Pozívání dalších hráčů
-  </nb-card-header>
+<nb-card [nbSpinner]="isLoading" nbSpinnerStatus="primary">
   <nb-card-body>
-    <form action="">
-      <label>Email</label>
-      <input type="text">
-    </form>
 
-    <button class="btn btn-hero btn-hero-success" (click)="openForm = !openForm">Pozvat více najednou</button>
-    <form action="" *ngIf="openForm">
-      LOOOL
-    </form>
-  </nb-card-body>
-</nb-card>
+    <div class="row">
+      <div class="col-sm-12">
+        <table class="w-100 table table-responsive d-lg-table">
 
-<nb-card>
-  <nb-card-header>
-    Přijmání uživatelských registrací
-  </nb-card-header>
-  <nb-card-body>
-    <ng2-smart-table [settings]="settings" [source]="source" (custom)="onCustom($event)">
-    </ng2-smart-table>
+          <thead>
+            <div class="stc-head d-flex justify-content-end align-items-center">
+              <h2 class="m-0 flex-grow-1">Registration Requests</h2>
+              <button class="button btn btn-hero-secondary mx-2 fs-larger" (click)="openInviteModal()">Invite</button>
+              <i class="icon ion-md-cog cursor-pointer fs-large" (click)="openPreferences()"></i>
+            </div>
+          </thead>
+
+          <tbody>
+            <ng2-smart-table-extended
+              [settings]="settings"
+              [source]="source"
+              (userRowSelect)="onUserRowSelect($event)"
+              (delete)="onDelete($event)"
+              (edit)="onEdit($event)">
+            </ng2-smart-table-extended>
+          </tbody>
+
+        </table>
+      </div>
+    </div>
   </nb-card-body>
 </nb-card>

@@ -1,4 +1,4 @@
 export enum DialogType {
   Danger,
-  Info
+  Info,
 }

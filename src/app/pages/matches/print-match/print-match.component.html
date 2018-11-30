@@ -1,0 +1,64 @@
+<div id="content" #content>
+  <nb-card [nbSpinner]="isLoading" nbSpinnerStatus="primary">
+
+    <nb-card-header>
+      <h1 class="d-flex align-items-center">
+        <button [routerLink]="['/pages/matches/']" class="close float-left mr-3">
+          <i class="icon ion-ios-arrow-back fs-larger"></i>
+        </button>
+        {{match?.title}}
+      </h1>
+      <span class="text-muted fs-big">{{match?.place.name}}</span><br>
+      <span class="text-muted fs-big">{{match?.date}}</span>
+    </nb-card-header>
+
+    <nb-card-body>
+
+      <div class="row">
+        <div class="col-sm-12 col-lg-6 p-3">
+          <h4>Enrollment Opens:</h4>
+          <span class="text-muted">{{match?.enrollment.enrollmentOpens || 'not-specified'}}</span>
+        </div>
+
+        <div class="col-sm-12 col-lg-6 p-3">
+          <h4>Enrollment Closes:</h4>
+          <span class="text-muted">{{match?.enrollment.enrollmentCloses || 'not-specified'}}</span>
+        </div>
+
+        <div class="col-sm-12 col-lg-6 p-3">
+          <h4>Players Enrolled:</h4>
+          <span class="text-muted">{{playersEnrolled()}}</span>
+        </div>
+
+        <div class="col-sm-12 col-lg-6 p-3">
+          <h4>Match note:</h4>
+          <span class="text-muted">{{match?.note || '---'}}</span>
+        </div>
+      </div>
+
+      <div class="row">
+
+        <table class="table">
+          <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Username</th>
+            <th scope="col">Enrolled On</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let player of match?.enrollment.players; let i = index">
+            <th scope="row">{{i}}</th>
+            <td>{{player.info.name}} (#{{player.info.number}})</td>
+            <td>@{{player.info.username}}</td>
+            <td>{{player.enrolledOn}}</td>
+          </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </nb-card-body>
+
+  </nb-card>
+</div>

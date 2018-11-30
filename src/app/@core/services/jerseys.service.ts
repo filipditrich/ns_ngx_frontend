@@ -1,11 +1,10 @@
-import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
-import {IMatch} from "../models/match.interface";
-import {Observable} from "rxjs";
-import {IResponse} from "../models/response.interface";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { IResponse } from '../models/response.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class JerseysService {
   constructor(private http: HttpClient) {}
@@ -15,6 +14,6 @@ export class JerseysService {
   }
 
   addJersey(input) {
-    return this.http.post('http://localhost:4000/api/core/jerseys', {input})
+    return this.http.post('http://localhost:4000/api/core/jerseys', {input});
   }
 }
