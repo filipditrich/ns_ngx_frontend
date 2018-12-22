@@ -38,10 +38,10 @@ export class RegisterComponent implements OnInit {
      */
     this.form = new FormGroup({
       username: new FormControl(null, [
-        Validators.required, Validators.minLength(5), Validators.maxLength(32), isUpperCase(),
+        Validators.required, Validators.minLength(2), Validators.maxLength(32),
       ]),
       name: new FormControl(null, [
-        Validators.required, Validators.minLength(5),
+        Validators.required, Validators.minLength(2),
       ]),
       password: new FormControl(null, [
         Validators.required, passwordStrength(),
@@ -79,6 +79,7 @@ export class RegisterComponent implements OnInit {
 
   /** ngOnInit **/
   ngOnInit() {
+    this.team.setValue(0, { onlySelf: true });
     this.route.data.subscribe(data => {
       this.request = data.request;
     }, error => {});
@@ -91,6 +92,7 @@ export class RegisterComponent implements OnInit {
    * @param input
    */
   onSubmit(input) {
+    if (this.team.value === 0) this.team.setErrors({ required: true });
     if (!this.form.valid) {
       this.username.markAsTouched();
       this.password.markAsTouched();

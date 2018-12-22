@@ -92,6 +92,7 @@ export class EnrolledPlayersComponent implements OnInit {
           type: 'custom',
           component: EPlayersStatusEditorComponent,
         },
+        valuePrepareFunction: value => translate(value.toUpperCase()),
       },
     },
   };

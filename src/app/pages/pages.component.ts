@@ -82,7 +82,7 @@ export class PagesComponent {
       const output = !response.output ? [] : response.output;
       output.forEach(group => {
         this.MENU_ITEMS.find(x => x.title === translate('MATCHES')).children
-          .push({ title: group.name, link: `/pages/matches/gn/${group.name.toLowerCase().replace(' ', '-')}` });
+          .push({ title: group.name, link: `/pages/matches/gnr/${group.name.toLowerCase().replace(' ', '-')}` });
       });
       // TODO: DRY1
       const user = JSON.parse(sessionStorage.getItem('user'));

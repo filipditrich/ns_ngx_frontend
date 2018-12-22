@@ -58,7 +58,7 @@ export class MatchesResultsComponent extends DefaultTableComponent implements On
     };
     this.settings = {
       edit: {
-        editButtonContent: `<i class="icon nb-edit fs-large"></i>`,
+        editButtonContent: `<i class="icon ion-md-add fs-large"></i>`,
         editClassFunction: row => {
           return this.isWritten(row.data) ? 'pointer-events-none' : '';
         },

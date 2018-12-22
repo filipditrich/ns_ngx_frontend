@@ -18,6 +18,9 @@ export class HumanizerHelper {
    * @return {string}
    */
   date(date) {
+    if (!moment(new Date(date)).isValid()) {
+      date = moment(new Date(date), getLang()).locale('en');
+    }
     return moment(new Date(date)).locale(getLang()).format('lll');
   }
 

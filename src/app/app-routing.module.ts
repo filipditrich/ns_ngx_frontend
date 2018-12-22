@@ -18,6 +18,7 @@ const routes: Routes = [
     path: 'pages',
     loadChildren: () => PagesModule,
     canActivate: [ AuthGuard ],
+    runGuardsAndResolvers: 'always',
   },
   {
     path: 'auth',

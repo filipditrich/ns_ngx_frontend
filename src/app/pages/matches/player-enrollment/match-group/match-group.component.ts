@@ -28,12 +28,16 @@ export class MatchGroupComponent extends PlayerEnrollmentComponent implements On
               private activatedRoute: ActivatedRoute,
               private groupsService: GroupsService) {
     super(matchesService, errorHelper, humanizer, toasterService, userService, modalService, router);
+  }
+
+  ngOnInit() {
     const groupName = this.activatedRoute.snapshot.paramMap.get('group').replace('-', ' ').toLowerCase();
     this.groupsService.getByName(groupName).subscribe(response => {
       if (response.response.success) {
         this.matchGroup = response.output.name;
         this.storagePrefName = `${this.matchGroup.replace(' ', '').toLowerCase()}Group`;
         this.loadData();
+        this.loadPreferences();
       } else {
         this.router.navigate(['/pages/matches']).then(() => {
           this.errorHelper.processedButFailed(response);
@@ -44,9 +48,6 @@ export class MatchGroupComponent extends PlayerEnrollmentComponent implements On
         this.errorHelper.handleGenericError(error);
       });
     });
-  }
-
-  ngOnInit() {
   }
 
   /**

@@ -82,7 +82,7 @@ export class MatchResultWriteModalComponent implements OnInit {
       if (this.set.length === 1 && this.resultOptions.length <= 2) {
         this._jerseys = this.jerseys.filter(x => x._id !== this.set[0].jersey);
         this.jersey.setValue(this._jerseys.length === 1 ? this._jerseys[0]._id : 0);
-      } else {
+      } else if (this.set.length) {
         this.jersey.setValue(0);
         this._jerseys = [] = [ ...this.jerseys ];
       }
@@ -101,11 +101,10 @@ export class MatchResultWriteModalComponent implements OnInit {
       if (this.set.length === 1 && this.resultOptions.length <= 2) {
         this._resultOptions = this.resultOptions.filter(x => x.value !== this.set[0].status);
         this.result.setValue(this._resultOptions[0].value);
-      } else {
+      } else if (this.set.length) {
         this.result.setValue(0);
         this._resultOptions = [ ...this.resultOptions ];
       }
-      this._resultOptions = [ ...this.resultOptions ];
     }
   }
 

@@ -35,6 +35,7 @@ import { MatchResultModalComponent } from './matches/matches-results/match-resul
 import { PrintMatchComponent } from './matches/print-match/print-match.component';
 import { SharedModule } from '../@shared/shared.module';
 import { MatchGroupComponent } from './matches/player-enrollment/match-group/match-group.component';
+import { MatchGroupRouterComponent } from './matches/player-enrollment/match-group/match-group.router';
 
 const PAGES_COMPONENTS = [
   AlertsComponent, DialogsComponent, PagesComponent,
@@ -66,6 +67,7 @@ const PAGES_COMPONENTS = [
     MatchResultModalComponent,
     PrintMatchComponent,
     MatchGroupComponent,
+    MatchGroupRouterComponent,
   ],
   entryComponents: [
     MatchDetailComponent,

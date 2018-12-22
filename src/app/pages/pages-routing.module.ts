@@ -8,6 +8,7 @@ import { PrintMatchComponent } from './matches/print-match/print-match.component
 import { RoleGuard} from '../@core/services/auth.guard';
 import { UserRoles } from '../@shared/enums';
 import { MatchGroupComponent } from './matches/player-enrollment/match-group/match-group.component';
+import { MatchGroupRouterComponent } from './matches/player-enrollment/match-group/match-group.router';
 
 /**
  * Pages routing settings
@@ -35,6 +36,11 @@ const routes: Routes = [
             path: 'all',
             component: PlayerEnrollmentComponent,
             data: { title: 'Matches' },
+          },
+          {
+            path: 'gnr/:group',
+            component: MatchGroupRouterComponent,
+            data: { title: 'Match Group' },
           },
           {
             path: 'gn/:group',
