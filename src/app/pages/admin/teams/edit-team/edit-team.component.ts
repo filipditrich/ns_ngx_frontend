@@ -1,16 +1,15 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
-import { ErrorHelper } from '../../../../@core/helpers/error.helper';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TeamsService } from '../teams.service';
 import { ToasterService } from 'angular2-toaster';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgSelectComponent } from '@ng-select/ng-select';
 import { UserService } from '../../../user/user.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalComponent } from '../../../ui-features/modals/modal/modal.component';
-import { ITeam } from '../../../../@core/models/team.interface';
+import { translate, ErrorHelper } from '../../../../@shared/helpers';
+import { ITeam } from '../../../../@shared/interfaces';
 import * as moment from 'moment';
-import * as codeConfig from '../../../../@core/config/codes.config';
+import * as codeConfig from '../../../../@shared/config/codes.config';
 
 @Component({
   selector: 'ns-edit-team',
@@ -26,10 +25,6 @@ export class EditTeamComponent implements OnInit {
   public now = new Date();
   public team: ITeam;
   public isLoading = true;
-
-  // ViewChild of ng-select component
-  @ViewChild('updatedByID') ngSelectUpdatedBy: NgSelectComponent;
-  @ViewChild('createdByID') ngSelectCreatedBy: NgSelectComponent;
 
   constructor(private errorHelper: ErrorHelper,
               private teamsService: TeamsService,
@@ -75,44 +70,38 @@ export class EditTeamComponent implements OnInit {
           this.updatedAt.setValue(this.team.updatedAt);
 
           // createdBy field
-          if (!!this.team.createdBy && !!this.team.createdBy._id) {
-            if (!!this.ngSelectCreatedBy.itemsList.findItem(this.team.createdBy._id)) {
-              this.ngSelectCreatedBy.select(this.ngSelectCreatedBy.itemsList.findItem(this.team.createdBy._id));
+          if (!!this.team.createdBy && this.team.createdBy._id) {
+            if (this.usersArray.findIndex(x => x._id === this.team.createdBy._id) >= 0) {
+              this.createdBy.setValue(this.team.createdBy._id, {onlySelf: true});
             } else if (this.team.createdBy.username === 'deletedUser') {
-              if (!this.ngSelectCreatedBy.itemsList.findItem(this.team.createdBy._id)) {
-                this.ngSelectCreatedBy.itemsList.addItem(this.team.createdBy);
+              if (this.usersArray.findIndex(x => x._id === this.team.createdBy._id) < 0) {
+                this.usersArray.push(this.team.createdBy);
               }
-              this.ngSelectCreatedBy.select(this.ngSelectCreatedBy.itemsList.findItem(this.team.createdBy._id));
+              this.createdBy.setValue(this.team.createdBy._id, {onlySelf: true});
             } else {
-              if (!this.ngSelectCreatedBy.itemsList.findItem(1)) {
-                this.ngSelectCreatedBy.itemsList.addItem({ _id: 1, name: '(unknown user)' });
+              if (this.usersArray.findIndex(x => x._id === 1) < 0) {
+                this.usersArray.push({_id: 1, name: '(unknown user)'});
               }
-              this.ngSelectCreatedBy.select(this.ngSelectCreatedBy.itemsList.findItem(1));
+              this.createdBy.setValue(1, {onlySelf: true});
             }
           }
 
           // updatedBy field
-          if (!!this.team.updatedBy && !!this.team.updatedBy._id) {
-            if (!!this.ngSelectUpdatedBy.itemsList.findItem(this.team.updatedBy._id)) {
-              this.ngSelectUpdatedBy.select(this.ngSelectUpdatedBy.itemsList.findItem(this.team.updatedBy._id));
+          if (!!this.team.updatedBy && this.team.updatedBy._id) {
+            if (this.usersArray.findIndex(x => x._id === this.team.updatedBy._id) >= 0) {
+              this.updatedBy.setValue(this.team.updatedBy._id, {onlySelf: true});
             } else if (this.team.updatedBy.username === 'deletedUser') {
-              if (!this.ngSelectUpdatedBy.itemsList.findItem(this.team.updatedBy._id)) {
-                this.ngSelectUpdatedBy.itemsList.addItem(this.team.updatedBy);
+              if (this.usersArray.findIndex(x => x._id === this.team.updatedBy._id) < 0) {
+                this.usersArray.push(this.team.updatedBy);
               }
-              this.ngSelectUpdatedBy.select(this.ngSelectUpdatedBy.itemsList.findItem(this.team.updatedBy._id));
+              this.updatedBy.setValue(this.team.updatedBy._id, {onlySelf: true});
             } else {
-              if (!this.ngSelectUpdatedBy.itemsList.findItem(1)) {
-                this.ngSelectUpdatedBy.itemsList.addItem({ _id: 1, name: '(unknown user)' });
+              if (this.usersArray.findIndex(x => x._id === 1) < 0) {
+                this.usersArray.push({_id: 1, name: '(unknown user)'});
               }
-              this.ngSelectUpdatedBy.select(this.ngSelectUpdatedBy.itemsList.findItem(1));
+              this.updatedBy.setValue(1, {onlySelf: true});
             }
           }
-
-          // hack/fix for misplaced values
-          this.ngSelectCreatedBy.focus();
-          this.ngSelectUpdatedBy.focus();
-          document.getElementById('name').focus();
-          document.getElementById('name').blur();
 
           // mark all fields as touched
           this.touchAllFields();
@@ -129,7 +118,7 @@ export class EditTeamComponent implements OnInit {
         switch (error.name || error.type) {
           case codeConfig.getCodeByName('TEAM_NOT_FOUND', 'core').name: {
             this.router.navigate(['/pages/admin/teams/']).then(() => {
-              this.toasterService.popAsync('error', 'Team not found.', 'Team with the specified ID is invalid or does not exist.');
+              this.toasterService.popAsync('error', translate('TEAM_NOT_FOUND_TITLE'), translate('TEAM_NOT_FOUND_MSG'));
             });
             break;
           }
@@ -165,11 +154,11 @@ export class EditTeamComponent implements OnInit {
       container: 'nb-layout',
     });
 
-    modal.componentInstance.modalHeader = `Delete '${this.team.name}'?`;
-    modal.componentInstance.modalContent = '<p>Do you really want to delete this team?</p>';
+    modal.componentInstance.modalHeader = `${translate('DELETE')} '${this.team.name}'?`;
+    modal.componentInstance.modalContent = `<p>${translate('DELETE_TEAM_MSG')}</p>`;
     modal.componentInstance.modalButtons = [
       {
-        text: 'Delete',
+        text: translate('DELETE'),
         classes: 'btn btn-danger',
         action: () => {
           this.teamsService.delete(this.team._id).subscribe(response => {
@@ -186,7 +175,7 @@ export class EditTeamComponent implements OnInit {
         },
       },
       {
-        text: 'Cancel',
+        text: translate('CANCEL'),
         classes: 'btn btn-secondary',
         action: () => modal.close(),
       },
@@ -201,8 +190,6 @@ export class EditTeamComponent implements OnInit {
       this.usersService.getAllUsers().subscribe(response => {
         if (response.response.success) {
           this.usersArray = response.output;
-          this.ngSelectCreatedBy.itemsList.setItems(this.usersArray);
-          this.ngSelectUpdatedBy.itemsList.setItems(this.usersArray);
           resolve();
         } else {
           this.errorHelper.processedButFailed(response);
@@ -238,7 +225,7 @@ export class EditTeamComponent implements OnInit {
       this.teamsService.update(this.team._id, input).subscribe(response => {
         if (response.response.success) {
           this.router.navigate(['/pages/admin/teams']).then(() => {
-            this.toasterService.popAsync('success', 'Team Updated!', 'Team successfully updated.');
+            this.toasterService.popAsync('success', translate('TEAM_UPDATED_TITLE'), translate('TEAM_UPDATED_MSG'));
           });
         } else {
           this.errorHelper.processedButFailed(response);

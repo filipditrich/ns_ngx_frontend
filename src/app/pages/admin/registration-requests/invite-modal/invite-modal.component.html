@@ -1,12 +1,12 @@
 <div class="modal-header">
-  <span>Invite people</span>
+  <span>{{ 'INVITE_PEOPLE' | translate }}</span>
   <button class="close" aria-label="Close" (click)="closeModal()">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
 <div class="modal-body">
 
-  <p class="text-muted">Here you can add emails to the list of recipients who are going to receive an invitation to join your Team App.</p>
+  <p class="text-muted">{{ 'INVITE_PEOPLE_MSG' | translate }}</p>
 
   <hr>
 
@@ -33,9 +33,9 @@
           </div>
 
         </div>
-        <small class="text-danger" *ngIf="email.hasError('required') && (email.dirty || email.touched) && invitationEmails.length === 0">Email address is required</small>
-        <small class="text-danger" *ngIf="email.hasError('duplicate')">This email is already in your list of recipients</small>
-        <small class="text-danger" *ngIf="email.hasError('email')">This email is invalid</small>
+        <small class="text-danger" *ngIf="email.hasError('required') && (email.dirty || email.touched) && invitationEmails.length === 0">{{ 'EMAIL_REQUIRED' | translate }}</small>
+        <small class="text-danger" *ngIf="email.hasError('duplicate')">{{ 'EMAIL_DUPLICATE' | translate }}</small>
+        <small class="text-danger" *ngIf="email.hasError('email')">{{ 'EMAIL_INVALID' | translate }}</small>
       </div>
   </form>
 
@@ -53,6 +53,6 @@
 
 </div>
 <div class="modal-footer flex-wrap">
-  <button class="btn btn-md btn-secondary my-1" (click)="closeModal()">Close</button>
-  <button class="btn btn-md btn-primary my-1" (click)="submitForm()">Send</button>
+  <button class="btn btn-md btn-secondary my-1" (click)="closeModal()">{{ 'CLOSE' | translate }}</button>
+  <button class="btn btn-md btn-primary my-1" (click)="submitForm()">{{ 'SEND' | translate }}</button>
 </div>

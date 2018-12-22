@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AlertsService } from './alerts.service';
-import { IAlert } from '../../models/alerts.interface';
-import { AlertType } from '../../enums/alerts.enum';
-import { AlertTimeout } from '../../helpers/functions.helper';
+import { IAlert } from '../../../@shared/interfaces/alerts.interface';
+import { AlertType } from '../../../@shared/enums/alerts.enum';
+import { AlertTimeout } from '../../../@shared/helpers/functions.helper';
 import { trigger, transition, query, style, stagger, animate, keyframes } from '@angular/animations';
 
 @Component({

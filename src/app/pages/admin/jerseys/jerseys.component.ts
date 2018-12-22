@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table-extended';
-import { ErrorHelper } from '../../../@core/helpers/error.helper';
-import { HumanizerHelper } from '../../../@core/helpers/humanizer.helper';
 import { ToasterService } from 'angular2-toaster';
 import { UserService } from '../../user/user.service';
 import { Router } from '@angular/router';
@@ -11,7 +9,8 @@ import { DefaultTableComponent } from '../../../@core/tables/default-table.compo
 import { JerseysService } from './jerseys.service';
 import { AddJerseyComponent } from './add-jersey/add-jersey.component';
 import { JerseyDetailComponent } from './jersey-detail/jersey-detail.component';
-import * as codeConfig from '../../../@core/config/codes.config';
+import { translate, ErrorHelper, HumanizerHelper } from '../../../@shared/helpers';
+import * as codeConfig from '../../../@shared/config/codes.config';
 
 @Component({
   selector: 'ns-jerseys',
@@ -30,13 +29,13 @@ export class JerseysComponent extends DefaultTableComponent implements OnInit {
     super(errorHelper, modalService);
 
     // pass in the values
-    this.localStoragePrefName = 'jerseyManager';
+    this.storagePrefName = 'jerseyManager';
     this.source = new LocalDataSource();
     this.filterOptions = {
       rowsPerPage: {
         value: 5,
         id: 'rowsPerPage',
-        title: 'Rows per page:',
+        title: translate('ROWS_PER_PAGE'),
         type: 'select',
         options: {
           multiple: false,
@@ -60,11 +59,11 @@ export class JerseysComponent extends DefaultTableComponent implements OnInit {
         deleteButtonContent: '<i class="nb-trash"></i>',
       },
       actions: {
-        columnTitle: 'Actions',
+        columnTitle: translate('ACTIONS'),
       },
       hideSubHeader: true,
       mode: 'external',
-      noDataMessage: 'No jerseys found',
+      noDataMessage: translate('NO_JERSEYS'),
       columns: {},
       pager: {
         perPage: this.filterOptions.rowsPerPage.value,
@@ -74,7 +73,7 @@ export class JerseysComponent extends DefaultTableComponent implements OnInit {
       {
         order: 1,
         id: 'name',
-        title: 'Title',
+        title: translate('TITLE'),
         type: 'string',
         checked: false,
         default: true,
@@ -85,7 +84,7 @@ export class JerseysComponent extends DefaultTableComponent implements OnInit {
       {
         order: 2,
         id: 'createdBy',
-        title: 'Created By',
+        title: translate('CREATED_BY'),
         type: 'string',
         checked: false,
         editable: false,
@@ -98,7 +97,7 @@ export class JerseysComponent extends DefaultTableComponent implements OnInit {
       {
         order: 3,
         id: 'createdAt',
-        title: 'Created At',
+        title: translate('CREATED_AT'),
         type: 'string',
         checked: false,
         editable: false,
@@ -108,7 +107,7 @@ export class JerseysComponent extends DefaultTableComponent implements OnInit {
       {
         order: 4,
         id: 'updatedBy',
-        title: 'Updated By',
+        title: translate('UPDATED_BY'),
         type: 'string',
         checked: false,
         editable: false,
@@ -121,7 +120,7 @@ export class JerseysComponent extends DefaultTableComponent implements OnInit {
       {
         order: 5,
         id: 'updatedAt',
-        title: 'Updated At',
+        title: translate('UPDATED_AT'),
         type: 'string',
         checked: false,
         editable: false,
@@ -184,21 +183,21 @@ export class JerseysComponent extends DefaultTableComponent implements OnInit {
       container: 'nb-layout',
     });
 
-    modal.componentInstance.modalHeader = `Delete '${event.data.title}'?`;
-    modal.componentInstance.modalContent = `<p class="text-muted">Are you sure you want to delete this jersey?</p>`;
+    modal.componentInstance.modalHeader = `${translate('DELETE')} '${event.data.name}'?`;
+    modal.componentInstance.modalContent = `<p class="text-muted">${translate('DELETE_JERSEY_MSG')}</p>`;
     modal.componentInstance.modalButtons = [
       {
-        text: 'Cancel',
+        text: translate('CANCEL'),
         classes: 'btn-secondary',
         action: () => { modal.close(); },
       },
       {
-        text: 'Delete',
+        text: translate('DELETE'),
         classes: 'btn-danger',
         action: () => {
           this.jerseysService.delete(event.data._id).subscribe(response => {
             if (response.response.success) {
-              this.toasterService.popAsync('success', 'Deleted', 'Jersey has been successfully deleted.');
+              this.toasterService.popAsync('success', translate('JERSEY_DELETED_TITLE'), translate('JERSEY_DELETED_MSG'));
               modal.close();
               this.loadData();
             } else {

@@ -1,11 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
-import { HumanizerHelper } from '../../../../@core/helpers/humanizer.helper';
 import { TeamsService } from '../teams.service';
 import { ModalComponent } from '../../../ui-features/modals/modal/modal.component';
-import { ErrorHelper } from '../../../../@core/helpers/error.helper';
-import { ITeam } from '../../../../@core/models/team.interface';
+import { translate, HumanizerHelper, ErrorHelper } from '../../../../@shared/helpers';
+import { ITeam } from '../../../../@shared/interfaces';
 
 @Component({
   selector: 'ns-team-detail',
@@ -56,11 +55,11 @@ export class TeamDetailComponent implements OnInit {
     });
 
     this.isHidden = true;
-    modal.componentInstance.modalHeader = `Delete '${this.team.name}'?`;
-    modal.componentInstance.modalContent = '<p>Do you really want to delete this team?</p>';
+    modal.componentInstance.modalHeader = `${translate('DELETE')} '${this.team.name}'?`;
+    modal.componentInstance.modalContent = `<p>${translate('DELETE_TEAM_MSG')}</p>`;
     modal.componentInstance.modalButtons = [
       {
-        text: 'Delete',
+        text: translate('CANCEL'),
         classes: 'btn btn-danger',
         action: () => {
           this.teamsService.delete(this.team._id).subscribe(response => {
@@ -79,7 +78,7 @@ export class TeamDetailComponent implements OnInit {
         },
       },
       {
-        text: 'Cancel',
+        text: translate('CANCEL'),
         classes: 'btn btn-secondary',
         action: () => { modal.close(); this.isHidden = false; },
       },

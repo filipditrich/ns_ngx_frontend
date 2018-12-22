@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { IResource } from '../../@core/models/config.interface';
+import { IResource } from '../../@shared/interfaces/config.interface';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { ICredentialReset } from '../../@core/models/credentials.interface';
-import { getUrl } from '../../@core/config/endpoints.config';
+import { ICredentialReset } from '../../@shared/interfaces/credentials.interface';
+import { getUrl } from '../../@shared/config/endpoints.config';
 
 @Injectable({
   providedIn: 'root',

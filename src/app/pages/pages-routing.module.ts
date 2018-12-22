@@ -6,7 +6,8 @@ import { AdminModule } from './admin';
 import { PlayerEnrollmentComponent } from './matches/player-enrollment/player-enrollment.component';
 import { PrintMatchComponent } from './matches/print-match/print-match.component';
 import { RoleGuard} from '../@core/services/auth.guard';
-import { UserRoles } from '../@core/enums/user.enum';
+import { UserRoles } from '../@shared/enums';
+import { MatchGroupComponent } from './matches/player-enrollment/match-group/match-group.component';
 
 /**
  * Pages routing settings
@@ -27,8 +28,18 @@ const routes: Routes = [
         children: [
           {
             path: '',
+            redirectTo: 'all',
+            pathMatch: 'full',
+          },
+          {
+            path: 'all',
             component: PlayerEnrollmentComponent,
             data: { title: 'Matches' },
+          },
+          {
+            path: 'gn/:group',
+            component: MatchGroupComponent,
+            data: { title: 'Match Group' },
           },
           {
             path: 'results',

@@ -1,10 +1,10 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { TeamsService } from '../teams.service';
-import { ErrorHelper } from '../../../../@core/helpers/error.helper';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToasterService } from 'angular2-toaster';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { translate, ErrorHelper } from '../../../../@shared/helpers';
 
 @Component({
   selector: 'ns-add-team',
@@ -69,7 +69,7 @@ export class AddTeamComponent implements OnInit {
       this.teamsService.create(input).subscribe(response => {
         if (response.response.success) {
           this.router.navigate(['/pages/admin/teams/manager']).then(() => {
-            this.toasterService.popAsync('success', 'Team Created!', 'Team successfully created.');
+            this.toasterService.popAsync('success', translate('TEAM_CREATED_TITLE'), translate('TEAM_CREATED_MSG'));
             this.closeModal(true);
           });
         } else {

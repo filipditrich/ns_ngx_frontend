@@ -1,4 +1,3 @@
-import {Team} from '../enums/team.enum';
 import {UserRoles} from '../enums/user.enum';
 
 export interface ICredentials {

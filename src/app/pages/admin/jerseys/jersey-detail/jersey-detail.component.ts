@@ -1,11 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
-import { HumanizerHelper } from '../../../../@core/helpers/humanizer.helper';
 import { JerseysService } from '../jerseys.service';
 import { ModalComponent } from '../../../ui-features/modals/modal/modal.component';
-import { ErrorHelper } from '../../../../@core/helpers/error.helper';
-import { IJersey } from '../../../../@core/models/jersey.interface';
+import { IJersey } from '../../../../@shared/interfaces';
+import { translate, ErrorHelper, HumanizerHelper } from '../../../../@shared/helpers';
 
 @Component({
   selector: 'ns-jersey-detail',
@@ -56,11 +55,11 @@ export class JerseyDetailComponent implements OnInit {
     });
 
     this.isHidden = true;
-    modal.componentInstance.modalHeader = `Delete '${this.jersey.name}'?`;
-    modal.componentInstance.modalContent = '<p>Do you really want to delete this jersey?</p>';
+    modal.componentInstance.modalHeader = `${translate('DELETE')} '${this.jersey.name}'?`;
+    modal.componentInstance.modalContent = `<p>${translate('DELETE_JERSEY_MSG')}</p>`;
     modal.componentInstance.modalButtons = [
       {
-        text: 'Delete',
+        text: translate('DELETE'),
         classes: 'btn btn-danger',
         action: () => {
           this.jerseysService.delete(this.jersey._id).subscribe(response => {
@@ -79,7 +78,7 @@ export class JerseyDetailComponent implements OnInit {
         },
       },
       {
-        text: 'Cancel',
+        text: translate('CANCEL'),
         classes: 'btn btn-secondary',
         action: () => { modal.close(); this.isHidden = false; },
       },

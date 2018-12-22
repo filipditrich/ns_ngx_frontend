@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { IMatch } from '../../../../@core/models/match.interface';
+import { IMatch } from '../../../../@shared/interfaces/match.interface';
 
 @Component({
   selector: 'ns-match-result-modal',

@@ -1,0 +1,12 @@
+/deep/ .flex-centered {
+  -ms-flex: 0 0 45% ;
+  flex: 0 0 45% ;
+  max-width: 45% ;
+}
+@media (max-width: 576px) {
+  /deep/ .flex-centered {
+    -ms-flex: 0 0 100% ;
+    flex: 0 0 100% ;
+    max-width: 100% ;
+  }
+}

@@ -1,5 +1,5 @@
 <div id="content" #content>
-  <nb-card [nbSpinner]="isLoading" nbSpinnerStatus="primary">
+  <nb-card [nbSpinner]="isLoading" nbSpinnerMessage="{{ 'LOADING' | translate }}" nbSpinnerStatus="primary">
 
     <nb-card-header>
       <h1 class="d-flex align-items-center">
@@ -16,22 +16,22 @@
 
       <div class="row">
         <div class="col-sm-12 col-lg-6 p-3">
-          <h4>Enrollment Opens:</h4>
+          <h4>{{ 'EOPEN' | translate }}:</h4>
           <span class="text-muted">{{match?.enrollment.enrollmentOpens || 'not-specified'}}</span>
         </div>
 
         <div class="col-sm-12 col-lg-6 p-3">
-          <h4>Enrollment Closes:</h4>
+          <h4>{{ 'ECLOSE' | translate }}:</h4>
           <span class="text-muted">{{match?.enrollment.enrollmentCloses || 'not-specified'}}</span>
         </div>
 
         <div class="col-sm-12 col-lg-6 p-3">
-          <h4>Players Enrolled:</h4>
+          <h4>{{ 'EPLAYERS' | translate }}:</h4>
           <span class="text-muted">{{playersEnrolled()}}</span>
         </div>
 
         <div class="col-sm-12 col-lg-6 p-3">
-          <h4>Match note:</h4>
+          <h4>{{ 'NOTE' | translate }}:</h4>
           <span class="text-muted">{{match?.note || '---'}}</span>
         </div>
       </div>
@@ -42,9 +42,9 @@
           <thead class="thead-dark">
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Username</th>
-            <th scope="col">Enrolled On</th>
+            <th scope="col">{{ 'NAME' | translate }}</th>
+            <th scope="col">{{ 'USERNAME' | translate }}</th>
+            <th scope="col">{{ 'ENROLLED_ON' | translate }}</th>
           </tr>
           </thead>
           <tbody>

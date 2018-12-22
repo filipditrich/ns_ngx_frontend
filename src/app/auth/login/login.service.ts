@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ICredentials } from '../../@core/models/credentials.interface';
 import { Observable } from 'rxjs/internal/Observable';
-import { ILoginResponse } from '../../@core/models/response.interface';
+import { ILoginResponse, ICredentials } from '../../@shared/interfaces';
 import { HttpClient } from '@angular/common/http';
-import { getUrl } from '../../@core/config/endpoints.config';
+import { getUrl } from '../../@shared/config/endpoints.config';
 
 @Injectable({
   providedIn: 'root',

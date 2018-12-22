@@ -1,8 +1,7 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { UserService } from '../../../pages/user/user.service';
-import { ErrorHelper } from '../../helpers/error.helper';
+import { ErrorHelper } from '../../../@shared/helpers/error.helper';
 import { DefaultEditor } from 'ng2-smart-table-extended';
-import { NgSelectComponent } from '@ng-select/ng-select';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ToasterService } from 'angular2-toaster';
 
@@ -19,19 +18,18 @@ import { ToasterService } from 'angular2-toaster';
       <!-- Status Picker -->
       <div class="form-group group d-flex flex-column col-sm-12"
            [ngClass]="{ 'error' : player.invalid && (player.dirty || player.touched) }">
-
-        <ng-select
-          #playerID
-          [items]="playerList"
-          [multiple]="false"
-          [clearable]="false"
-          [closeOnSelect]="true"
-          [hideSelected]="true"
-          bindLabel="name"
-          bindValue="_id"
-          id="player" class="ng-select-input-custom flex-grow-1"
-          (change)="updateValue()">
-        </ng-select>
+          <select
+            name="player"
+            id="player"
+            formControlName="player"
+            class="input-full-width input-md ng-dirty ng-valid ng-touched"
+            (change)="updateValue()">
+            <option
+              *ngFor="let player of playerList"
+              value="{{player._id}}">
+              {{player.name}}
+            </option>
+          </select>
         <small class="text-danger" *ngIf="player.invalid && (player.dirty || player.touched)">This player is invalid</small>
 
       </div>
@@ -45,7 +43,6 @@ export class UsersEditorComponent extends DefaultEditor implements AfterViewInit
   public form: FormGroup;
   public isLoading = true;
 
-  @ViewChild(NgSelectComponent) ngSelect: NgSelectComponent;
 
   constructor(private playerService: UserService,
               private errorHelper: ErrorHelper,
@@ -61,18 +58,33 @@ export class UsersEditorComponent extends DefaultEditor implements AfterViewInit
     this.playerService.getAllUsers().subscribe(response => {
       if (response.response.success) {
 
-        // do not list already used users
-        const used = this.cell.getDataSet().getData().map(row => row.player);
-        this.playerList = response.output.filter(player => used.indexOf(player._id) < 0);
+        if (!!this.cell.getRow().getData().info) {
+          this.playerList = response.output;
+        } else {
+          // do not list already used users if in editing mode
+          const used = this.cell.getDataSet().getData().map(row => row.player);
+          this.playerList = response.output.filter(player => used.indexOf(player._id) < 0);
+        }
 
         if (this.playerList.length !== 0) {
 
-          // set ngSelect items + default value (if available)
-          this.ngSelect.itemsList.setItems(this.playerList);
           if (!!this.cell.getRow().getData().info) {
             const player = this.playerList.filter(f => f._id === this.cell.getRow().getData().info._id)[0];
-            this.ngSelect.select(this.ngSelect.itemsList.findItem(player._id));
-            this.ngSelect.focus();
+            if (!!player) {
+              if (this.playerList.findIndex(x => x._id === player._id) >= 0) {
+                this.player.setValue(player._id, { onlySelf: true });
+              } else if (player.username === 'deletedUser') {
+                if (this.playerList.findIndex(x => x._id === player._id) < 0) {
+                  this.playerList.push(player);
+                }
+                this.player.setValue(player._id, { onlySelf: true });
+              }
+            } else {
+              if (this.playerList.findIndex(x => x._id === 1) < 0) {
+                this.playerList.push({ _id: 1, name: '(unknown user)' });
+              }
+              this.player.setValue(1, { onlySelf: true });
+            }
           }
 
           // turn off the loader
@@ -81,9 +93,8 @@ export class UsersEditorComponent extends DefaultEditor implements AfterViewInit
         } else if (this.playerList.length === 0 && !!this.cell.getRow().getData().info) {
 
           const player = response.output.filter(f => f._id === this.cell.getRow().getData().info._id)[0];
-          this.ngSelect.itemsList.setItems([ player ]);
-          this.ngSelect.select(this.ngSelect.itemsList.findItem(player._id));
-          this.ngSelect.focus();
+          this.playerList = [ player ];
+          this.player.setValue(player._id, { onlySelf: true });
           this.isLoading = false;
 
         } else {
@@ -111,7 +122,7 @@ export class UsersEditorComponent extends DefaultEditor implements AfterViewInit
    * @description Updates the cell value
    */
   updateValue() {
-    this.cell.newValue = this.ngSelect.itemsList.selectedItems[0];
+    this.cell.newValue = this.playerList.find(x => x._id === this.player.value);
   }
 
   ngAfterViewInit() {

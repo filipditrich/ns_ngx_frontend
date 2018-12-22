@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table-extended';
 import { MatchesService } from './matches.service';
-import { ErrorHelper } from '../../../@core/helpers/error.helper';
-import { HumanizerHelper } from '../../../@core/helpers/humanizer.helper';
 import { ToasterService } from 'angular2-toaster';
 import { EPlayersRendererComponent } from '../../../@core/tables/renderers/eplayers.renderer';
 import { UserService } from '../../user/user.service';
@@ -12,8 +10,8 @@ import { ModalComponent } from '../../ui-features/modals/modal/modal.component';
 import { MatchDetailComponent } from '../../matches/match-detail/match-detail.component';
 import { DefaultTableComponent } from '../../../@core/tables/default-table.component';
 import { AddMatchComponent } from './add-match/add-match.component';
-import { formatMatches } from '../../../@core/helpers/formatter.helper';
-import * as codeConfig from '../../../@core/config/codes.config';
+import { translate, formatMatches, ErrorHelper, HumanizerHelper } from '../../../@shared/helpers';
+import * as codeConfig from '../../../@shared/config/codes.config';
 import * as moment from 'moment';
 
 @Component({
@@ -33,19 +31,19 @@ export class MatchesComponent extends DefaultTableComponent implements OnInit {
     super(errorHelper, modalService);
 
     // pass in the values
-    this.localStoragePrefName = 'matchManager';
+    this.storagePrefName = 'matchManager';
     this.source = new LocalDataSource();
     this.filterOptions = {
       showPast: {
         value: true,
         id: 'showPast',
-        title: 'Show past matches',
+        title: translate('SHOW_PAST_MATCHES'),
         type: 'checkbox',
       },
       rowsPerPage: {
         value: 5,
         id: 'rowsPerPage',
-        title: 'Rows per page:',
+        title: translate('ROWS_PER_PAGE'),
         type: 'select',
         options: {
           multiple: false,
@@ -69,11 +67,11 @@ export class MatchesComponent extends DefaultTableComponent implements OnInit {
         deleteButtonContent: '<i class="nb-trash"></i>',
       },
       actions: {
-        columnTitle: 'Actions',
+        columnTitle: translate('ACTIONS'),
       },
       hideSubHeader: true,
       mode: 'external',
-      noDataMessage: 'No matches found',
+      noDataMessage: translate('NO_MATCHES'),
       rowClassFunction: row => moment(row.data.date).isSameOrBefore(new Date()) ? 'data-row-old' : null,
       columns: {},
       pager: {
@@ -84,7 +82,7 @@ export class MatchesComponent extends DefaultTableComponent implements OnInit {
       {
         order: 1,
         id: 'title',
-        title: 'Title',
+        title: translate('TITLE'),
         type: 'string',
         checked: false,
         default: true,
@@ -95,7 +93,7 @@ export class MatchesComponent extends DefaultTableComponent implements OnInit {
       {
         order: 2,
         id: 'place',
-        title: 'Place',
+        title: translate('PLACE'),
         type: 'string',
         checked: false,
         default: true,
@@ -107,7 +105,7 @@ export class MatchesComponent extends DefaultTableComponent implements OnInit {
       {
         order: 3,
         id: 'date',
-        title: 'Date',
+        title: translate('DATE'),
         type: 'html',
         checked: false,
         editable: false,
@@ -116,22 +114,20 @@ export class MatchesComponent extends DefaultTableComponent implements OnInit {
       },
       {
         order: 4,
-        id: 'note',
-        title: 'Note',
+        id: 'group',
+        title: translate('GROUP'),
         type: 'string',
         checked: false,
-        default: false,
-        valuePrepareFunction: value => !!value ? value : '---',
+        default: true,
+        valuePrepareFunction: value => value.name,
         compareFunction: (dir, a, b) => {
-          const first = typeof a === 'string' ? a.toLowerCase() : a === null ? 'zzz' : a;
-          const second = typeof b === 'string' ? b.toLowerCase() : b === null ? 'zzz' : b;
-          return first.localeCompare(second, undefined, { numeric: true, sensitivity: 'base' }) * dir;
+          return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }) * dir;
         },
       },
       {
         order: 5,
         id: 'enrollmentOpens',
-        title: 'Enrollment Opens',
+        title: translate('EOPEN'),
         type: 'string',
         checked: false,
         editable: false,
@@ -141,7 +137,7 @@ export class MatchesComponent extends DefaultTableComponent implements OnInit {
       {
         order: 6,
         id: 'enrollmentCloses',
-        title: 'Enrollment Closes',
+        title: translate('ECLOSE'),
         type: 'string',
         checked: false,
         editable: false,
@@ -151,7 +147,7 @@ export class MatchesComponent extends DefaultTableComponent implements OnInit {
       {
         order: 7,
         id: 'enrollmentMaxCap',
-        title: 'Capacity',
+        title: translate('EMAX'),
         type: 'string',
         checked: false,
         editable: false,
@@ -161,7 +157,7 @@ export class MatchesComponent extends DefaultTableComponent implements OnInit {
       {
         order: 8,
         id: 'enrollmentPlayers',
-        title: 'Enrolled Players',
+        title: translate('EPLAYERS'),
         type: 'custom',
         checked: false,
         editable: false,
@@ -171,7 +167,7 @@ export class MatchesComponent extends DefaultTableComponent implements OnInit {
       {
         order: 9,
         id: 'createdBy',
-        title: 'Created By',
+        title: translate('CREATED_BY'),
         type: 'string',
         checked: false,
         editable: false,
@@ -184,7 +180,7 @@ export class MatchesComponent extends DefaultTableComponent implements OnInit {
       {
         order: 10,
         id: 'createdAt',
-        title: 'Created At',
+        title: translate('CREATED_AT'),
         type: 'string',
         checked: false,
         editable: false,
@@ -194,7 +190,7 @@ export class MatchesComponent extends DefaultTableComponent implements OnInit {
       {
         order: 11,
         id: 'updatedBy',
-        title: 'Updated By',
+        title: translate('UPDATED_BY'),
         type: 'string',
         checked: false,
         editable: false,
@@ -207,12 +203,26 @@ export class MatchesComponent extends DefaultTableComponent implements OnInit {
       {
         order: 12,
         id: 'updatedAt',
-        title: 'Updated At',
+        title: translate('UPDATED_AT'),
         type: 'string',
         checked: false,
         editable: false,
         default: false,
         valuePrepareFunction: value => this.humanizer.date(value),
+      },
+      {
+        order: 13,
+        id: 'note',
+        title: translate('NOTE'),
+        type: 'string',
+        checked: false,
+        default: false,
+        valuePrepareFunction: value => !!value ? value : '---',
+        compareFunction: (dir, a, b) => {
+          const first = typeof a === 'string' ? a.toLowerCase() : a === null ? 'zzz' : a;
+          const second = typeof b === 'string' ? b.toLowerCase() : b === null ? 'zzz' : b;
+          return first.localeCompare(second, undefined, { numeric: true, sensitivity: 'base' }) * dir;
+        },
       },
     ];
   }
@@ -288,21 +298,21 @@ export class MatchesComponent extends DefaultTableComponent implements OnInit {
       container: 'nb-layout',
     });
 
-    modal.componentInstance.modalHeader = `Delete '${event.data.title}'?`;
-    modal.componentInstance.modalContent = `<p class="text-muted">Are you sure you want to delete this match?</p>`;
+    modal.componentInstance.modalHeader = `${translate('DELETE')} '${event.data.title}'?`;
+    modal.componentInstance.modalContent = `<p class="text-muted">${translate('DELETE_MATCH_MSG')}</p>`;
     modal.componentInstance.modalButtons = [
       {
-        text: 'Cancel',
+        text: translate('CANCEL'),
         classes: 'btn-secondary',
         action: () => { modal.close(); },
       },
       {
-        text: 'Delete',
+        text: translate('DELETE'),
         classes: 'btn-danger',
         action: () => {
           this.matchesService.delete(event.data._id).subscribe(response => {
             if (response.response.success) {
-              this.toasterService.popAsync('success', 'Deleted', 'Match has been successfully deleted.');
+              this.toasterService.popAsync('success', translate('MATCH_DELETED_TITLE'), translate('MATCH_DELETED_MSG'));
               modal.close();
               this.loadData();
             } else {
@@ -323,6 +333,7 @@ export class MatchesComponent extends DefaultTableComponent implements OnInit {
   onUserRowSelect(event) {
     const modal = this.modalService.open(MatchDetailComponent, {
       container: 'nb-layout',
+      size: 'lg',
       keyboard: false,
       backdrop: 'static',
     });

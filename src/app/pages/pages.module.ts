@@ -15,12 +15,10 @@ import { DialogsComponent } from '../@core/services/dialogs/dialogs.component';
 import { Ng2SmartTableExtendedModule} from 'ng2-smart-table-extended';
 import { MatchesResultsComponent } from './matches/matches-results/matches-results.component';
 import { MomentModule } from 'angular2-moment';
-import { JerseysService } from '../@core/services/jerseys.service';
 import { UserModule } from './user/user.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpHeadersInterceptor } from '../@core/services/http.interceptor';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { HumanizerHelper } from '../@core/helpers/humanizer.helper';
 import { UserService} from './user/user.service';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { SortablejsModule } from 'angular-sortablejs';
@@ -28,11 +26,15 @@ import { PlayerEnrollmentComponent } from './matches/player-enrollment/player-en
 import { NbSpinnerModule } from '@nebular/theme';
 import { PlacesService } from './admin/places';
 import { TeamsService } from './admin/teams';
+import { GroupsService } from './admin/groups';
+import { JerseysService } from './admin/jerseys';
 import { MatchDetailComponent } from './matches/match-detail/match-detail.component';
 import { EnrolledPlayersComponent } from './matches/enrolled-players/enrolled-players.component';
 import { MatchResultWriteModalComponent } from './matches/matches-results/match-result-write-modal/match-result-write-modal.component';
 import { MatchResultModalComponent } from './matches/matches-results/match-result-modal/match-result-modal.component';
 import { PrintMatchComponent } from './matches/print-match/print-match.component';
+import { SharedModule } from '../@shared/shared.module';
+import { MatchGroupComponent } from './matches/player-enrollment/match-group/match-group.component';
 
 const PAGES_COMPONENTS = [
   AlertsComponent, DialogsComponent, PagesComponent,
@@ -52,6 +54,7 @@ const PAGES_COMPONENTS = [
     OwlNativeDateTimeModule,
     SortablejsModule,
     NbSpinnerModule,
+    SharedModule,
   ],
   declarations: [
     ...PAGES_COMPONENTS,
@@ -62,6 +65,7 @@ const PAGES_COMPONENTS = [
     MatchResultWriteModalComponent,
     MatchResultModalComponent,
     PrintMatchComponent,
+    MatchGroupComponent,
   ],
   entryComponents: [
     MatchDetailComponent,
@@ -73,11 +77,11 @@ const PAGES_COMPONENTS = [
     AlertsService,
     DialogsService,
     PreviousRouteService,
-    JerseysService,
-    HumanizerHelper,
     UserService,
+    JerseysService,
     PlacesService,
     TeamsService,
+    GroupsService,
     [PreventLogged],
     [AuthGuard],
     [RoleGuard],

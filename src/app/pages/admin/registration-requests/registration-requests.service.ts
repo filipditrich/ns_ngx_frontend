@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { HttpClient } from '@angular/common/http';
-import { IResource } from '../../../@core/models/config.interface';
-import { getUrl } from '../../../@core/config/endpoints.config';
+import { IResource } from '../../../@shared/interfaces';
+import { getUrl } from '../../../@shared/config/endpoints.config';
 
 @Injectable({
   providedIn: 'root',

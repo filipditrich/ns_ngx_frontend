@@ -1,16 +1,15 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
-import { ErrorHelper } from '../../../../@core/helpers/error.helper';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PlacesService } from '../places.service';
 import { ToasterService } from 'angular2-toaster';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgSelectComponent } from '@ng-select/ng-select';
 import { UserService } from '../../../user/user.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalComponent } from '../../../ui-features/modals/modal/modal.component';
-import { IPlace } from '../../../../@core/models/place.interface';
+import { translate, ErrorHelper } from '../../../../@shared/helpers';
+import { IPlace } from '../../../../@shared/interfaces';
 import * as moment from 'moment';
-import * as codeConfig from '../../../../@core/config/codes.config';
+import * as codeConfig from '../../../../@shared/config/codes.config';
 
 @Component({
   selector: 'ns-edit-place',
@@ -26,10 +25,6 @@ export class EditPlaceComponent implements OnInit {
   public now = new Date();
   public place: IPlace;
   public isLoading = true;
-
-  // ViewChild of ng-select component
-  @ViewChild('updatedByID') ngSelectUpdatedBy: NgSelectComponent;
-  @ViewChild('createdByID') ngSelectCreatedBy: NgSelectComponent;
 
   constructor(private errorHelper: ErrorHelper,
               private placesService: PlacesService,
@@ -75,44 +70,38 @@ export class EditPlaceComponent implements OnInit {
           this.updatedAt.setValue(this.place.updatedAt);
 
           // createdBy field
-          if (!!this.place.createdBy && !!this.place.createdBy._id) {
-            if (!!this.ngSelectCreatedBy.itemsList.findItem(this.place.createdBy._id)) {
-              this.ngSelectCreatedBy.select(this.ngSelectCreatedBy.itemsList.findItem(this.place.createdBy._id));
+          if (!!this.place.createdBy && this.place.createdBy._id) {
+            if (this.usersArray.findIndex(x => x._id === this.place.createdBy._id) >= 0) {
+              this.createdBy.setValue(this.place.createdBy._id, {onlySelf: true});
             } else if (this.place.createdBy.username === 'deletedUser') {
-              if (!this.ngSelectCreatedBy.itemsList.findItem(this.place.createdBy._id)) {
-                this.ngSelectCreatedBy.itemsList.addItem(this.place.createdBy);
+              if (this.usersArray.findIndex(x => x._id === this.place.createdBy._id) < 0) {
+                this.usersArray.push(this.place.createdBy);
               }
-              this.ngSelectCreatedBy.select(this.ngSelectCreatedBy.itemsList.findItem(this.place.createdBy._id));
+              this.createdBy.setValue(this.place.createdBy._id, {onlySelf: true});
             } else {
-              if (!this.ngSelectCreatedBy.itemsList.findItem(1)) {
-                this.ngSelectCreatedBy.itemsList.addItem({ _id: 1, name: '(unknown user)' });
+              if (this.usersArray.findIndex(x => x._id === 1) < 0) {
+                this.usersArray.push({_id: 1, name: '(unknown user)'});
               }
-              this.ngSelectCreatedBy.select(this.ngSelectCreatedBy.itemsList.findItem(1));
+              this.createdBy.setValue(1, {onlySelf: true});
             }
           }
 
           // updatedBy field
-          if (!!this.place.updatedBy && !!this.place.updatedBy._id) {
-            if (!!this.ngSelectUpdatedBy.itemsList.findItem(this.place.updatedBy._id)) {
-              this.ngSelectUpdatedBy.select(this.ngSelectUpdatedBy.itemsList.findItem(this.place.updatedBy._id));
+          if (!!this.place.updatedBy && this.place.updatedBy._id) {
+            if (this.usersArray.findIndex(x => x._id === this.place.updatedBy._id) >= 0) {
+              this.updatedBy.setValue(this.place.updatedBy._id, {onlySelf: true});
             } else if (this.place.updatedBy.username === 'deletedUser') {
-              if (!this.ngSelectUpdatedBy.itemsList.findItem(this.place.updatedBy._id)) {
-                this.ngSelectUpdatedBy.itemsList.addItem(this.place.updatedBy);
+              if (this.usersArray.findIndex(x => x._id === this.place.updatedBy._id) < 0) {
+                this.usersArray.push(this.place.updatedBy);
               }
-              this.ngSelectUpdatedBy.select(this.ngSelectUpdatedBy.itemsList.findItem(this.place.updatedBy._id));
+              this.updatedBy.setValue(this.place.updatedBy._id, {onlySelf: true});
             } else {
-              if (!this.ngSelectUpdatedBy.itemsList.findItem(1)) {
-                this.ngSelectUpdatedBy.itemsList.addItem({ _id: 1, name: '(unknown user)' });
+              if (this.usersArray.findIndex(x => x._id === 1) < 0) {
+                this.usersArray.push({_id: 1, name: '(unknown user)'});
               }
-              this.ngSelectUpdatedBy.select(this.ngSelectUpdatedBy.itemsList.findItem(1));
+              this.updatedBy.setValue(1, {onlySelf: true});
             }
           }
-
-          // hack/fix for misplaced values
-          this.ngSelectCreatedBy.focus();
-          this.ngSelectUpdatedBy.focus();
-          document.getElementById('name').focus();
-          document.getElementById('name').blur();
 
           // mark all fields as touched
           this.touchAllFields();
@@ -129,7 +118,7 @@ export class EditPlaceComponent implements OnInit {
         switch (error.name || error.type) {
           case codeConfig.getCodeByName('PLACE_NOT_FOUND', 'core').name: {
             this.router.navigate(['/pages/admin/places/']).then(() => {
-              this.toasterService.popAsync('error', 'Place not found.', 'Place with the specified ID is invalid or does not exist.');
+              this.toasterService.popAsync('error',  translate('PLACE_NOT_FOUND_TITLE'), translate('PLACE_NOT_FOUND_MSG'));
             });
             break;
           }
@@ -165,11 +154,11 @@ export class EditPlaceComponent implements OnInit {
       container: 'nb-layout',
     });
 
-    modal.componentInstance.modalHeader = `Delete '${this.place.name}'?`;
-    modal.componentInstance.modalContent = '<p>Do you really want to delete this place?</p>';
+    modal.componentInstance.modalHeader = `${translate('DELETE')} '${this.place.name}'?`;
+    modal.componentInstance.modalContent = `<p>${translate('DELETE_PLACE_MSG')}</p>`;
     modal.componentInstance.modalButtons = [
       {
-        text: 'Delete',
+        text: translate('DELETE'),
         classes: 'btn btn-danger',
         action: () => {
           this.placesService.delete(this.place._id).subscribe(response => {
@@ -186,7 +175,7 @@ export class EditPlaceComponent implements OnInit {
         },
       },
       {
-        text: 'Cancel',
+        text: translate('CANCEL'),
         classes: 'btn btn-secondary',
         action: () => modal.close(),
       },
@@ -201,8 +190,6 @@ export class EditPlaceComponent implements OnInit {
       this.usersService.getAllUsers().subscribe(response => {
         if (response.response.success) {
           this.usersArray = response.output;
-          this.ngSelectCreatedBy.itemsList.setItems(this.usersArray);
-          this.ngSelectUpdatedBy.itemsList.setItems(this.usersArray);
           resolve();
         } else {
           this.errorHelper.processedButFailed(response);
@@ -238,7 +225,7 @@ export class EditPlaceComponent implements OnInit {
       this.placesService.update(this.place._id, input).subscribe(response => {
         if (response.response.success) {
           this.router.navigate(['/pages/admin/places']).then(() => {
-            this.toasterService.popAsync('success', 'Place Updated!', 'Place successfully updated.');
+            this.toasterService.popAsync('success', translate('PLACE_UPDATED_TITLE'), translate('PLACE_UPDATED_MSG'));
           });
         } else {
           this.errorHelper.processedButFailed(response);

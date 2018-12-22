@@ -1,0 +1,30 @@
+<nb-card [nbSpinner]="isLoading" nbSpinnerMessage="{{ 'LOADING' | translate }}" nbSpinnerStatus="primary">
+  <nb-card-body>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <table class="w-100 table table-responsive d-lg-table">
+
+          <thead>
+          <div class="stc-head d-flex justify-content-end align-items-center">
+            <h2 class="m-0 flex-grow-1">{{ 'MATCHES' | translate }} - {{ matchGroup }}</h2>
+            <i class="icon ion-md-cog cursor-pointer fs-large" (click)="openPreferences()"></i>
+          </div>
+          </thead>
+
+          <tbody>
+          <ng2-smart-table-extended
+            [settings]="settings"
+            [source]="source"
+            (delete)="enrollSelf($event, false)"
+            (edit)="enrollSelf($event, true)"
+            (custom)="onPrint($event)"
+            (userRowSelect)="onUserRowSelect($event)">
+          </ng2-smart-table-extended>
+          </tbody>
+
+        </table>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

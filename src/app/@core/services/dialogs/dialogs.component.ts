@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IDialog } from '../../models/dialogs.interface';
+import { IDialog } from '../../../@shared/interfaces/dialogs.interface';
 import { DialogsService } from './dialogs.service';
-import { DialogType } from '../../enums/dialogs.enum';
+import { DialogType } from '../../../@shared/enums/dialogs.enum';
 
 @Component({
   selector: 'ns-dialogs',

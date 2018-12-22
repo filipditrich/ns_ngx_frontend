@@ -4,9 +4,9 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { AuthService } from '../../../@core/services/auth/auth.service';
 import { CredResetService } from '../reset.service';
-import { ErrorHelper } from '../../../@core/helpers/error.helper';
+import { translate, ErrorHelper } from '../../../@shared/helpers';
 import { ToasterService } from 'angular2-toaster';
-import * as codeConfig from '../../../@core/config/codes.config';
+import * as codeConfig from '../../../@shared/config/codes.config';
 
 @Component({
   selector: 'ns-request-cred-reset',
@@ -16,7 +16,7 @@ import * as codeConfig from '../../../@core/config/codes.config';
 export class ResetRequestComponent implements OnInit {
 
   public form: FormGroup;
-  public submitted = false;
+  public isLoading = false;
 
   constructor(private httpClient: HttpClient,
               private authService: AuthService,
@@ -26,68 +26,98 @@ export class ResetRequestComponent implements OnInit {
               private errorHelper: ErrorHelper,
               private toasterService: ToasterService) {
 
+    /**
+     * @description Form Group
+     * @type {FormGroup}
+     */
     this.form = new FormGroup({
       type: new FormControl(null, [ Validators.required ]),
-      username: new FormControl(null),
+      username: new FormControl(null, []),
       email: new FormControl(null, []),
     });
 
   }
 
+  // getters
   get username() { return this.form.get('username'); }
   get email() { return this.form.get('email'); }
   get type() { return this.form.get('type'); }
 
+  /** ngOnInit **/
   ngOnInit() {
+    // set default value
     this.type.setValue('password', { onlySelf: true });
   }
 
+  /**
+   * @description Handler for onChange event
+   */
   onChange() {
     this.email.setErrors(null);
+    this.email.setValue(null);
+    this.email.markAsUntouched();
     this.username.setErrors(null);
+    this.username.setValue(null);
+    this.username.markAsUntouched();
   }
 
+  /**
+   * @description Handler for onSubmit event
+   * @param input
+   */
   onSubmit(input) {
     this.username.markAsTouched();
     this.email.markAsTouched();
     this.type.markAsTouched();
+
+    if (input.type === 'username' && !!input.email) { input.username = ''; }
+    if (input.type === 'password') {
+      if (!!input.email) {
+        this.username.setValue(' ');
+      } else if (!!input.username) {
+        this.email.setValue(' ');
+      }
+    }
+
     if (this.form.valid && (input.username || input.email)) {
+      if (input.username === ' ') { input.username = false; }
+      if (input.email === ' ') { input.email = false; }
 
-      if (input.username === '') { input.username = false; }
-      if (input.email === '') { input.email = false; }
-
-      if (!this.submitted) {
+      if (!this.isLoading) {
         if (input.type === 'password') {
           this.requestPassword(input);
-          this.submitted = true;
+          this.isLoading = true;
         } else if (input.type === 'username') {
           this.requestUsername(input);
-          this.submitted = true;
+          this.isLoading = true;
         }
       }
-
     }
 
   }
 
+  /**
+   * @description Calls the service for Password Reset Request
+   * @param input
+   */
   requestPassword(input) {
     this.credResetService.requestPasswordReset(input).subscribe(response => {
 
       if (response.response.success) {
         // TODO - navigate to custom page?
         this.router.navigate(['/auth/login']).then(() => {
-          this.toasterService.popAsync('info', 'Email Sent!', 'A password reset link has been sent to your email.');
+          this.toasterService.popAsync('info', translate('EMAIL_SENT'), translate('PWD_RES_SENT_MSG'));
         }).catch(error => {
           this.errorHelper.handleGenericError(error);
         });
       } else {
-        this.submitted = false;
+        this.isLoading = false;
         this.errorHelper.processedButFailed(response);
       }
     }, err => {
 
       const error = !!err.error ? !!err.error.response ? err.error.response : err.error : err;
-      this.submitted = false;
+      this.isLoading = false;
 
       switch (error.name || error.type) {
 
@@ -118,23 +148,27 @@ export class ResetRequestComponent implements OnInit {
     });
   }
 
+  /**
+   * @description Calls the service for Username Reset Request
+   * @param input
+   */
   requestUsername(input) {
     this.credResetService.sendUsernameToEmail(input).subscribe(response => {
       if (response.response.success) {
-        // TODO - redirect to some custom page
+        // TODO: redirect to some custom page
         this.router.navigate(['/auth/login']).then(() => {
-          this.toasterService.popAsync('info', 'Email Sent!', 'We\'ve sent you an email with your username.');
+          this.toasterService.popAsync('info', translate('EMAIL_SENT'), translate('USN_RES_SENT_MSG'));
         }).catch(error => {
           this.errorHelper.handleGenericError(error);
         });
       } else {
-        this.submitted = false;
+        this.isLoading = false;
         this.errorHelper.processedButFailed(response);
       }
 
     }, err => {
       const error = !!err.error ? !!err.error.response ? err.error.response : err.error : err;
-      this.submitted = false;
+      this.isLoading = false;
 
       switch (error.name || error.type) {
         case codeConfig.getCodeByName('EMAIL_NOT_FOUND', 'operator').name: {

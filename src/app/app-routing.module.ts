@@ -16,12 +16,12 @@ const routes: Routes = [
   },
   {
     path: 'pages',
-    loadChildren: './pages/pages.module#PagesModule',
+    loadChildren: () => PagesModule,
     canActivate: [ AuthGuard ],
   },
   {
     path: 'auth',
-    loadChildren: './auth/auth.module#AuthModule',
+    loadChildren: () => AuthModule,
   },
   {
     path: '**',
@@ -34,6 +34,7 @@ const routes: Routes = [
 
 const config: ExtraOptions = {
   useHash: true,
+  onSameUrlNavigation: 'reload',
 };
 
 

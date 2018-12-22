@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from './auth/auth.service';
-import { ErrorHelper } from '../helpers/error.helper';
 import { Toast, ToasterService } from 'angular2-toaster';
+import { translate, ErrorHelper } from '../../@shared/helpers';
 
 @Injectable()
 export class AuthGuard implements CanActivate, CanActivateChild {
@@ -27,14 +27,14 @@ export class AuthGuard implements CanActivate, CanActivateChild {
           if (hasBeenLogged) {
             toast = {
               type: 'warning',
-              title: 'Token expired',
-              body: 'Your session token has expired, please log in to revoke it.',
+              title: translate('TOKEN_EXP_TITLE'),
+              body: translate('TOKEN_EXP_MSG'),
             };
           } else {
             toast = {
               type: 'error',
-              title: 'You are not logged in',
-              body: 'Please log in before accessing this page',
+              title: translate('NOT_LOGGED_TITLE'),
+              body: translate('NOT_LOGGED_MSG'),
             };
           }
           this.toasterService.popAsync(toast);
@@ -61,8 +61,8 @@ export class PreventLogged implements CanActivate {
       this.router.navigate(['/pages']).then(() => {
         const toast: Toast = {
           type: 'warning',
-          title: 'Prevention',
-          body: 'You are already logged in!',
+          title: translate('WARNING'),
+          body: translate('ALREADY_LOGGED'),
         };
         this.toasterService.popAsync(toast);
       }).catch(error => {
@@ -113,8 +113,8 @@ export class RoleGuard implements CanActivate, CanActivateChild {
       this.router.navigate(['/pages']).then(() => {
         const toast: Toast = {
           type: 'error',
-          title: 'Unauthorized',
-          body: 'You don\'t have enough privileges to do such an action!',
+          title: translate('UNAUTHORIZED_TITLE'),
+          body: translate('UNAUTHORIZED_MSG'),
         };
         this.toasterService.popAsync(toast);
         return false;

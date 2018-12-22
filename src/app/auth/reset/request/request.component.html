@@ -1,43 +1,43 @@
-<nb-auth-block>
-  <h2 class="title">Forgotten Credentials</h2>
-  <small class="form-text sub-title">Did you forget your credentials. Request a credential reset</small>
-  <form fullwidth novalidate="" [formGroup]="form" (submit)="onSubmit(form.value)" class="ng-touched ng-dirty ng-valid form login-form">
-    <div class="form-group group form-group col-sm-12 d-flex flex-wrap align-items-center justify-content-between">
-      <label for="cred-reset" class="">I forgot my: </label>
-      <select fullwidth nbinput ng-reflect-name="cred-reset" class="input-full-width input-md ng-dirty ng-valid ng-touched form-control col-sm-12 col-md-8" id="cred-reset" [formControlName]="'type'" (change)="onChange()">
-        <option value="password">Password</option>
-        <option value="username">Username</option>
-      </select>
+<div [nbSpinner]="isLoading" nbSpinnerMessage="{{ 'LOADING' | translate }}" nbSpinnerStatus="primary">
+  <nb-auth-block>
+    <h2 class="title">{{ 'F_CREDS_TITLE' | translate }}</h2>
+    <small class="form-text sub-title">{{ 'F_CREDS_MSG' | translate }}</small>
+    <form fullwidth novalidate="" [formGroup]="form" (submit)="onSubmit(form.value)" class="ng-touched ng-dirty ng-valid form login-form">
+      <div class="form-group group form-group col-sm-12 d-flex flex-wrap align-items-center justify-content-between">
+        <label for="cred-reset" class="">{{ 'F_CREDS_SUB' | translate }}</label>
+        <select fullwidth nbinput ng-reflect-name="cred-reset" class="input-full-width input-md ng-dirty ng-valid ng-touched form-control col-sm-12" id="cred-reset" [formControlName]="'type'" (change)="onChange()">
+          <option value="password">{{ 'PASSWORD' | translate }}</option>
+          <option value="username">{{ 'USERNAME' | translate }}</option>
+        </select>
+      </div>
+      <hr class="col-md-11">
+      <div class="form-group group d-flex flex-column col-sm-12" [ngClass]="{ 'error' : (username.hasError('req-dup') && username.value) || (username.hasError('not-found') && username.value && type.value !== 'username') || (((!email.value && type.value !== 'username') && !username.value) && (username.dirty || username.touched)) }">
+        <input fullwidth nbinput ng-reflect-name="email" type="text" id="username" placeholder="{{ 'USERNAME' | translate }}" formControlName="username" autocomplete="username" [readonly]="email.value || type.value === 'username'" [value]="type.value === 'username' ? null : username.value" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+        <small class="text-danger" *ngIf="((!email.value && type.value !== 'username') && !username.value) && (username.dirty || username.touched)">{{ 'USN_OR_EM_REQUIRED' | translate }}</small>
+        <small class="text-danger" *ngIf="username.hasError('not-found') && username.value && type.value !== 'username'">{{ 'USERNAME_NO_MATCH' | translate }}</small>
+        <small class="text-danger" *ngIf="username.hasError('req-dup') && username.value">{{ 'CRED_REQ_DUP' | translate }}</small>
+      </div>
+      <div class="form-group group d-flex col-sm-12 text-center flex-column justify-content-center">
+        <p class="m-0 text-lowercase">{{ 'OR' | translate }}</p>
+      </div>
+      <div class="form-group group d-flex flex-column col-sm-12" [ngClass]="{ 'error' : (email.hasError('req-dup') && email.value) || (email.hasError('not-found') && email.value) || email.hasError('email') || (!username.value && !email.value) && (email.dirty || email.touched) }">
+        <input fullwidth nbinput ng-reflect-name="email" type="email" id="email" placeholder="{{ 'EMAIL' | translate }}" formControlName="email" autocomplete="email" [readonly]="username.value && type.value !== 'username'" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+        <small class="text-danger" *ngIf="(!username.value && !email.value) && (email.dirty || email.touched)">{{ 'USN_OR_EM_REQUIRED' | translate }}</small>
+        <small class="text-danger" *ngIf="email.hasError('email') && (email.dirty || email.touched)">{{ 'EMAIL_INVALID' | translate }}</small>
+        <small class="text-danger" *ngIf="email.hasError('not-found') && email.value">{{ 'EMAIL_NO_MATCH' | translate }}</small>
+        <small class="text-danger" *ngIf="email.hasError('req-dup') && email.value">{{ 'CRED_REQ_DUP' | translate }}</small>
+      </div>
+      <div class="form-group group d-flex flex-column col-sm-12 mt-4">
+        <button fullwidth nbbutton class="btn btn-primary col-sm-12 p-3" [ngClass]="{'btn-disabled': ((!username.value && !email.value) && (email.dirty || email.touched) || ((!email.value && type.value !== 'username') && !username.value) && (username.dirty || username.touched)) && form.touched}" aria-disabled="false">{{ 'SEND_REQ' | translate }}</button>
+      </div>
+    </form>
+    <div class="links d-flex justify-content-between">
+      <small class="form-text">
+        <strong><a routerLink="/auth/login">{{ 'SIGN_IN' | translate }}</a></strong>
+      </small>
+      <small class="form-text">
+        {{ 'LOGIN_REGISTER_MSG' | translate }} <strong><a routerLink="/auth/request-registration">{{ 'REGISTER' | translate }}</a></strong>
+      </small>
     </div>
-    <hr class="col-md-11">
-    <div class="form-group group d-flex flex-column col-sm-12" [ngClass]="{ 'error' : (username.hasError('req-dup') && username.value) || (username.hasError('not-found') && username.value && type.value !== 'username') || (((!email.value && type.value !== 'username') && !username.value) && (username.dirty || username.touched)) }">
-      <input fullwidth nbinput ng-reflect-name="email" type="text" id="username" placeholder="Username" formControlName="username" autocomplete="username" [readonly]="email.value || type.value === 'username'" [value]="type.value === 'username' ? null : username.value" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
-      <small class="text-danger" *ngIf="((!email.value && type.value !== 'username') && !username.value) && (username.dirty || username.touched)">Username or Email is required</small>
-      <small class="text-danger" *ngIf="username.hasError('not-found') && username.value && type.value !== 'username'">This username matched no results in our database</small>
-      <small class="text-danger" *ngIf="username.hasError('req-dup') && username.value">A reset request has already been made for this account!</small>
-    </div>
-    <div class="form-group group d-flex col-xl-2 text-center flex-column justify-content-center">
-      <p class="m-0">or</p>
-    </div>
-    <div class="form-group group d-flex flex-column col-sm-12" [ngClass]="{ 'error' : (email.hasError('req-dup') && email.value) || (email.hasError('not-found') && email.value) || email.hasError('email') || (!username.value && !email.value) && (email.dirty || email.touched) }">
-      <input fullwidth nbinput ng-reflect-name="email" type="email" id="email" placeholder="Email" formControlName="email" autocomplete="email" [readonly]="username.value && type.value !== 'username'" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
-      <small class="text-danger" *ngIf="(!username.value && !email.value) && (email.dirty || email.touched)">Email or Username is required</small>
-      <small class="text-danger" *ngIf="email.hasError('email') && (email.dirty || email.touched)">Enter valid email</small>
-      <small class="text-danger" *ngIf="email.hasError('not-found') && email.value">This email matched no results in our database</small>
-      <small class="text-danger" *ngIf="email.hasError('req-dup') && email.value">A reset request has already been made for this account!</small>
-    </div>
-    <div class="form-group group d-flex flex-column col-sm-12 mt-4">
-      <button fullwidth nbbutton class="col-sm-12 p-3" [ngClass]="{'btn-disabled': ((!username.value && !email.value) && (email.dirty || email.touched) || ((!email.value && type.value !== 'username') && !username.value) && (username.dirty || username.touched)) && form.touched}" aria-disabled="false">Send Request</button>
-    </div>
-  </form>
-  <div class="links d-flex justify-content-between">
-    <small class="form-text">
-      Want to login? <strong><a routerLink="/auth/login">Sign In</a></strong>
-    </small>
-    <small class="form-text">
-      Not registered yet? <strong><a routerLink="/auth/request-registration">Sign Up</a></strong>
-    </small>
-  </div>
-</nb-auth-block>
-
-
+  </nb-auth-block>
+</div>

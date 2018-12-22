@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ViewCell } from 'ng2-smart-table-extended';
-import { HumanizerHelper } from '../../helpers/humanizer.helper';
+import { HumanizerHelper } from '../../../@shared/helpers/humanizer.helper';
 
 @Component({
   template: `

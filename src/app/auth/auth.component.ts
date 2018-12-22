@@ -3,7 +3,9 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'ns-auth',
   template: `
-    <router-outlet></router-outlet>
+    <nb-auth>
+      <router-outlet></router-outlet>
+    </nb-auth>
   `,
 })
 export class AuthComponent implements OnInit {

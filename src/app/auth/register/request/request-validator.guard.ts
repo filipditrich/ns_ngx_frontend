@@ -3,8 +3,8 @@ import { ActivatedRouteSnapshot, CanActivate, Resolve, Router, RouterStateSnapsh
 import { Observable } from 'rxjs/internal/Observable';
 import { RegistrationService} from '../registration.service';
 import { CredResetService } from '../../reset';
-import { CheckType } from '../../../@core/enums/check.enum';
-import { ErrorHelper } from '../../../@core/helpers/error.helper';
+import { CheckType } from '../../../@shared/enums';
+import { ErrorHelper } from '../../../@shared/helpers';
 
 
 @Injectable()
@@ -73,32 +73,6 @@ export class IsRequestHashValid implements CanActivate {
           });
         });
       }
-      // case CheckType.EditUser: {
-      //   return new Observable<any>(observer => {
-      //     this.userMgmtSvc.getUser(hash).subscribe(response => {
-      //       if (response.response.success) {
-      //         observer.next(true);
-      //         observer.complete();
-      //       } else {
-      //         this.router.navigate(['/']).then(() => {
-      //           this.errorHelper.processedButFailed(response);
-      //         }).catch(error => {
-      //           this.errorHelper.handleGenericError(error);
-      //         });
-      //         observer.next(false);
-      //         observer.complete();
-      //       }
-      //     }, err => {
-      //       this.router.navigate(['/']).then(() => {
-      //         this.errorHelper.handleGenericError(err);
-      //       }).catch(error => {
-      //         this.errorHelper.handleGenericError(error);
-      //       });
-      //       observer.next(false);
-      //       observer.complete();
-      //     });
-      //   });
-      // }
     }
   }
 }
@@ -134,25 +108,6 @@ export class DataResolver implements Resolve<any> {
           return;
         });
       }
-      // case CheckType.EditUser: {
-      //   return this.userMgmtSvc.getUser(hash).toPromise().then(response => {
-      //     if (response.response.success && response.output) {
-      //       return response.output[0];
-      //     } else {
-      //       this.router.navigate(['/']).then(() => {
-      //         this.errorHelper.processedButFailed(response);
-      //       });
-      //       return;
-      //     }
-      //   }).catch(error => {
-      //     this.router.navigate(['/']).then(() => {
-      //       this.errorHelper.handleGenericError(error);
-      //     }).catch(err => {
-      //       this.errorHelper.handleGenericError(err);
-      //     });
-      //     return;
-      //   });
-      // }
     }
 
   }

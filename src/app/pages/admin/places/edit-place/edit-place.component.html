@@ -1,12 +1,12 @@
 <div class="row">
   <div class="col-sm-12">
-    <nb-card [nbSpinner]="isLoading" nbSpinnerStatus="primary">
+    <nb-card [nbSpinner]="isLoading" nbSpinnerMessage="{{ 'LOADING' | translate }}" nbSpinnerStatus="primary">
 
       <nb-card-header>
         <button [routerLink]="['/pages/admin/places']" class="close float-left mr-3">
           <i class="icon ion-ios-arrow-back fs-larger"></i>
         </button>
-        <h2>Edit '{{place?.name}}'</h2>
+        <h2>{{ 'EDIT' | translate }} '{{place?.name}}'</h2>
       </nb-card-header>
 
       <nb-card-body>
@@ -16,9 +16,9 @@
           <!-- Name -->
           <div class="form-group group d-flex flex-column"
                [ngClass]="{ 'error' : name.invalid && (name.dirty || name.touched) }">
-            <label for="name">Place Name*</label>
+            <label for="name">{{ 'PLACE_NAME' | translate }}*</label>
             <input fullwidth id="name" name="name" nbinput formControlName="name" type="text" ng-reflect-name="name" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
-            <small class="text-danger" *ngIf="name.hasError('required') && (name.dirty || name.touched)">Jersey name is required</small>
+            <small class="text-danger" *ngIf="name.hasError('required') && (name.dirty || name.touched)">{{ 'PLACE_NAME_REQUIRED' | translate }}</small>
           </div>
 
           <hr>
@@ -29,7 +29,7 @@
               <!-- Created At -->
               <div class="form-group group d-flex flex-column col-sm-6"
                    [ngClass]="{ 'error' : createdAt.invalid && (createdAt.dirty || createdAt.touched) }">
-                <label for="createdAt">Created At</label>
+                <label for="createdAt">{{ 'CREATED_AT' | translate }}</label>
                 <div class="calendar">
 
                   <input
@@ -51,22 +51,21 @@
                   </div>
 
                 </div>
-                <small class="text-danger" *ngIf="createdAt.invalid">This date is invalid</small>
+                <small class="text-danger" *ngIf="createdAt.invalid">{{ 'DATE_INVALID' | translate }}</small>
               </div>
 
               <!-- Created By -->
               <div class="form-group group d-flex flex-column col-sm-6"
                    [ngClass]="{ 'error' : createdBy.invalid && (createdBy.dirty || createdBy.touched) }">
-                <label for="createdBy">Created By</label>
-                <ng-select
-                  #createdByID
-                  [multiple]="false"
-                  [closeOnSelect]="true"
-                  bindLabel="name"
-                  bindValue="_id"
-                  id="createdBy" name="createdBy" formControlName="createdBy" ng-reflect-name="createdBy" class="ng-select-input-custom flex-grow-1">
-                </ng-select>
-                <small class="text-danger" *ngIf="createdBy.hasError('required') && (createdBy.dirty || createdBy.touched)">Created By is required</small>
+                <label for="createdBy">{{ 'CREATED_BY' | translate }}</label>
+                <select name="createdBy" id="createdBy" formControlName="createdBy" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+                  <option
+                    *ngFor="let user of usersArray"
+                    value="{{user._id}}">
+                    {{user.name}}
+                  </option>
+                </select>
+                <small class="text-danger" *ngIf="createdBy.hasError('required') && (createdBy.dirty || createdBy.touched)">{{ 'CREATED_BY_REQUIRED' | translate }}</small>
               </div>
 
             </div>
@@ -76,7 +75,7 @@
               <!-- Updated At -->
               <div class="form-group group d-flex flex-column col-sm-6"
                    [ngClass]="{ 'error' : updatedAt.invalid && (updatedAt.dirty || updatedAt.touched) }">
-                <label for="updatedAt">Updated At</label>
+                <label for="updatedAt">{{ 'UPDATED_AT' | translate }}</label>
                 <div class="calendar">
 
                   <input
@@ -99,22 +98,21 @@
                   </div>
 
                 </div>
-                <small class="text-danger" *ngIf="updatedAt.invalid">This date is invalid</small>
+                <small class="text-danger" *ngIf="updatedAt.invalid">{{ 'DATE_INVALID' | translate }}</small>
               </div>
 
               <!-- Updated By -->
               <div class="form-group group d-flex flex-column col-sm-6"
                    [ngClass]="{ 'error' : updatedBy.invalid && (updatedBy.dirty || updatedBy.touched) }">
-                <label for="updatedBy">Updated By</label>
-                <ng-select
-                  #updatedByID
-                  [multiple]="false"
-                  [closeOnSelect]="true"
-                  bindLabel="name"
-                  bindValue="_id"
-                  id="updatedBy" name="updatedBy" formControlName="updatedBy" ng-reflect-name="updatedBy" class="ng-select-input-custom flex-grow-1">
-                </ng-select>
-                <small class="text-danger" *ngIf="updatedBy.hasError('required') && (updatedBy.dirty || updatedBy.touched)">Updated By is required</small>
+                <label for="updatedBy">{{ 'UPDATED_BY' | translate }}</label>
+                <select name="updatedBy" id="updatedBy" formControlName="updatedBy" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+                  <option
+                    *ngFor="let user of usersArray"
+                    value="{{user._id}}">
+                    {{user.name}}
+                  </option>
+                </select>
+                <small class="text-danger" *ngIf="updatedBy.hasError('required') && (updatedBy.dirty || updatedBy.touched)">{{ 'UPDATED_BY_REQUIRED' | translate }}</small>
               </div>
 
             </div>
@@ -124,8 +122,8 @@
 
           <!-- Submit -->
           <div class="form-group mt-2">
-            <button nbbutton class="col-sm-3 mr-sm-0 mr-md-3 p-3 button btn-danger" aria-disabled="false" (click)="deletePlace()">Delete</button>
-            <button nbbutton class="col-sm-3 p-3 button btn-primary" [ngClass]="{'btn-disabled': !form.valid || isSame() }" aria-disabled="false" (click)="submitForm(form.value)">Save Changes</button>
+            <button nbbutton class="col-sm-3 mr-sm-0 mr-md-3 p-3 button btn-danger" aria-disabled="false" (click)="deletePlace()">{{ 'DELETE' | translate }}</button>
+            <button nbbutton class="col-sm-3 p-3 button btn-primary" [ngClass]="{'btn-disabled': !form.valid || isSame() }" aria-disabled="false" (click)="submitForm(form.value)">{{ 'SAVE_CHANGES' | translate }}</button>
           </div>
 
         </form>

@@ -3,14 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../@core/services/auth/auth.service';
-import { isUpperCase, passwordStrength, passwordConfirmation } from '../../@core/helpers/validators.helper';
+import { isUpperCase, passwordStrength, passwordConfirmation, translate, ErrorHelper } from '../../@shared/helpers';
 import { RegistrationService } from './registration.service';
-import { ErrorHelper } from '../../@core/helpers/error.helper';
-import { IRegistrationCredentials } from '../../@core/models/credentials.interface';
-import { ITeam } from '../../@core/models/team.interface';
+import { IRegistrationCredentials, ITeam } from '../../@shared/interfaces';
 import { ToasterService } from 'angular2-toaster';
-
-import * as codeConfig from '../../@core/config/codes.config';
+import * as codeConfig from '../../@shared/config/codes.config';
 
 @Component({
   selector: 'ns-registration',
@@ -22,13 +19,8 @@ export class RegisterComponent implements OnInit {
   public hash: string;
   public request: any;
   public form: FormGroup;
-  public submitted = false;
-
-  // TODO : GET TEAMS FROM SERVER WITHOUT AUTH
-  public teams: ITeam[] = [
-    { _id: '5bf97caf3f781659d81be6ec', name: 'Northern Stars' },
-    { _id: '5bf97caf3f781659d81be6ec', name: 'Other' },
-  ];
+  public isLoading = true;
+  public teams: ITeam[] = [];
 
   constructor(private httpClient: HttpClient,
               private authService: AuthService,
@@ -40,6 +32,10 @@ export class RegisterComponent implements OnInit {
               private errorHelper: ErrorHelper) {
 
     // TODO - Validators import settings from server (minlength, maxlength etc...)
+    /**
+     * @description Form Group
+     * @type {FormGroup}
+     */
     this.form = new FormGroup({
       username: new FormControl(null, [
         Validators.required, Validators.minLength(5), Validators.maxLength(32), isUpperCase(),
@@ -59,8 +55,21 @@ export class RegisterComponent implements OnInit {
       passwordSubmit: new FormControl(null, [ Validators.required ]),
     }, passwordConfirmation());
 
+    // Get the teams and list them in the <select>
+    this.registrationService.getRegistrationTeams().subscribe(response => {
+      if (response.response.success) {
+        this.teams = response.output;
+        this.isLoading = false;
+      } else {
+        this.errorHelper.processedButFailed(response);
+      }
+    }, error => {
+      this.errorHelper.handleGenericError(error);
+    });
+
   }
 
+  // getters
   get username() { return this.form.get('username'); }
   get name() { return this.form.get('name'); }
   get password() { return this.form.get('password'); }
@@ -68,17 +77,20 @@ export class RegisterComponent implements OnInit {
   get passwordSubmit() { return this.form.get('passwordSubmit'); }
   get team() { return this.form.get('team'); }
 
+  /** ngOnInit **/
   ngOnInit() {
     this.route.data.subscribe(data => {
       this.request = data.request;
-    }, error => {
-    });
+    }, error => {});
     this.hash = this.route.snapshot.paramMap.get('hash');
     if (this.request) { this.name.setValue(this.request); }
   }
 
+  /**
+   * @description Handler for onSubmit event
+   * @param input
+   */
   onSubmit(input) {
-
     if (!this.form.valid) {
       this.username.markAsTouched();
       this.password.markAsTouched();
@@ -87,33 +99,35 @@ export class RegisterComponent implements OnInit {
       this.number.markAsTouched();
       this.team.markAsTouched();
     } else {
-      if (!this.submitted) {
-        this.submitted = true;
+      if (!this.isLoading) {
+        this.isLoading = true;
         this.callRegistrationSvc(input);
       }
     }
-
-
   }
 
+  /**
+   * @description Calls the Registration service
+   * @param {IRegistrationCredentials} input
+   */
   callRegistrationSvc(input: IRegistrationCredentials) {
     this.registrationService.registerUser(this.hash, input).subscribe(response => {
-      this.submitted = false;
+      this.isLoading = false;
 
       if (response.response.success && response.output.user) {
         this.router.navigate(['/auth/login']).then(() => {
-          this.toasterService.popAsync('success', 'Registered!', 'You have been successfully registered. You can now login.');
+          this.toasterService.popAsync('success', translate('REGISTERED_TITLE'), translate('REGISTERED_MSG'));
         }).catch(error => {
           this.errorHelper.handleGenericError(error);
         });
       } else {
-        this.submitted = false;
+        this.isLoading = false;
         this.errorHelper.processedButFailed(response);
       }
 
     }, err => {
       const error = !!err.error ? !!err.error.response ? err.error.response : err.error : err;
-      this.submitted = false;
+      this.isLoading = false;
 
       switch (error.name || error.type) {
         case codeConfig.getCodeByName('USERNAME_IN_USE', 'operator').name: {

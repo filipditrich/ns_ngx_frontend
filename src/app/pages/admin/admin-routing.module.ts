@@ -5,6 +5,7 @@ import { MatchesComponent, EditMatchComponent } from './matches';
 import { PlacesComponent, EditPlaceComponent } from './places';
 import { TeamsComponent, EditTeamComponent } from './teams';
 import { JerseysComponent, EditJerseyComponent } from './jerseys';
+import { EditGroupComponent, GroupsComponent } from './groups';
 import { RegistrationRequestsComponent } from './registration-requests';
 
 /**
@@ -72,6 +73,19 @@ const routes: Routes = [
       },
       { path: 'manager', component: TeamsComponent, data: { title: 'Team Manager' } },
       { path: 'edit/:id', component: EditTeamComponent, data: { title: 'Edit Team' } },
+    ],
+  },
+
+  {
+    path: 'groups',
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'manager',
+      },
+      { path: 'manager', component: GroupsComponent, data: { title: 'Group Manager' } },
+      { path: 'edit/:id', component: EditGroupComponent, data: { title: 'Edit Group' } },
     ],
   },
 ];

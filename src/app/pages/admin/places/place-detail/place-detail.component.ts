@@ -1,11 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
-import { HumanizerHelper } from '../../../../@core/helpers/humanizer.helper';
 import { PlacesService } from '../places.service';
 import { ModalComponent } from '../../../ui-features/modals/modal/modal.component';
-import { ErrorHelper } from '../../../../@core/helpers/error.helper';
-import { IPlace } from '../../../../@core/models/place.interface';
+import { IPlace } from '../../../../@shared/interfaces';
+import { translate, ErrorHelper, HumanizerHelper } from '../../../../@shared/helpers';
 
 @Component({
   selector: 'ns-place-detail',
@@ -56,11 +55,11 @@ export class PlaceDetailComponent implements OnInit {
     });
 
     this.isHidden = true;
-    modal.componentInstance.modalHeader = `Delete '${this.place.name}'?`;
-    modal.componentInstance.modalContent = '<p>Do you really want to delete this place?</p>';
+    modal.componentInstance.modalHeader = `${translate('DELETE')} '${this.place.name}'?`;
+    modal.componentInstance.modalContent = `<p>${translate('DELETE_PLACE_MSG')}</p>`;
     modal.componentInstance.modalButtons = [
       {
-        text: 'Delete',
+        text: translate('DELETE'),
         classes: 'btn btn-danger',
         action: () => {
           this.placesService.delete(this.place._id).subscribe(response => {
@@ -79,7 +78,7 @@ export class PlaceDetailComponent implements OnInit {
         },
       },
       {
-        text: 'Cancel',
+        text: translate('CANCEL'),
         classes: 'btn btn-secondary',
         action: () => { modal.close(); this.isHidden = false; },
       },

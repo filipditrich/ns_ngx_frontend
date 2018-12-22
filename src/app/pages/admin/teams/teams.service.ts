@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { HttpClient } from '@angular/common/http';
-import { getUrl } from '../../../@core/config/endpoints.config';
-import { ITeam } from '../../../@core/models/team.interface';
-import { IResource } from '../../../@core/models/config.interface';
+import { getUrl } from '../../../@shared/config/endpoints.config';
+import { ITeam } from '../../../@shared/interfaces/team.interface';
+import { IResource } from '../../../@shared/interfaces/config.interface';
 
 @Injectable({
   providedIn: 'root',

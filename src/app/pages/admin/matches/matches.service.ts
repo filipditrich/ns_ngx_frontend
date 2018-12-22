@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { HttpClient } from '@angular/common/http';
-import { IMatch } from '../../../@core/models/match.interface';
-import { IResource } from '../../../@core/models/config.interface';
-import { getUrl } from '../../../@core/config/endpoints.config';
+import { IMatch } from '../../../@shared/interfaces/match.interface';
+import { IResource } from '../../../@shared/interfaces/config.interface';
+import { getUrl } from '../../../@shared/config/endpoints.config';
 
 @Injectable({
   providedIn: 'root',
@@ -23,12 +23,30 @@ export class MatchesService {
   }
 
   /**
-   * @description Request for Match obtain
+   * @description Request to obtain Match(es)
    * @param {string} id
    * @return {Observable<IResource>}
    */
   get(id?: string): Observable<IResource> {
     return this.http.get<IResource>(`${getUrl('core', 'GET_MATCH')}/${!!id ? id : ''}`);
+  }
+
+  /**
+   * @description Request to obtain Match(es) by its Group
+   * @param {string} group
+   * @return {Observable<IResource>}
+   */
+  getByGroup(group: string): Observable<IResource> {
+    return this.http.get<IResource>(`${getUrl('core', 'GET_MATCH_BY_GROUP')}/${group}`);
+  }
+
+  /**
+   * @description Request to obtain Match(es) by its Group name
+   * @param {string} groupName
+   * @return {Observable<IResource>}
+   */
+  getByGroupName(groupName: string): Observable<IResource> {
+    return this.http.get<IResource>(`${getUrl('core', 'GET_MATCH_BY_GROUP_NAME')}/${groupName}`);
   }
 
   /**

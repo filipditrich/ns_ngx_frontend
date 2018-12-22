@@ -29,6 +29,7 @@ import { EPlayersStatusEditorComponent } from './@core/tables/editors/eplayers-s
 import { EPlayersRendererComponent } from './@core/tables/renderers/eplayers.renderer';
 import { NbSpinnerModule } from '@nebular/theme';
 import { TablePreferencesComponent } from './@core/tables/table-preferences/table-preferences.component';
+import { SharedModule } from './@shared/shared.module';
 
 export function PreloadInitializerProviderFactory(provider: PreloadInitializer) {
   return () => provider.startupConfig();
@@ -52,6 +53,7 @@ const RENDERS = [ PlaceRendererComponent, EOpenRendererComponent, ECloseRenderer
     NgxMyDatePickerModule.forRoot(),
     ThemeModule.forRoot(),
     CoreModule.forRoot(),
+    SharedModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     SortablejsModule.forRoot({ animation: 150 }),

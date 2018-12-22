@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table-extended';
 import { MatchesService } from '../../admin/matches';
-import { ErrorHelper } from '../../../@core/helpers/error.helper';
-import { HumanizerHelper } from '../../../@core/helpers/humanizer.helper';
 import { ToasterService } from 'angular2-toaster';
 import { UserService } from '../../user/user.service';
-import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatchResultWriteModalComponent } from './match-result-write-modal/match-result-write-modal.component';
 import { DefaultTableComponent } from '../../../@core/tables/default-table.component';
 import { EPlayersRendererComponent } from '../../../@core/tables/renderers/eplayers.renderer';
-import {IMatch, MatchResult} from '../../../@core/models/match.interface';
+import { IMatch, MatchResult } from '../../../@shared/interfaces';
+import { translate, ErrorHelper, HumanizerHelper } from '../../../@shared/helpers';
 import * as moment from 'moment';
+import * as codeConfig from '../../../@shared/config/codes.config';
 
 @Component({
   selector: 'ns-matches-results',
@@ -29,19 +28,19 @@ export class MatchesResultsComponent extends DefaultTableComponent implements On
 
     super(errorHelper, modalService);
 
-    this.localStoragePrefName = 'matchResults';
+    this.storagePrefName = 'matchResults';
     this.source = new LocalDataSource();
     this.filterOptions = {
       showWritten: {
         value: false,
         id: 'showWritten',
-        title: 'Show Written',
+        title: translate('SHOW_WRITTEN'),
         type: 'checkbox',
       },
       rowsPerPage: {
         value: 5,
         id: 'rowsPerPage',
-        title: 'Rows per page:',
+        title: translate('ROWS_PER_PAGE'),
         type: 'select',
         options: {
           multiple: false,
@@ -66,9 +65,9 @@ export class MatchesResultsComponent extends DefaultTableComponent implements On
       },
       hideSubHeader: true,
       mode: 'external',
-      noDataMessage: 'No played matches found',
+      noDataMessage: translate('NO_MATCHES_FOUND_MSG'),
       actions : {
-        columnTitle: 'Actions',
+        columnTitle: translate('ACTIONS'),
         add: false,
         edit: true,
         delete: false,
@@ -90,7 +89,7 @@ export class MatchesResultsComponent extends DefaultTableComponent implements On
       {
         order: 1,
         id: 'title',
-        title: 'Title',
+        title: translate('TITLE'),
         type: 'html',
         checked: false,
         default: true,
@@ -101,7 +100,7 @@ export class MatchesResultsComponent extends DefaultTableComponent implements On
       {
         order: 2,
         id: 'place',
-        title: 'Place',
+        title: translate('PLACE'),
         type: 'html',
         checked: false,
         default: true,
@@ -113,7 +112,7 @@ export class MatchesResultsComponent extends DefaultTableComponent implements On
       {
         order: 3,
         id: 'date',
-        title: 'Date',
+        title: translate('DATE'),
         type: 'html',
         checked: false,
         editable: false,
@@ -123,7 +122,7 @@ export class MatchesResultsComponent extends DefaultTableComponent implements On
       {
         order: 4,
         id: 'note',
-        title: 'Note',
+        title: translate('NOTE'),
         type: 'html',
         checked: false,
         default: false,
@@ -137,7 +136,7 @@ export class MatchesResultsComponent extends DefaultTableComponent implements On
       {
         order: 5,
         id: 'enrollmentPlayers',
-        title: 'Enrolled Players',
+        title: translate('EPLAYERS'),
         type: 'custom',
         checked: false,
         editable: false,
@@ -148,7 +147,7 @@ export class MatchesResultsComponent extends DefaultTableComponent implements On
       {
         order: 6,
         id: 'playerResult',
-        title: 'Your Result',
+        title: translate('RESULT'),
         type: 'string',
         checked: false,
         editable: false,
@@ -156,13 +155,13 @@ export class MatchesResultsComponent extends DefaultTableComponent implements On
         sortable: false,
         valuePrepareFunction: (cell, row) => {
           const UID = this.userService.getCurrentUser('_id');
-          return row.results ? row.results.players.filter(x => x.player === UID).length ? row.results.players.filter(x => x.player === UID)[0].status : '---' : '---';
+          return row.results ? row.results.players.filter(x => x.player === UID).length ? translate(row.results.players.filter(x => x.player === UID)[0].status.toUpperCase()) : '---' : '---';
         },
       },
       {
         order: 7,
         id: 'playerJersey',
-        title: 'Your Jersey',
+        title: translate('JERSEY'),
         type: 'string',
         checked: false,
         editable: false,
@@ -176,7 +175,7 @@ export class MatchesResultsComponent extends DefaultTableComponent implements On
       {
         order: 8,
         id: 'resultsWritten',
-        title: 'Written',
+        title: translate('WRITTEN'),
         type: 'string',
         checked: false,
         editable: false,
@@ -211,8 +210,19 @@ export class MatchesResultsComponent extends DefaultTableComponent implements On
       } else {
         this.errorHelper.processedButFailed(response);
       }
-    }, error => {
-      this.errorHelper.handleGenericError(error);
+    }, err => {
+      const error = !!err.error ? !!err.error.response ? err.error.response : err.error : err;
+
+      switch (error.name || error.type) {
+        case codeConfig.getCodeByName('NO_MATCHS_FOUND', 'core').name: {
+          this.source.load([]).then(() => { this.isLoading = false; });
+          break;
+        }
+        default: {
+          this.errorHelper.handleGenericError(err);
+          break;
+        }
+      }
     });
   }
 

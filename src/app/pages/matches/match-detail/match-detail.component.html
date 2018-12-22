@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <span>Match detail for '{{ match.title }}'</span>
+  <span>{{ 'MATCH_DETAIL_FOR' | translate }} <b>'{{ match.title }}'</b></span>
   <button class="close" aria-label="Close" (click)="closeModal()">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -16,18 +16,28 @@
 
   <section class="row">
 
-    <div class="col-sm-12 col-lg-6 p-3">
-      <h6>Enrollment Opens:</h6>
+    <div class="col-sm-12 col-md-6 col-lg-4 p-3">
+      <h6>{{ 'GROUP' | translate }}:</h6>
+      <span class="text-muted">{{match.group.name}}</span>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-4 p-3">
+      <h6>{{ 'EMAX' | translate }}:</h6>
+      <span class="text-muted">{{maxCapacity}}</span>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-4 p-3">
+      <h6>{{ 'EOPEN' | translate }}:</h6>
       <span class="text-muted">{{match.enrollment.enrollmentOpens || 'not-specified'}}</span>
     </div>
 
-    <div class="col-sm-12 col-lg-6 p-3">
-      <h6>Enrollment Closes:</h6>
+    <div class="col-sm-12 col-md-6 col-lg-4 p-3">
+      <h6>{{ 'ECLOSE' | translate }}:</h6>
       <span class="text-muted">{{match.enrollment.enrollmentCloses || 'not-specified'}}</span>
     </div>
 
-    <div class="col-sm-12 col-lg-6 p-3">
-      <h6>Enrolled Players:</h6>
+    <div class="col-sm-12 col-md-6 col-lg-4 p-3">
+      <h6>{{ 'EPLAYERS' | translate }}:</h6>
       <div class="profile-picture-row d-flex" (click)="openMore()">
         <ng-container *ngFor="let player of match.enrollment.players; let i = index">
           <div *ngIf="i < 5"
@@ -35,39 +45,38 @@
                [attr.ns-jersey-number]="'#' + player.info.number"></div>
         </ng-container>
         <div *ngIf="match.enrollment.players.length > 5" class="cursor-pointer open-more ml-2" (click)="openMore()">+{{match.enrollment.players.length - 5}} more</div>
-        <div *ngIf="match.enrollment.players.length === 0">no players</div>
+        <div *ngIf="match.enrollment.players.length === 0">{{ 'NO_PLAYERS' | translate }}</div>
       </div>
     </div>
 
-    <div class="col-sm-12 col-lg-6 p-3">
-      <h6>Match note:</h6>
+    <div class="col-sm-12 col-md-6 col-lg-4 p-3">
+      <h6>{{ 'NOTE' | translate }}:</h6>
       <span class="text-muted">{{match.note || '---'}}</span>
     </div>
 
   </section>
 
-  <hr>
+  <hr *ngIf="admin">
 
-  <!-- TODO: Only admin -->
   <section class="row" *ngIf="admin">
 
-    <div class="col-sm-12 col-lg-6 p-3">
-      <h6>Created By:</h6>
+    <div class="col-sm-12 col-md-6 col-lg-4 p-3">
+      <h6>{{ 'CREATED_BY' | translate }}:</h6>
       <span class="text-muted">{{match.createdBy.name}}</span>
     </div>
 
-    <div class="col-sm-12 col-lg-6 p-3">
-      <h6>Created At:</h6>
+    <div class="col-sm-12 col-md-6 col-lg-4 p-3">
+      <h6>{{ 'CREATED_AT' | translate }}:</h6>
       <span class="text-muted">{{match.createdAt}}</span>
     </div>
 
-    <div class="col-sm-12 col-lg-6 p-3">
-      <h6>Updated By:</h6>
+    <div class="col-sm-12 col-md-6 col-lg-4 p-3">
+      <h6>{{ 'UPDATED_BY' | translate }}:</h6>
       <span class="text-muted">{{match.updatedBy.name}}</span>
     </div>
 
-    <div class="col-sm-12 col-lg-6 p-3">
-      <h6>Updated At:</h6>
+    <div class="col-sm-12 col-md-6 col-lg-4 p-3">
+      <h6>{{ 'UPDATED_AT' | translate }}:</h6>
       <span class="text-muted">{{match.updatedAt}}</span>
     </div>
 
@@ -75,7 +84,7 @@
 
 </div>
 <div class="modal-footer flex-wrap">
-  <button *ngIf="admin" class="btn btn-md btn-danger my-1" (click)="deleteMatch()">Delete</button>
-  <button *ngIf="admin" class="btn btn-md btn-primary my-1" (click)="editMatch()">Edit</button>
-  <button class="btn btn-md btn-secondary my-1" (click)="closeModal()">Close</button>
+  <button *ngIf="admin" class="btn btn-md btn-danger my-1" (click)="deleteMatch()">{{ 'DELETE' | translate }}</button>
+  <button *ngIf="admin" class="btn btn-md btn-primary my-1" (click)="editMatch()">{{ 'EDIT' | translate }}</button>
+  <button class="btn btn-md btn-secondary my-1" (click)="closeModal()">{{ 'CLOSE' | translate }}</button>
 </div>

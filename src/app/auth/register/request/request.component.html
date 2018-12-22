@@ -1,24 +1,27 @@
-<nb-auth-block>
-  <h2 class="title">Registration</h2>
-  <small class="form-text sub-title">Are you a part of Northern Stars? Request a new registration to continue.</small>
-  <form fullwidth novalidate="" class="ng-touched ng-dirty ng-valid form" [formGroup]="form" (submit)="onSubmit(form.value)">
-    <div class="form-group group d-flex flex-column my-4">
-        <input fullwidth id="input-email" name="email" nbinput formControlName="email" placeholder="Email" type="email" ng-reflect-name="email" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
-        <small class="text-danger" *ngIf="email.hasError('required') && (email.dirty || email.touched)">Email is required</small>
-        <small class="text-danger" *ngIf="email.hasError('email')">Invalid Email</small>
-        <small class="text-danger" *ngIf="email.hasError('in-use')">Email is already in use</small>
+<div [nbSpinner]="isLoading" nbSpinnerMessage="{{ 'LOADING' | translate }}" nbSpinnerStatus="primary">
+  <nb-auth-block>
+    <h2 class="title">{{ 'REG_REQ_TITLE' | translate }}</h2>
+    <small class="form-text sub-title">{{ 'REG_REQ_MSG' | translate }}</small>
+    <form fullwidth novalidate="" class="ng-touched ng-dirty ng-valid form" [formGroup]="form" (submit)="onSubmit(form.value)">
+      <div class="form-group group d-flex flex-column my-4"
+           [ngClass]="{ 'error' : email.invalid && (email.dirty || email.touched) }">
+          <input fullwidth id="input-email" name="email" nbinput formControlName="email" placeholder="{{ 'EMAIL' | translate }}" type="email" ng-reflect-name="email" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+          <small class="text-danger" *ngIf="email.hasError('required') && (email.dirty || email.touched)">{{ 'EMAIL_REQUIRED' | translate }}</small>
+          <small class="text-danger" *ngIf="email.hasError('email')">{{ 'EMAIL_INVALID' | translate }}</small>
+          <small class="text-danger" *ngIf="email.hasError('in-use')">{{ 'EMAIL_IN_USE' | translate }}</small>
+        </div>
+      <div class="form-group group d-flex flex-column my-4"
+           [ngClass]="{ 'error' : name.invalid && (name.dirty || name.touched) }">
+          <input fullwidth id="input-name" name="name" nbinput formControlName="name" placeholder="{{ 'NAME' | translate }}" type="text" ng-reflect-name="name" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+          <small class="text-danger" *ngIf="name.hasError('required') && (name.dirty || name.touched)">{{ 'NAME_REQUIRED' | translate }}</small>
+          <small class="text-danger" *ngIf="name.hasError('minlength')">{{ 'NAME_MIN' | translate:{minLength:5} }}</small>
       </div>
-    <div class="form-group group d-flex flex-column my-4">
-        <input fullwidth id="input-name" name="name" nbinput formControlName="name" placeholder="Name" type="text" ng-reflect-name="name" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
-        <small class="text-danger" *ngIf="name.hasError('required') && (name.dirty || name.touched)">Name is required</small>
-        <small class="text-danger" *ngIf="name.hasError('minlength')">Your full name must be at least 5 characters long!</small>
+      <button fullwidth nbbutton class="btn btn-primary col-sm-12 p-3" [ngClass]="{'btn-disabled': !form.valid && form.touched}" aria-disabled="false">{{ 'SEND_REQ' | translate }}</button>
+    </form>
+    <div class="links">
+      <small class="form-text text-left">
+        {{ 'ALREADY_REGISTERED' | translate }}? <strong><a routerLink="/auth/login">{{ 'SIGN_IN' | translate }}</a>.</strong>
+      </small>
     </div>
-    <button fullwidth nbbutton class="col-sm-12 p-3" [ngClass]="{'btn-disabled': !form.valid && form.touched}" aria-disabled="false">Send Request</button>
-  </form>
-  <div class="links">
-    <small class="form-text text-left">
-      Already registered? <strong><a routerLink="/auth/login">Sign In</a>.</strong>
-    </small>
-  </div>
-</nb-auth-block>
-
+  </nb-auth-block>
+</div>

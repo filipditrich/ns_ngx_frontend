@@ -1,14 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatchesService } from '../../admin/matches/matches.service';
-import { ErrorHelper } from '../../../@core/helpers/error.helper';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToasterService } from 'angular2-toaster';
 import { LocalDataSource } from 'ng2-smart-table-extended';
-import { HumanizerHelper } from '../../../@core/helpers/humanizer.helper';
+import { translate, ErrorHelper, HumanizerHelper } from '../../../@shared/helpers';
 import { UsersEditorComponent } from '../../../@core/tables/editors/users.editor';
 import { DatetimeEditorComponent } from '../../../@core/tables/editors/datetime.editor';
 import { EPlayersStatusEditorComponent } from '../../../@core/tables/editors/eplayers-status.editor';
 import { UserService } from '../../user/user.service';
+import { LANG } from '../../../../environments/environment';
+import * as moment from 'moment';
 
 @Component({
   selector: 'ns-enrolled-players',
@@ -25,8 +26,6 @@ export class EnrolledPlayersComponent implements OnInit {
               private toasterService: ToasterService,
               private userService: UserService) {
   }
-
-  // TODO: WHY THE FUCK IS IT NOT SHOWING ANYTHING IN THE TABLE WHEN THE SOURCE HAS DATA IN IT ?!
 
   @Input() match;
   @Input() players;
@@ -59,12 +58,13 @@ export class EnrolledPlayersComponent implements OnInit {
       add: false,
       edit: false,
       delete: false,
+      columnTitle: translate('ACTIONS'),
     },
     hideSubHeader: true,
-    noDataMessage: 'No players enrolled',
+    noDataMessage: translate('NO_PLAYERS'),
     columns: {
       info: {
-        title: 'Player',
+        title: translate('PLAYER'),
         type: 'string',
         editor: {
           type: 'custom',
@@ -77,17 +77,16 @@ export class EnrolledPlayersComponent implements OnInit {
         filterFunction: (cell: any, search: string) => cell.name.toLowerCase().indexOf(search.toLowerCase()) >= 0,
       },
       enrolledOn: {
-        title: 'Enrolled On',
+        title: translate('ENROLLED_ON'),
         type: 'string',
         filter: false,
         editor: {
           type: 'custom',
           component: DatetimeEditorComponent,
         },
-        valuePrepareFunction: value => this.humanizer.date(value),
       },
       status: {
-        title: 'Status',
+        title: translate('STATUS'),
         type: 'string',
         editor: {
           type: 'custom',
@@ -97,9 +96,13 @@ export class EnrolledPlayersComponent implements OnInit {
     },
   };
 
+  /**
+   * @description ngOnInit
+   */
   ngOnInit() {
     this.isAdmin = ['admin'].some(role => this.userService.getCurrentUser('roles').indexOf(role) >= 0);
-    if (this.isAdmin) {
+    // TODO: fix all the problems, until then I'm disabling editing for everybody. FUCK
+    if (this.isAdmin && false) {
       this.settings.actions.add = true;
       this.settings.actions.delete = true;
       this.settings.actions.edit = true;
@@ -134,17 +137,20 @@ export class EnrolledPlayersComponent implements OnInit {
    */
   onCreateConfirm(event) {
     const newPlayer = {
-      player: event.newData.info.value._id,
-      info: event.newData.info.value,
+      player: event.newData.info._id,
+      info: event.newData.info,
       status: event.newData.status,
       enrolledOn: event.newData.enrolledOn,
     };
 
+    // format the de-formatted date values
+    this.match.enrollment.enrollmentOpens = moment(this.match.enrollment.enrollmentOpens, LANG).locale('en').format();
+    this.match.enrollment.enrollmentCloses = moment(this.match.enrollment.enrollmentCloses, LANG).locale('en').format();
     this.match.enrollment.players.push(newPlayer);
 
     this.matchesService.update(this.match._id, { enrollment: this.match.enrollment }).subscribe(response => {
       if (response.response.status) {
-        this.toasterService.popAsync('info', 'Update successful', 'A player has been successfully added to the match enrollment list.');
+        this.toasterService.popAsync('info', translate('UPDATE_SUCCESS_TITLE'), translate('UPDATE_SUCCESS_MSG'));
         this.reload = true;
         event.confirm.resolve(newPlayer);
       } else {
@@ -165,10 +171,13 @@ export class EnrolledPlayersComponent implements OnInit {
     if (window.confirm('Are you sure?')) {
       const deleteIndex = this.match.enrollment.players.findIndex(obj => obj.player === event.data.info._id);
       this.match.enrollment.players.splice(deleteIndex, 1);
+      // format the de-formatted date values
+      this.match.enrollment.enrollmentOpens = moment(this.match.enrollment.enrollmentOpens, LANG).locale('en').format();
+      this.match.enrollment.enrollmentCloses = moment(this.match.enrollment.enrollmentCloses, LANG).locale('en').format();
 
       this.matchesService.update(this.match._id, { enrollment: this.match.enrollment }).subscribe(response => {
         if (response.response.status) {
-          this.toasterService.popAsync('info', 'Delete successful', 'A player has been successfully deleted from the match enrollment list.');
+          this.toasterService.popAsync('info', translate('DELETE_SUCCESS_TITLE'), translate('DELETE_SUCCESS_MSG'));
           this.reload = true;
           event.confirm.resolve(event.newData);
         } else {
@@ -189,19 +198,22 @@ export class EnrolledPlayersComponent implements OnInit {
    * @param event
    */
   onEditConfirm(event) {
-    const _id = event.newData.info.value._id;
+    const _id = event.newData.info._id;
     const info = event.newData.info;
     const editIndex = this.match.enrollment.players.findIndex(obj => obj.player === event.newData.player);
 
     // update values
     this.match.enrollment.players[editIndex].player = _id;
     this.match.enrollment.players[editIndex].status = event.newData.status;
-    this.match.enrollment.players[editIndex].enrolledOn = event.newData.enrolledOn;
+    this.match.enrollment.players[editIndex].enrolledOn = moment(event.newData.enrolledOn, LANG).locale('en').format();
     this.match.enrollment.players[editIndex].info = info.value;
+    // format the de-formatted date values
+    this.match.enrollment.enrollmentOpens = moment(this.match.enrollment.enrollmentOpens, LANG).locale('en').format();
+    this.match.enrollment.enrollmentCloses = moment(this.match.enrollment.enrollmentCloses, LANG).locale('en').format();
 
     this.matchesService.update(this.match._id, { enrollment: this.match.enrollment }).subscribe(response => {
       if (response.response.status) {
-        this.toasterService.popAsync('info', 'Update successful', 'Match enrollment player list has been updated successfully.');
+        this.toasterService.popAsync('info', translate('UPDATE_SUCCESS_TITLE'), translate('UPDATE_SUCCESS_MSG'));
         this.reload = true;
         event.confirm.resolve(event.newData);
       } else {

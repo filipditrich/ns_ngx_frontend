@@ -1,10 +1,10 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { JerseysService } from '../jerseys.service';
-import { ErrorHelper } from '../../../../@core/helpers/error.helper';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToasterService } from 'angular2-toaster';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { translate, ErrorHelper } from '../../../../@shared/helpers';
 
 @Component({
   selector: 'ns-add-jersey',
@@ -31,14 +31,14 @@ export class AddJerseyComponent implements OnInit {
      */
     this.form = new FormGroup({
       name: new FormControl(null, [ Validators.required ]),
-      color: new FormControl(null, [ Validators.required ]),
+      // color: new FormControl(null, [ Validators.required ]),
     });
 
   }
 
   // Form Getters
   get name() { return this.form.get('name'); }
-  get color() { return this.form.get('color'); }
+  // get color() { return this.form.get('color'); }
 
   ngOnInit() {
   }
@@ -48,7 +48,7 @@ export class AddJerseyComponent implements OnInit {
    */
   touchAllFields() {
     this.name.markAsTouched();
-    this.color.markAsTouched();
+    // this.color.markAsTouched();
   }
 
   /**
@@ -72,7 +72,7 @@ export class AddJerseyComponent implements OnInit {
       this.jerseysService.create(input).subscribe(response => {
         if (response.response.success) {
           this.router.navigate(['/pages/admin/jerseys']).then(() => {
-            this.toasterService.popAsync('success', 'Jersey Created!', 'Jersey successfully created.');
+            this.toasterService.popAsync('success', translate('JERSEY_CREATED_TITLE'), translate('JERSEY_CREATED_MSG'));
             this.closeModal(true);
           });
         } else {

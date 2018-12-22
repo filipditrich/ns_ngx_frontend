@@ -2,6 +2,7 @@ import * as moment from 'moment';
 import { PlacesService } from '../../pages/admin/places/places.service';
 import { ErrorHelper } from './error.helper';
 import { Injectable } from '@angular/core';
+import { getLang } from './translator.helper';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,7 @@ export class HumanizerHelper {
    * @return {string}
    */
   date(date) {
-    return moment(new Date(date)).locale('en').format('lll');
+    return moment(new Date(date)).locale(getLang()).format('lll');
   }
 
   /**

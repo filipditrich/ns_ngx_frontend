@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { IDialog, IDialogPayload } from '../../models/dialogs.interface';
+import { IDialog, IDialogPayload } from '../../../@shared/interfaces/dialogs.interface';
 import { Observable, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 

@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table-extended';
-import { ErrorHelper } from '../../../@core/helpers/error.helper';
-import { HumanizerHelper } from '../../../@core/helpers/humanizer.helper';
 import { ToasterService } from 'angular2-toaster';
 import { UserService } from '../../user/user.service';
 import { Router } from '@angular/router';
@@ -11,7 +9,8 @@ import { DefaultTableComponent } from '../../../@core/tables/default-table.compo
 import { PlacesService } from './places.service';
 import { AddPlaceComponent } from './add-place/add-place.component';
 import { PlaceDetailComponent } from './place-detail/place-detail.component';
-import * as codeConfig from '../../../@core/config/codes.config';
+import { translate, HumanizerHelper, ErrorHelper } from '../../../@shared/helpers';
+import * as codeConfig from '../../../@shared/config/codes.config';
 
 @Component({
   selector: 'ns-places',
@@ -30,13 +29,13 @@ export class PlacesComponent extends DefaultTableComponent implements OnInit {
     super(errorHelper, modalService);
 
     // pass in the values
-    this.localStoragePrefName = 'placeManager';
+    this.storagePrefName = 'placeManager';
     this.source = new LocalDataSource();
     this.filterOptions = {
       rowsPerPage: {
         value: 5,
         id: 'rowsPerPage',
-        title: 'Rows per page:',
+        title: translate('ROWS_PER_PAGE'),
         type: 'select',
         options: {
           multiple: false,
@@ -60,11 +59,11 @@ export class PlacesComponent extends DefaultTableComponent implements OnInit {
         deleteButtonContent: '<i class="nb-trash"></i>',
       },
       actions: {
-        columnTitle: 'Actions',
+        columnTitle: translate('ACTIONS'),
       },
       hideSubHeader: true,
       mode: 'external',
-      noDataMessage: 'No places found',
+      noDataMessage: translate('NO_PLACES'),
       columns: {},
       pager: {
         perPage: this.filterOptions.rowsPerPage.value,
@@ -74,7 +73,7 @@ export class PlacesComponent extends DefaultTableComponent implements OnInit {
       {
         order: 1,
         id: 'name',
-        title: 'Title',
+        title: translate('TITLE'),
         type: 'string',
         checked: false,
         default: true,
@@ -85,7 +84,7 @@ export class PlacesComponent extends DefaultTableComponent implements OnInit {
       {
         order: 2,
         id: 'createdBy',
-        title: 'Created By',
+        title: translate('CREATED_BY'),
         type: 'string',
         checked: false,
         editable: false,
@@ -98,7 +97,7 @@ export class PlacesComponent extends DefaultTableComponent implements OnInit {
       {
         order: 3,
         id: 'createdAt',
-        title: 'Created At',
+        title: translate('CREATED_AT'),
         type: 'string',
         checked: false,
         editable: false,
@@ -108,7 +107,7 @@ export class PlacesComponent extends DefaultTableComponent implements OnInit {
       {
         order: 4,
         id: 'updatedBy',
-        title: 'Updated By',
+        title: translate('UPDATED_BY'),
         type: 'string',
         checked: false,
         editable: false,
@@ -121,7 +120,7 @@ export class PlacesComponent extends DefaultTableComponent implements OnInit {
       {
         order: 5,
         id: 'updatedAt',
-        title: 'Updated At',
+        title: translate('UPDATED_AT'),
         type: 'string',
         checked: false,
         editable: false,
@@ -184,21 +183,21 @@ export class PlacesComponent extends DefaultTableComponent implements OnInit {
       container: 'nb-layout',
     });
 
-    modal.componentInstance.modalHeader = `Delete '${event.data.title}'?`;
-    modal.componentInstance.modalContent = `<p class="text-muted">Are you sure you want to delete this place?</p>`;
+    modal.componentInstance.modalHeader = `${translate('DELETE')} '${event.data.name}'?`;
+    modal.componentInstance.modalContent = `<p class="text-muted">${translate('DELETE_PLACE_MSG')}</p>`;
     modal.componentInstance.modalButtons = [
       {
-        text: 'Cancel',
+        text: translate('CANCEL'),
         classes: 'btn-secondary',
         action: () => { modal.close(); },
       },
       {
-        text: 'Delete',
+        text: translate('DELETE'),
         classes: 'btn-danger',
         action: () => {
           this.placesService.delete(event.data._id).subscribe(response => {
             if (response.response.success) {
-              this.toasterService.popAsync('success', 'Deleted', 'Place has been successfully deleted.');
+              this.toasterService.popAsync('success', translate('PLACE_DELETED_TITLE'), translate('PLACE_DELETED_MSG'));
               modal.close();
               this.loadData();
             } else {

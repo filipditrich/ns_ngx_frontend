@@ -1,14 +1,16 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatchesService } from '../matches.service';
-import { ErrorHelper } from '../../../../@core/helpers/error.helper';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PlacesService } from '../../places';
 import { ToasterService } from 'angular2-toaster';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgSelectComponent } from '@ng-select/ng-select';
 import { UserService } from '../../../user/user.service';
-import { IMatch } from '../../../../@core/models/match.interface';
-import * as codeConfig from '../../../../@core/config/codes.config';
+import { GroupsService } from '../../groups';
+import { IMatch } from '../../../../@shared/interfaces';
+import { ModalComponent } from '../../../ui-features/modals/modal/modal.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { translate, ErrorHelper } from '../../../../@shared/helpers';
+import * as codeConfig from '../../../../@shared/config/codes.config';
 import * as moment from 'moment';
 
 @Component({
@@ -22,23 +24,21 @@ export class EditMatchComponent implements OnInit {
   // public variables
   public form: FormGroup;
   public placesArray = [];
+  public groupsArray = [];
   public usersArray = [];
   public now = new Date();
   public match: IMatch;
   public isLoading = true;
 
-  // ViewChild of ng-select component
-  @ViewChild('placeID') ngSelectPlace: NgSelectComponent;
-  @ViewChild('updatedByID') ngSelectUpdatedBy: NgSelectComponent;
-  @ViewChild('createdByID') ngSelectCreatedBy: NgSelectComponent;
-
   constructor(private matchesService: MatchesService,
               private errorHelper: ErrorHelper,
               private placesService: PlacesService,
+              private groupsService: GroupsService,
               private toasterService: ToasterService,
               private activatedRoute: ActivatedRoute,
               private router: Router,
-              private usersService: UserService) {
+              private usersService: UserService,
+              private modalService: NgbModal) {
 
     /**
      * @description FormGroup
@@ -48,6 +48,7 @@ export class EditMatchComponent implements OnInit {
       title: new FormControl(null, [ Validators.required ]),
       date: new FormControl(null, [ Validators.required ]),
       place: new FormControl(null, [ Validators.required ]),
+      group: new FormControl(null, [ Validators.required ]),
       note: new FormControl(null, []),
       enrollmentOpens: new FormControl(null, []),
       enrollmentCloses: new FormControl(null, []),
@@ -64,6 +65,7 @@ export class EditMatchComponent implements OnInit {
   get title() { return this.form.get('title'); }
   get date() { return this.form.get('date'); }
   get place() { return this.form.get('place'); }
+  get group() { return this.form.get('group'); }
   get note() { return this.form.get('note'); }
   get enrollmentOpens() { return this.form.get('enrollmentOpens'); }
   get enrollmentCloses() { return this.form.get('enrollmentCloses'); }
@@ -77,7 +79,7 @@ export class EditMatchComponent implements OnInit {
    * @description ngOnInit
    */
   ngOnInit() {
-    Promise.all([ this.getPlaces(), this.getUsers()] ).then(() => {
+    Promise.all([ this.getPlaces(), this.getUsers(), this.getGroups() ] ).then(() => {
       this.matchesService.get(this.activatedRoute.snapshot.params['id']).subscribe(response => {
         if (response.response.success) {
           this.match = response.output[0];
@@ -86,88 +88,96 @@ export class EditMatchComponent implements OnInit {
           this.title.setValue(this.match.title);
           this.date.setValue(new Date(this.match.date));
           this.maxCap.setValue(this.match.enrollment.maxCapacity);
-
-          // place field
-          if (!!this.match.place && !!this.match.place._id) {
-            if (!!this.ngSelectPlace.itemsList.findItem(this.match.place._id)) {
-              this.ngSelectPlace.select(this.ngSelectPlace.itemsList.findItem(this.match.place._id));
-            } else if (this.match.place.name === '(unavailable place)') {
-              if (!this.ngSelectPlace.itemsList.findItem(this.match.place._id)) {
-                this.ngSelectPlace.itemsList.addItem(this.match.place);
-              }
-              this.ngSelectPlace.select(this.ngSelectPlace.itemsList.findItem(this.match.place._id));
-            } else {
-              if (!this.ngSelectPlace.itemsList.findItem(1)) {
-                this.ngSelectPlace.itemsList.addItem({ _id: 1, name: '(unknown place)' });
-              }
-              this.ngSelectPlace.select(this.ngSelectPlace.itemsList.findItem(1));
-            }
-          }
-
           this.enrollmentOpens.setValue(new Date(this.match.enrollment.enrollmentOpens));
           this.enrollmentCloses.setValue(new Date(this.match.enrollment.enrollmentCloses));
           this.note.setValue(this.match.note);
-
-          // TODO: only if user is administrator
           this.createdAt.setValue(this.match.createdAt);
           this.updatedAt.setValue(this.match.updatedAt);
 
-          // createdBy field
-          if (!!this.match.createdBy && !!this.match.createdBy._id) {
-            if (!!this.ngSelectCreatedBy.itemsList.findItem(this.match.createdBy._id)) {
-              this.ngSelectCreatedBy.select(this.ngSelectCreatedBy.itemsList.findItem(this.match.createdBy._id));
-            } else if (this.match.createdBy.username === 'deletedUser') {
-              if (!this.ngSelectCreatedBy.itemsList.findItem(this.match.createdBy._id)) {
-                this.ngSelectCreatedBy.itemsList.addItem(this.match.createdBy);
+          // place field
+          if (!!this.match.place && this.match.place._id) {
+            if (this.placesArray.findIndex(x => x._id === this.match.place._id) >= 0) {
+              this.place.setValue(this.match.place._id, { onlySelf: true });
+            } else if (this.match.place.name === '(unavailable place)') {
+              if (this.placesArray.findIndex(x => x._id === this.match.place._id) < 0) {
+                this.placesArray.push(this.match.place);
               }
-              this.ngSelectCreatedBy.select(this.ngSelectCreatedBy.itemsList.findItem(this.match.createdBy._id));
+              this.place.setValue(this.match.place._id, { onlySelf: true });
             } else {
-              if (!this.ngSelectCreatedBy.itemsList.findItem(1)) {
-                this.ngSelectCreatedBy.itemsList.addItem({ _id: 1, name: '(unknown user)' });
+              if (this.placesArray.findIndex(x => x._id === 1) < 0) {
+                this.placesArray.push({ _id: 1, name: '(unknown place)' });
               }
-              this.ngSelectCreatedBy.select(this.ngSelectCreatedBy.itemsList.findItem(1));
+              this.place.setValue(1, { onlySelf: true });
+            }
+          }
+
+          // group field
+          if (!!this.match.group && this.match.group._id) {
+            if (this.groupsArray.findIndex(x => x._id === this.match.group._id) >= 0) {
+              this.group.setValue(this.match.group._id, {onlySelf: true});
+            } else if (this.match.group.name === '(unavailable group)') {
+              if (this.groupsArray.findIndex(x => x._id === this.match.group._id) < 0) {
+                this.groupsArray.push(this.match.group);
+              }
+              this.group.setValue(this.match.group._id, {onlySelf: true});
+            } else {
+              if (this.groupsArray.findIndex(x => x._id === 1) < 0) {
+                this.groupsArray.push({_id: 1, name: '(unknown group)'});
+              }
+              this.group.setValue(1, {onlySelf: true});
+            }
+          }
+
+
+          // createdBy field
+          if (!!this.match.createdBy && this.match.createdBy._id) {
+            if (this.usersArray.findIndex(x => x._id === this.match.createdBy._id) >= 0) {
+              this.createdBy.setValue(this.match.createdBy._id, {onlySelf: true});
+            } else if (this.match.createdBy.username === 'deletedUser') {
+              if (this.usersArray.findIndex(x => x._id === this.match.createdBy._id) < 0) {
+                this.usersArray.push(this.match.createdBy);
+              }
+              this.createdBy.setValue(this.match.createdBy._id, {onlySelf: true});
+            } else {
+              if (this.usersArray.findIndex(x => x._id === 1) < 0) {
+                this.usersArray.push({_id: 1, name: '(unknown user)'});
+              }
+              this.createdBy.setValue(1, {onlySelf: true});
             }
           }
 
           // updatedBy field
-          if (!!this.match.updatedBy && !!this.match.updatedBy._id) {
-            if (!!this.ngSelectUpdatedBy.itemsList.findItem(this.match.updatedBy._id)) {
-              this.ngSelectUpdatedBy.select(this.ngSelectUpdatedBy.itemsList.findItem(this.match.updatedBy._id));
+          if (!!this.match.updatedBy && this.match.updatedBy._id) {
+            if (this.usersArray.findIndex(x => x._id === this.match.updatedBy._id) >= 0) {
+              this.updatedBy.setValue(this.match.updatedBy._id, {onlySelf: true});
             } else if (this.match.updatedBy.username === 'deletedUser') {
-              if (!this.ngSelectUpdatedBy.itemsList.findItem(this.match.updatedBy._id)) {
-                this.ngSelectUpdatedBy.itemsList.addItem(this.match.updatedBy);
+              if (this.usersArray.findIndex(x => x._id === this.match.updatedBy._id) < 0) {
+                this.usersArray.push(this.match.updatedBy);
               }
-              this.ngSelectUpdatedBy.select(this.ngSelectUpdatedBy.itemsList.findItem(this.match.updatedBy._id));
+              this.updatedBy.setValue(this.match.updatedBy._id, {onlySelf: true});
             } else {
-              if (!this.ngSelectUpdatedBy.itemsList.findItem(1)) {
-                this.ngSelectUpdatedBy.itemsList.addItem({ _id: 1, name: '(unknown user)' });
+              if (this.usersArray.findIndex(x => x._id === 1) < 0) {
+                this.usersArray.push({_id: 1, name: '(unknown user)'});
               }
-              this.ngSelectUpdatedBy.select(this.ngSelectUpdatedBy.itemsList.findItem(1));
+              this.updatedBy.setValue(1, {onlySelf: true});
             }
           }
-
-          // hack/fix for misplaced values
-          this.ngSelectPlace.focus();
-          this.ngSelectCreatedBy.focus();
-          this.ngSelectUpdatedBy.focus();
-          document.getElementById('title').focus();
-          document.getElementById('title').blur();
 
           // mark all fields as touched
           this.touchAllFields();
 
           // disable inputs if the match is already in past
           if (moment(this.match.date).isBefore(this.now)) {
-            this.toasterService.popAsync('info', 'Cannot edit', 'This match has already been played. So you cannot change it\'s properties.');
+            this.toasterService.popAsync('info', translate('MATCH_NOT_EDITABLE_TITLE'), translate('MATCH_NOT_EDITABLE_MSG'));
             this.title.disable();
             this.date.disable();
             this.place.disable();
+            this.group.disable();
             this.enrollmentOpens.disable();
             this.enrollmentCloses.disable();
             this.maxCap.disable();
             this.note.disable();
           }
-
           this.isLoading = false;
 
         } else {
@@ -180,7 +190,7 @@ export class EditMatchComponent implements OnInit {
         switch (error.name || error.type) {
           case codeConfig.getCodeByName('MATCH_NOT_FOUND', 'core').name: {
             this.router.navigate(['/pages/admin/matches/']).then(() => {
-              this.toasterService.popAsync('error', 'Match not found.', 'Match with the specified ID is invalid or does not exist.');
+              this.toasterService.popAsync('error', translate('MATCH_NOT_FOUND_TITLE'), translate('MATCH_NOT_FOUND_MSG'));
             });
             break;
           }
@@ -205,6 +215,7 @@ export class EditMatchComponent implements OnInit {
     return (this.title.value === this.match.title) &&
            (moment(this.date.value).isSame(this.match.date)) &&
            (this.place.value === this.match.place._id) &&
+           (this.group.value === this.match.group._id) &&
            (moment(this.enrollmentOpens.value).isSame(this.match.enrollment.enrollmentOpens)) &&
            (moment(this.enrollmentCloses.value).isSame(this.match.enrollment.enrollmentCloses)) &&
            (this.note.value === this.match.note) &&
@@ -222,7 +233,26 @@ export class EditMatchComponent implements OnInit {
       this.placesService.get().subscribe(response => {
         if (response.response.success) {
           this.placesArray = response.output;
-          this.ngSelectPlace.itemsList.setItems(this.placesArray);
+          resolve();
+        } else {
+          this.errorHelper.processedButFailed(response);
+          reject(response);
+        }
+      }, err => {
+        reject(err);
+      });
+    });
+  }
+
+  /**
+   * @description Loads Groups from server
+   * @return {Promise<any>}
+   */
+  getGroups() {
+    return new Promise((resolve, reject) => {
+      this.groupsService.get().subscribe(response => {
+        if (response.response.success) {
+          this.groupsArray = response.output;
           resolve();
         } else {
           this.errorHelper.processedButFailed(response);
@@ -242,8 +272,6 @@ export class EditMatchComponent implements OnInit {
       this.usersService.getAllUsers().subscribe(response => {
         if (response.response.success) {
           this.usersArray = response.output;
-          this.ngSelectCreatedBy.itemsList.setItems(this.usersArray);
-          this.ngSelectUpdatedBy.itemsList.setItems(this.usersArray);
           resolve();
         } else {
           this.errorHelper.processedButFailed(response);
@@ -256,12 +284,49 @@ export class EditMatchComponent implements OnInit {
   }
 
   /**
+   * @description Deletes a Match
+   */
+  deleteMatch() {
+    const modal = this.modalService.open(ModalComponent, {
+      container: 'nb-layout',
+    });
+
+    modal.componentInstance.modalHeader = `${translate('DELETE')} '${this.match.title}'?`;
+    modal.componentInstance.modalContent = `<p>${translate('DELETE_MATCH_MSG')}</p>`;
+    modal.componentInstance.modalButtons = [
+      {
+        text: translate('DELETE'),
+        classes: 'btn btn-danger',
+        action: () => {
+          this.matchesService.delete(this.match._id).subscribe(response => {
+            if (response.response.success) {
+              this.router.navigate(['/pages/admin/matches']).then(() => {
+                modal.close();
+              });
+            } else {
+              this.errorHelper.processedButFailed(response);
+            }
+          }, error => {
+            this.errorHelper.handleGenericError(error);
+          });
+        },
+      },
+      {
+        text: translate('CANCEL'),
+        classes: 'btn btn-secondary',
+        action: () => modal.close(),
+      },
+    ];
+  }
+
+  /**
    * @description Marks all fields as touched
    */
   touchAllFields() {
     this.title.markAsTouched();
     this.date.markAsTouched();
     this.place.markAsTouched();
+    this.group.markAsTouched();
     this.note.markAsTouched();
     this.enrollmentOpens.markAsTouched();
     this.enrollmentCloses.markAsTouched();
@@ -287,7 +352,7 @@ export class EditMatchComponent implements OnInit {
       this.matchesService.update(this.match._id, input).subscribe(response => {
         if (response.response.success) {
           this.router.navigate(['/pages/admin/matches']).then(() => {
-            this.toasterService.popAsync('success', 'Match Updated!', 'Match successfully updated.');
+            this.toasterService.popAsync('success', translate('MATCH_UPDATED_TITLE'), translate('MATCH_UPDATED_MSG'));
           });
         } else {
           this.errorHelper.processedButFailed(response);

@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h3>Create a Team</h3>
+  <h3>{{ 'CREATE_TEAM' | translate }}</h3>
   <button class="close" aria-label="Close" (click)="closeModal(false)">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -14,16 +14,16 @@
           <!-- Name -->
           <div class="form-group group d-flex flex-column"
                [ngClass]="{ 'error' : name.invalid && (name.dirty || name.touched) }">
-            <label for="name">Team Name*</label>
+            <label for="name">{{ 'TEAM_NAME' | translate }}*</label>
             <input fullwidth id="name" name="name" nbinput formControlName="name" type="text" ng-reflect-name="name" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
-            <small class="text-danger" *ngIf="name.hasError('required') && (name.dirty || name.touched)">Team name is required</small>
+            <small class="text-danger" *ngIf="name.hasError('required') && (name.dirty || name.touched)">{{ 'TEAM_NAME_REQUIRED' | translate }}</small>
           </div>
 
           <hr>
 
           <!-- Submit -->
           <div class="form-group mt-2">
-            <button nbbutton class="col-sm-12 p-3" [ngClass]="{'btn-disabled': !form.valid }">Create Team</button>
+            <button nbbutton class="col-sm-12 p-3" [ngClass]="{'btn-disabled': !form.valid }">{{ 'CREATE_TEAM' | translate }}</button>
           </div>
 
         </form>

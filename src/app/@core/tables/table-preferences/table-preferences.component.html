@@ -1,18 +1,18 @@
 <div class="modal-header">
-  <h3>Table Preferences</h3>
+  <h3>{{ 'TABLE_PREF_TITLE' | translate }}</h3>
   <button class="close" aria-label="Close" (click)="closeModal()">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
 <div class="modal-body">
 
-  <section id="options-section">
+  <form novalidate="" class="ng-touched ng-dirty ng-valid form" id="options-section">
 
-    <header><h5>Options</h5></header>
+    <header><h5>{{ 'OPTIONS' | translate }}</h5></header>
 
-    <div class="row align-items-baseline">
+    <div class="row align-items-center">
 
-      <!-- Show past matches switch -->
+      <!-- switches -->
       <div *ngFor="let checkbox of FOCheckbox"
            class="pretty p-switch p-fill col-sm-6 py-2 mr-0">
         <input
@@ -26,30 +26,31 @@
         </div>
       </div>
 
-      <!-- Rows per page select -->
+      <!-- selects -->
       <div *ngFor="let select of FOSelect"
-           class="col-sm-6 d-flex align-items-center py-2">
-        <span class="mr-2">{{select.title}}</span>
-        <ng-select
-          [items]="select.options.items"
-          [multiple]="select.options.multiple"
-          [closeOnSelect]="select.options.closeOnSelect"
-          [clearable]="select.options.clearable"
-          [searchable]="select.options.searchable"
-          [placeholder]="filterOptions.rowsPerPage.value"
+           class="col-sm-6 d-flex py-2 form-group group flex-column">
+        <label class="mr-2">{{select.title}}</label>
+        <select
+          [name]="select.id"
           [id]="select.id"
-          class="ng-select-input-custom flex-grow-1"
-          (change)="selectOnChange($event, select.id)">
-        </ng-select>
+          class="input-full-width input-md ng-dirty ng-valid ng-touched"
+          (change)="selectOnSelect($event, select.id)">
+          <option
+            *ngFor="let item of select.options.items"
+            value="{{item.value}}"
+            [selected]="placeholderValue(item.value, select.id)">
+            {{item.label}}
+          </option>
+        </select>
       </div>
 
     </div>
 
-  </section>
+  </form>
 
   <section id="columns-section">
 
-    <header><h5>Columns</h5></header>
+    <header><h5>{{ 'COLUMNS' | translate }}</h5></header>
 
     <div class="row" [sortablejs]="filters" [sortablejsOptions]="sortableOptions">
       <!-- Rows -->
@@ -71,6 +72,6 @@
 
 </div>
 <div class="modal-footer">
-  <button class="btn btn-md btn-secondary" (click)="closeModal()">Cancel</button>
-  <button class="btn btn-md btn-primary" (click)="applyChanges()">Apply Changes</button>
+  <button class="btn btn-md btn-secondary" (click)="closeModal()">{{ 'CANCEL' | translate }}</button>
+  <button class="btn btn-md btn-primary" (click)="applyChanges()">{{ 'APPLY_CHANGES' | translate }}</button>
 </div>

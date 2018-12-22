@@ -2,11 +2,12 @@ import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { MatchesService } from '../../admin/matches/matches.service';
-import { HumanizerHelper } from '../../../@core/helpers/humanizer.helper';
+import { HumanizerHelper } from '../../../@shared/helpers/humanizer.helper';
 import { EnrolledPlayersComponent } from '../enrolled-players/enrolled-players.component';
 import { ModalComponent } from '../../ui-features/modals/modal/modal.component';
-import { ErrorHelper } from '../../../@core/helpers/error.helper';
+import { ErrorHelper } from '../../../@shared/helpers/error.helper';
 import { UserService } from '../../user/user.service';
+import { translate } from '../../../@shared/helpers/translator.helper';
 
 @Component({
   selector: 'ns-match-detail',
@@ -24,6 +25,7 @@ export class MatchDetailComponent implements OnInit {
   public isHidden = false;
   public reload = false;
   public admin = false;
+  public maxCapacity = translate('LOADING');
 
   constructor(private activeModal: NgbActiveModal,
               private router: Router,
@@ -36,6 +38,7 @@ export class MatchDetailComponent implements OnInit {
   ngOnInit() {
     this.match = this.humanizer.datesInMatch(this.match);
     this.admin = ['admin'].some(role => this.userService.getCurrentUser('roles').indexOf(role) >= 0);
+    this.maxCapacity = `${this.match.enrollment.players.filter(player => player.status === 'going').length}/${this.match.enrollment.maxCapacity}`;
   }
 
   /**
@@ -83,11 +86,11 @@ export class MatchDetailComponent implements OnInit {
     });
 
     this.isHidden = true;
-    modal.componentInstance.modalHeader = `Delete '${this.match.name}'?`;
+    modal.componentInstance.modalHeader = `${translate('DELETE')} '${this.match.name}'?`;
     modal.componentInstance.modalContent = '<p>Do you really want to delete this match?</p>';
     modal.componentInstance.modalButtons = [
       {
-        text: 'Delete',
+        text: translate('DELETE'),
         classes: 'btn btn-danger',
         action: () => {
           this.matchesService.delete(this.match._id).subscribe(response => {
@@ -106,7 +109,7 @@ export class MatchDetailComponent implements OnInit {
         },
       },
       {
-        text: 'Cancel',
+        text: translate('CANCEL'),
         classes: 'btn btn-secondary',
         action: () => { modal.close(); this.isHidden = false; },
       },

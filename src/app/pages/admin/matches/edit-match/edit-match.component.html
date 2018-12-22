@@ -1,24 +1,41 @@
 <div class="row">
   <div class="col-sm-12">
-    <nb-card [nbSpinner]="isLoading" nbSpinnerStatus="primary">
+    <nb-card [nbSpinner]="isLoading" nbSpinnerMessage="{{ 'LOADING' | translate }}" nbSpinnerStatus="primary">
 
       <nb-card-header>
         <button [routerLink]="['/pages/admin/matches']" class="close float-left mr-3">
           <i class="icon ion-ios-arrow-back fs-larger"></i>
         </button>
-        <h2>Edit '{{match?.title}}'</h2>
+        <h2>{{ 'EDIT' | translate }} '{{match?.title}}'</h2>
       </nb-card-header>
 
       <nb-card-body>
 
         <form novalidate="" class="ng-touched ng-dirty ng-valid form" [formGroup]="form">
 
-          <!-- Title -->
-          <div class="form-group group d-flex flex-column"
-               [ngClass]="{ 'error' : title.invalid && (title.dirty || title.touched) }">
-            <label for="title">Match Title*</label>
-            <input fullwidth id="title" name="title" nbinput formControlName="title" type="text" ng-reflect-name="title" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
-            <small class="text-danger" *ngIf="title.hasError('required') && (title.dirty || title.touched)">Match title is required</small>
+          <!-- Title & Group -->
+          <div class="row">
+
+            <div class="form-group group d-flex flex-column col-sm-6"
+                 [ngClass]="{ 'error' : title.invalid && (title.dirty || title.touched) }">
+              <label for="title">{{ 'TITLE' | translate }}*</label>
+              <input fullwidth id="title" name="title" nbinput formControlName="title" type="text" ng-reflect-name="title" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+              <small class="text-danger" *ngIf="title.hasError('required') && (title.dirty || title.touched)">{{ 'TITLE_REQUIRED' | translate }}</small>
+            </div>
+
+            <!-- Group -->
+            <div class="form-group group d-flex flex-column col-sm-6"
+                 [ngClass]="{ 'error' : group.invalid && (group.dirty || group.touched) }">
+              <label for="title">{{ 'GROUP' | translate }}*</label>
+              <select name="group" id="group" formControlName="group" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+                <option
+                  *ngFor="let group of groupsArray"
+                  value="{{group._id}}">
+                  {{group.name}}
+                </option>
+              </select>
+              <small class="text-danger" *ngIf="group.hasError('required') && (group.dirty || group.touched)">{{ 'GROUP_REQUIRED' | translate }}</small>
+            </div>
           </div>
 
           <!-- Date & Place -->
@@ -27,7 +44,7 @@
             <!-- Date -->
             <div class="form-group group d-flex flex-column col-sm-6"
                  [ngClass]="{ 'error' : date.invalid && (date.dirty || date.touched) }">
-              <label for="title">Match Date*</label>
+              <label for="title">{{ 'DATE' | translate }}*</label>
               <div class="calendar">
 
                 <input
@@ -49,22 +66,21 @@
                 </div>
 
               </div>
-              <small class="text-danger" *ngIf="date.hasError('required') && (date.dirty || date.touched)">Date is required</small>
+              <small class="text-danger" *ngIf="date.hasError('required') && (date.dirty || date.touched)">{{ 'DATE_REQUIRED' | translate }}</small>
             </div>
 
             <!-- Place -->
             <div class="form-group group d-flex flex-column col-sm-6"
                  [ngClass]="{ 'error' : place.invalid && (place.dirty || place.touched) }">
-              <label for="title">Match Place*</label>
-              <ng-select
-                #placeID
-                [multiple]="false"
-                [closeOnSelect]="true"
-                bindLabel="name"
-                bindValue="_id"
-                id="place" name="place" formControlName="place" ng-reflect-name="place" class="ng-select-input-custom flex-grow-1">
-              </ng-select>
-              <small class="text-danger" *ngIf="place.hasError('required') && (place.dirty || place.touched)">Place is required</small>
+              <label for="title">{{ 'PLACE' | translate }}*</label>
+              <select name="place" id="place" formControlName="place" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+                <option
+                  *ngFor="let place of placesArray"
+                  value="{{place._id}}">
+                  {{place.name}}
+                </option>
+              </select>
+              <small class="text-danger" *ngIf="place.hasError('required') && (place.dirty || place.touched)">{{ 'PLACE_REQUIRED' | translate }}</small>
             </div>
           </div>
 
@@ -76,7 +92,7 @@
             <!-- Enrollment Opens -->
             <div class="form-group group d-flex flex-column col-sm-5"
                  [ngClass]="{ 'error' : enrollmentOpens.invalid && (enrollmentOpens.dirty || enrollmentOpens.touched), 'disabled' : !date.value }">
-              <label for="enrollmentOpens">Enrollment Opens</label>
+              <label for="enrollmentOpens">{{ 'EOPEN' | translate }}</label>
               <div class="calendar">
 
                 <input
@@ -99,13 +115,13 @@
                 </div>
 
               </div>
-              <small class="text-danger" *ngIf="enrollmentOpens.invalid">This date is invalid</small>
+              <small class="text-danger" *ngIf="enrollmentOpens.invalid">{{ 'DATE_INVALID' | translate }}</small>
             </div>
 
             <!-- Enrollment Closes -->
             <div class="form-group group d-flex flex-column col-sm-5"
                  [ngClass]="{ 'error' : enrollmentCloses.invalid && (enrollmentCloses.dirty || enrollmentCloses.touched), 'disabled' : !date.value }">
-              <label for="enrollmentCloses">Enrollment Closes</label>
+              <label for="enrollmentCloses">{{ 'ECLOSE' | translate }}</label>
               <div class="calendar">
 
                 <input
@@ -128,17 +144,17 @@
                 </div>
 
               </div>
-              <small class="text-danger" *ngIf="enrollmentCloses.invalid">This date is invalid</small>
+              <small class="text-danger" *ngIf="enrollmentCloses.invalid">{{ 'DATE_INVALID' | translate }}</small>
             </div>
 
             <!-- Enrollment Max Capacity -->
             <div class="form-group group d-flex flex-column col-sm-2"
                  [ngClass]="{
                  'error' : (maxCap.invalid && (maxCap.dirty || maxCap.touched)) }">
-              <label for="maxCap">Capacity</label>
+              <label for="maxCap">{{ 'EMAX' | translate }}*</label>
               <input fullwidth id="maxCap" name="maxCap" nbinput formControlName="maxCap" type="number" ng-reflect-name="maxCap" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
-              <small class="text-danger" *ngIf="maxCap.hasError('required') && (maxCap.dirty || maxCap.touched)">Capacity is required</small>
-              <small class="text-danger" *ngIf="maxCap.hasError('min') && (maxCap.dirty || maxCap.touched)">Capacity cannot be less than 1!</small>
+              <small class="text-danger" *ngIf="maxCap.hasError('required') && (maxCap.dirty || maxCap.touched)">{{ 'EMAX_REQUIRED' | translate }}</small>
+              <small class="text-danger" *ngIf="maxCap.hasError('min') && (maxCap.dirty || maxCap.touched)">{{ 'EMAX_MIN' | translate }}</small>
             </div>
           </div>
 
@@ -146,7 +162,7 @@
 
           <!-- Note -->
           <div class="form-group group d-flex flex-column">
-            <label for="title">Match Note</label>
+            <label for="title">{{ 'NOTE' | translate }}</label>
             <textarea fullwidth name="note" nbinput id="note" rows="2" formControlName="note" ng-reflect-name="note" class="input-full-width input-md ng-dirty ng-valid ng-touched"></textarea>
           </div>
 
@@ -159,7 +175,7 @@
               <!-- Created At -->
               <div class="form-group group d-flex flex-column col-sm-6"
                    [ngClass]="{ 'error' : createdAt.invalid && (createdAt.dirty || createdAt.touched), 'disabled' : !date.value }">
-                <label for="enrollmentCloses">Created At</label>
+                <label for="createdAt">{{ 'CREATED_AT' | translate }}</label>
                 <div class="calendar">
 
                   <input
@@ -181,22 +197,21 @@
                   </div>
 
                 </div>
-                <small class="text-danger" *ngIf="createdAt.invalid">This date is invalid</small>
+                <small class="text-danger" *ngIf="createdAt.invalid">{{ 'DATE_INVALID' | translate }}</small>
               </div>
 
               <!-- Created By -->
               <div class="form-group group d-flex flex-column col-sm-6"
                    [ngClass]="{ 'error' : createdBy.invalid && (createdBy.dirty || createdBy.touched) }">
-                <label for="title">Created By</label>
-                <ng-select
-                  #createdByID
-                  [multiple]="false"
-                  [closeOnSelect]="true"
-                  bindLabel="name"
-                  bindValue="_id"
-                  id="createdBy" name="createdBy" formControlName="createdBy" ng-reflect-name="createdBy" class="ng-select-input-custom flex-grow-1">
-                </ng-select>
-                <small class="text-danger" *ngIf="createdBy.hasError('required') && (createdBy.dirty || createdBy.touched)">Created By is required</small>
+                <label for="createdBy">{{ 'CREATED_BY' | translate }}</label>
+                <select name="createdBy" id="createdBy" formControlName="createdBy" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+                  <option
+                    *ngFor="let user of usersArray"
+                    value="{{user._id}}">
+                    {{user.name}}
+                  </option>
+                </select>
+                <small class="text-danger" *ngIf="createdBy.hasError('required') && (createdBy.dirty || createdBy.touched)">{{ 'CREATED_BY_REQUIRED' | translate }}</small>
               </div>
 
             </div>
@@ -206,7 +221,7 @@
               <!-- Updated At -->
               <div class="form-group group d-flex flex-column col-sm-6"
                    [ngClass]="{ 'error' : updatedAt.invalid && (updatedAt.dirty || updatedAt.touched), 'disabled' : !date.value }">
-                <label for="enrollmentCloses">Updated At</label>
+                <label for="updatedAt">{{ 'UPDATED_AT' | translate }}</label>
                 <div class="calendar">
 
                   <input
@@ -229,22 +244,21 @@
                   </div>
 
                 </div>
-                <small class="text-danger" *ngIf="updatedAt.invalid">This date is invalid</small>
+                <small class="text-danger" *ngIf="updatedAt.invalid">{{ 'DATE_INVALID' | translate }}</small>
               </div>
 
               <!-- Updated By -->
               <div class="form-group group d-flex flex-column col-sm-6"
                    [ngClass]="{ 'error' : updatedBy.invalid && (updatedBy.dirty || updatedBy.touched) }">
-                <label for="title">Updated By</label>
-                <ng-select
-                  #updatedByID
-                  [multiple]="false"
-                  [closeOnSelect]="true"
-                  bindLabel="name"
-                  bindValue="_id"
-                  id="updatedBy" name="updatedBy" formControlName="updatedBy" ng-reflect-name="updatedBy" class="ng-select-input-custom flex-grow-1">
-                </ng-select>
-                <small class="text-danger" *ngIf="updatedBy.hasError('required') && (updatedBy.dirty || updatedBy.touched)">Updated By is required</small>
+                <label for="updatedBy">{{ 'UPDATED_BY' | translate }}</label>
+                <select name="updatedBy" id="updatedBy" formControlName="updatedBy" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+                  <option
+                    *ngFor="let user of usersArray"
+                    value="{{user._id}}">
+                    {{user.name}}
+                  </option>
+                </select>
+                <small class="text-danger" *ngIf="updatedBy.hasError('required') && (updatedBy.dirty || updatedBy.touched)">{{ 'UPDATED_BY_REQUIRED' | translate }}</small>
               </div>
 
             </div>
@@ -254,7 +268,8 @@
 
           <!-- Submit -->
           <div class="form-group mt-2">
-            <button nbbutton class="col-sm-12 p-3" [ngClass]="{'btn-disabled': !form.valid || isSame() }" aria-disabled="false" (click)="submitForm(form.value)">Save Changes</button>
+            <button nbbutton class="col-sm-3 mr-sm-0 mr-md-3 p-3 button btn-danger" aria-disabled="false" (click)="deleteMatch()">{{ 'DELETE' | translate }}</button>
+            <button nbbutton class="col-sm-3 p-3 button btn-primary" [ngClass]="{'btn-disabled': !form.valid || isSame() }" aria-disabled="false" (click)="submitForm(form.value)">{{ 'SAVE_CHANGES' | translate }}</button>
           </div>
 
         </form>

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { HttpClient } from '@angular/common/http';
-import { IJersey } from '../../../@core/models/jersey.interface';
-import { IResource } from '../../../@core/models/config.interface';
-import { getUrl } from '../../../@core/config/endpoints.config';
+import { IJersey } from '../../../@shared/interfaces/jersey.interface';
+import { IResource } from '../../../@shared/interfaces/config.interface';
+import { getUrl } from '../../../@shared/config/endpoints.config';
 
 @Injectable({
   providedIn: 'root',

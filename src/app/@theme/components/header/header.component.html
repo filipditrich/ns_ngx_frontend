@@ -3,7 +3,7 @@
      [class.right]="position === 'inverse'">
   <div class="logo-containter">
     <a (click)="toggleSidebar()" href="#" class="navigation"><i class="nb-menu"></i></a>
-    <span class="logo" (click)="goToHome()">Team App <span class="fs-small">beta 4</span></span>
+    <span class="logo" (click)="goToHome()">{{ 'appName' | sysinfo }}</span>
   </div>
   <!--<ns-theme-switcher></ns-theme-switcher>-->
 </div>
@@ -14,8 +14,8 @@
     size="medium"
     [class.right]="position === 'normal'"
     [class.left]="position === 'inverse'">
-    <nb-action icon="nb-gear" class="toggle-layout" (click)="toggleSettings()"></nb-action>
-    <nb-action *nbIsGranted="['view', 'user']" >
+    <!--<nb-action icon="nb-gear" class="toggle-layout" (click)="toggleSettings()"></nb-action>-->
+    <nb-action>
       <nb-user
         [nbContextMenu]="userMenu"
         [name]="user.name"

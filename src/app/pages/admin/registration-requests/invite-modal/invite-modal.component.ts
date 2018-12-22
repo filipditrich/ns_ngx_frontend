@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
-import { HumanizerHelper } from '../../../../@core/helpers/humanizer.helper';
-import { ErrorHelper } from '../../../../@core/helpers/error.helper';
 import { Validators, FormControl, FormGroup } from '@angular/forms';
 import { ModalComponent } from '../../../ui-features/modals/modal/modal.component';
+import { translate, isEmail, HumanizerHelper, ErrorHelper } from '../../../../@shared/helpers';
 import { RegistrationRequestsService } from '../registration-requests.service';
 import { ToasterService } from 'angular2-toaster';
 import { InviteModalErrorComponent } from './invite-modal-error.component';
-import { isEmail } from '../../../../@core/helpers/validators.helper';
 
 @Component({
   selector: 'ns-invite-modal',
@@ -79,16 +77,16 @@ export class InviteModalComponent implements OnInit {
         container: 'nb-layout',
       });
 
-      modal.componentInstance.modalHeader = 'Warning!';
-      modal.componentInstance.modalContent = '<p>Do you really want to close the invitation modal? If you do so, all emails in the invitation list are going to be removed.</p>';
+      modal.componentInstance.modalHeader = translate('WARNING');
+      modal.componentInstance.modalContent = `<p>${translate('CLOSE_INVITATION_MODAL_MSG')}</p>`;
       modal.componentInstance.modalButtons = [
         {
-          text: 'Close anyway',
+          text: translate('CLOSE_ANYWAY'),
           classes: 'btn btn-danger',
           action: () => { modal.close(); this.activeModal.close(false); this.isHidden = false; },
         },
         {
-          text: 'Keep editing',
+          text: translate('KEEP'),
           classes: 'btn btn-primary',
           action: () => { modal.close(); this.isHidden = false; },
         },
@@ -102,41 +100,45 @@ export class InviteModalComponent implements OnInit {
    * @description Handler for onSubmit event
    */
   submitForm() {
-
-    this.regReqService.sendInvites(this.invitationEmails).subscribe(response => {
-      if (response.response.success) {
-        if (response.output.unsent.length === 0 && response.output.sent.length === this.invitationEmails.length) {
-          // all sent
-          this.toasterService.popAsync('success', 'Invitations sent!', 'Invitation email has been sent to every single recipient from the email list');
-          this.activeModal.close(true);
-        } else {
-          // some sent
-          this.isHidden = true;
-          const modal = this.modalService.open(InviteModalErrorComponent, {
-            container: 'nb-layout',
-            keyboard: false,
-            backdrop: 'static',
-          });
-          modal.componentInstance.unsent = response.output.unsent;
-          modal.componentInstance.sent = response.output.sent;
-          modal.result.then(res => {
-            modal.close();
-            this.isHidden = false;
-            if (res) {
-              this.invitationEmails = res.map(x => x.email);
-            } else {
-              this.activeModal.close(true);
-            }
-          });
-        }
-      } else {
-        this.errorHelper.processedButFailed(response);
+    if (!this.form.valid && this.email.value) {
+      this.email.markAsTouched();
+    } else {
+      if (!!this.email.value) {
+        this.invitationEmails.push(this.email.value);
       }
-    }, error => {
-      this.errorHelper.handleGenericError(error);
-    });
-
-
+      this.regReqService.sendInvites(this.invitationEmails).subscribe(response => {
+        if (response.response.success) {
+          if (response.output.unsent.length === 0 && response.output.sent.length === this.invitationEmails.length) {
+            // all sent
+            this.toasterService.popAsync('success', translate('INVITATIONS_SENT_TITLE'), translate('INVITATIONS_SENT_MSG'));
+            this.activeModal.close(true);
+          } else {
+            // some sent
+            this.isHidden = true;
+            const modal = this.modalService.open(InviteModalErrorComponent, {
+              container: 'nb-layout',
+              keyboard: false,
+              backdrop: 'static',
+            });
+            modal.componentInstance.unsent = response.output.unsent;
+            modal.componentInstance.sent = response.output.sent;
+            modal.result.then(res => {
+              modal.close();
+              this.isHidden = false;
+              if (res) {
+                this.invitationEmails = res.map(x => x.email);
+              } else {
+                this.activeModal.close(true);
+              }
+            });
+          }
+        } else {
+          this.errorHelper.processedButFailed(response);
+        }
+      }, error => {
+        this.errorHelper.handleGenericError(error);
+      });
+    }
   }
 
 }

@@ -1,11 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HumanizerHelper } from '../../../@core/helpers/humanizer.helper';
+import { HumanizerHelper } from '../../../@shared/helpers/humanizer.helper';
 import { MatchesService } from '../../admin/matches';
 import { ToasterService } from 'angular2-toaster';
-import { ErrorHelper } from '../../../@core/helpers/error.helper';
-import { IMatch, EnrollmentStatus } from '../../../@core/models/match.interface';
-import * as codeConfig from '../../../@core/config/codes.config';
+import { ErrorHelper } from '../../../@shared/helpers/error.helper';
+import { IMatch, EnrollmentStatus } from '../../../@shared/interfaces/match.interface';
+import { translate } from '../../../@shared/helpers/translator.helper';
+import * as codeConfig from '../../../@shared/config/codes.config';
 import * as JSPDF from 'jspdf';
 import * as html2canvas from 'html2canvas';
 
@@ -43,7 +44,7 @@ export class PrintMatchComponent implements OnInit {
       switch (error.name || error.type) {
         case codeConfig.getCodeByName('MATCH_NOT_FOUND', 'core').name: {
           this.router.navigate(['/pages/matches/']).then(() => {
-            this.toasterService.popAsync('error', 'Match not found.', 'Match with the specified ID is invalid or does not exist.');
+            this.toasterService.popAsync('error', translate('MATCH_NOT_FOUND_TITLE'), translate('MATCH_NOT_FOUND_MSG'));
           });
           break;
         }

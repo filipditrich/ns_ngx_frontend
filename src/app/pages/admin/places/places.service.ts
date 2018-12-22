@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { HttpClient } from '@angular/common/http';
-import { IPlace } from '../../../@core/models/place.interface';
-import { getUrl } from '../../../@core/config/endpoints.config';
-import { IResource } from '../../../@core/models/config.interface';
+import { IPlace } from '../../../@shared/interfaces/place.interface';
+import { getUrl } from '../../../@shared/config/endpoints.config';
+import { IResource } from '../../../@shared/interfaces/config.interface';
 
 @Injectable({
   providedIn: 'root',

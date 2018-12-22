@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table-extended';
 import { MatchesService } from '../../admin/matches';
-import { ErrorHelper } from '../../../@core/helpers/error.helper';
-import { HumanizerHelper } from '../../../@core/helpers/humanizer.helper';
 import { ToasterService } from 'angular2-toaster';
 import { EPlayersRendererComponent } from '../../../@core/tables/renderers/eplayers.renderer';
 import { UserService } from '../../user/user.service';
@@ -10,10 +8,11 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DefaultTableComponent } from '../../../@core/tables/default-table.component';
 import { MatchDetailComponent } from '../match-detail/match-detail.component';
 import { ModalComponent } from '../../ui-features/modals/modal/modal.component';
-import { IMatch } from '../../../@core/models/match.interface';
+import { IMatch } from '../../../@shared/interfaces';
 import { Router } from '@angular/router';
+import { translate, ErrorHelper, HumanizerHelper } from '../../../@shared/helpers';
 import * as moment from 'moment';
-import * as codeConfig from '../../../@core/config/codes.config';
+import * as codeConfig from '../../../@shared/config/codes.config';
 
 @Component({
   selector: 'ns-player-enrollment',
@@ -22,30 +21,32 @@ import * as codeConfig from '../../../@core/config/codes.config';
 })
 export class PlayerEnrollmentComponent extends DefaultTableComponent implements OnInit {
 
-  constructor(private matchesService: MatchesService,
-              public errorHelper: ErrorHelper,
-              private humanizer: HumanizerHelper,
-              private toasterService: ToasterService,
-              private userService: UserService,
-              public modalService: NgbModal,
-              private router: Router) {
+  public now = new Date();
 
+  constructor(public matchesService: MatchesService,
+              public errorHelper: ErrorHelper,
+              public humanizer: HumanizerHelper,
+              public toasterService: ToasterService,
+              public userService: UserService,
+              public modalService: NgbModal,
+              public router: Router) {
     super(errorHelper, modalService);
 
     // pass in the values
-    this.localStoragePrefName = 'playerEnrollment';
+    this.storagePrefName = 'playerEnrollment';
+
     this.source = new LocalDataSource();
     this.filterOptions = {
       showPast: {
         value: false,
         id: 'showPast',
-        title: 'Show past matches',
+        title: translate('SHOW_PAST_MATCHES'),
         type: 'checkbox',
       },
       rowsPerPage: {
         value: 5,
         id: 'rowsPerPage',
-        title: 'Rows per page:',
+        title: translate('ROWS_PER_PAGE'),
         type: 'select',
         options: {
           multiple: false,
@@ -88,9 +89,9 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
       },
       hideSubHeader: true,
       mode: 'external',
-      noDataMessage: 'No matches found',
+      noDataMessage: translate('NO_MATCHES_FOUND_MSG'),
       actions : {
-        columnTitle: 'Actions',
+        columnTitle: translate('ACTIONS'),
         add: false,
         edit: true,
         delete: true,
@@ -107,9 +108,9 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
         const userEnrollment = row.data.enrollment.players.filter(player => player.player === UID)[0];
         const returnClass = [];
 
-        returnClass.push(this.isMatchEnrollmentClosed(row.data) && !this.isMatchInPast(row.data) ? 'row-data-warning' : null);
+        // TODO: ERROR WITH THESE CLASSES WHEN CLICKING (AFTERITHASBEENCHECKED). LICK MY BALLS WITH THIS BS
+        // returnClass.push(this.isMatchEnrollmentClosed(row.data) && !this.isMatchInPast(row.data) ? 'row-data-warning' : null);
         returnClass.push(this.isMatchEnrollmentFull(row.data) && !!userEnrollment && userEnrollment.status !== 'going' ? 'row-data-danger' : null);
-        returnClass.push(this.isMatchInPast(row.data) ? 'row-data-old' : null);
         return returnClass.filter(filterClass => filterClass !== null).join(' ');
 
       },
@@ -122,7 +123,7 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
       {
         order: 1,
         id: 'title',
-        title: 'Title',
+        title: translate('NAME'),
         type: 'html',
         checked: false,
         default: true,
@@ -134,7 +135,7 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
       {
         order: 2,
         id: 'place',
-        title: 'Place',
+        title: translate('PLACE'),
         type: 'html',
         checked: false,
         default: true,
@@ -146,7 +147,7 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
       {
         order: 3,
         id: 'date',
-        title: 'Date',
+        title: translate('DATE'),
         type: 'html',
         checked: false,
         editable: false,
@@ -156,7 +157,7 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
       {
         order: 4,
         id: 'note',
-        title: 'Note',
+        title: translate('NOTE'),
         type: 'html',
         checked: false,
         default: false,
@@ -170,7 +171,7 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
       {
         order: 5,
         id: 'enrollmentOpens',
-        title: 'Enrollment Opens',
+        title: translate('EOPEN'),
         type: 'html',
         checked: false,
         editable: false,
@@ -180,7 +181,7 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
       {
         order: 6,
         id: 'enrollmentCloses',
-        title: 'Enrollment Closes',
+        title: translate('ECLOSE'),
         type: 'html',
         checked: false,
         editable: false,
@@ -190,7 +191,7 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
       {
         order: 7,
         id: 'enrollmentPlayers',
-        title: 'Enrolled Players',
+        title: translate('EPLAYERS'),
         type: 'custom',
         checked: false,
         editable: false,
@@ -200,7 +201,7 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
       {
         order: 8,
         id: 'enrollmentMaxCap',
-        title: 'Capacity',
+        title: translate('EMAX'),
         type: 'html',
         checked: false,
         editable: false,
@@ -213,6 +214,9 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
     ];
   }
 
+  /**
+   * ngOnInit implementation
+   */
   ngOnInit() {
     this.loadPreferences();
     this.loadData();
@@ -226,7 +230,7 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
     this.matchesService.get().subscribe(response => {
       if (response.response.success) {
         const showOlder = this.filterOptions.showPast.value;
-        const matches = showOlder ? response.output : response.output.filter(x => !moment(x.date).isSameOrBefore(new Date()));
+        const matches = showOlder ? response.output : response.output.filter(x => !moment(x.date).isSameOrBefore(this.now));
         this.source.load(matches).then(() => {
           this.source.setSort([{ field: 'date', direction: 'desc' }]);
           this.applyPreferences();
@@ -235,8 +239,19 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
       } else {
         this.errorHelper.processedButFailed(response);
       }
-    }, error => {
-      this.errorHelper.handleGenericError(error);
+    }, err => {
+      const error = !!err.error ? !!err.error.response ? err.error.response : err.error : err;
+
+      switch (error.name || error.type) {
+        case codeConfig.getCodeByName('NO_MATCHS_FOUND', 'core').name: {
+          this.source.load([]).then(() => { this.isLoading = false; });
+          break;
+        }
+        default: {
+          this.errorHelper.handleGenericError(err);
+          break;
+        }
+      }
     });
   }
 
@@ -251,7 +266,8 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
     this.isLoading = true;
     this.matchesService.enrollSelf(event.data._id, enrollment).subscribe(response => {
       if (response.response.success) {
-        this.toasterService.popAsync('success', 'Enrolled!', `You have successfully enrolled yourself to the match with the status of "${status}".`);
+        const playerStatus = status.toUpperCase();
+        this.toasterService.popAsync('success', translate('ENROLLED_TITLE'),  translate('ENROLLED_MSG', { enrollmentStatus: translate(playerStatus) }));
         this.loadData();
       } else {
         this.errorHelper.processedButFailed(response);
@@ -261,7 +277,7 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
 
       switch (error.name || error.type) {
         case codeConfig.getCodeByName('MATCH_MAXIMUM_CAPACITY_EXCEEDED', 'core').name: {
-          this.toasterService.popAsync('warning', 'Maximum capacity', 'Maximum enrollment capacity for this match has been reached.');
+          this.toasterService.popAsync('warning', translate('MAX_CAP_TITLE'), translate('MAX_CAP_MSG'));
           this.isLoading = false;
           break;
         }
@@ -279,15 +295,15 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
    */
   onPrint(event): void {
     const match: IMatch = event.data;
-    if (moment(match.enrollment.enrollmentCloses).isAfter(new Date())) {
+    if (moment(match.enrollment.enrollmentCloses).isAfter(this.now)) {
       const modal = this.modalService.open(ModalComponent, {
         container: 'nb-layout',
       });
-      modal.componentInstance.modalHeader = 'Print enrollment list';
-      modal.componentInstance.modalContent = `<p>Match enrollment is still opened until ${this.humanizer.date(match.enrollment.enrollmentCloses)}.<br>Do you really want to print it now?</p>`;
+      modal.componentInstance.modalHeader = translate('PRINT_ENROLLMENT_LIST_TITLE');
+      modal.componentInstance.modalContent = translate('PRINT_ENROLLMENT_LIST_MSG', { enrollmentCloses: this.humanizer.date(match.enrollment.enrollmentCloses) });
       modal.componentInstance.modalButtons = [
         {
-          text: 'Print anyway',
+          text: translate('PRINT_ANYWAY'),
           classes: 'btn-primary',
           action: () => {
             modal.close();
@@ -295,7 +311,7 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
           },
         },
         {
-          text: 'Close',
+          text: translate('CANCEL'),
           classes: 'btn-secondary',
           action: () => modal.close(),
         },
@@ -303,7 +319,10 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
     } else { this.printData(match); }
   }
 
-  // TODO: PdfService!
+  /**
+   * @description Redirects to print page
+   * @param {IMatch} match
+   */
   printData(match: IMatch) {
     this.router.navigate(['/pages/matches/print/' + match._id]);
   }
@@ -319,14 +338,29 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
     return `<span${ disabled ? ' class="disabled"' : '' }>${input}</span>`;
   }
 
+  /**
+   * @description Return if match is already in past
+   * @param {IMatch} match
+   * @return {boolean}
+   */
   isMatchInPast(match: IMatch): boolean {
-    return moment(match.date).isSameOrBefore(new Date());
+    return moment(match.date).isSameOrBefore(this.now);
   }
 
+  /**
+   * @description Return if match enrollment is closed
+   * @param {IMatch} match
+   * @return {boolean}
+   */
   isMatchEnrollmentClosed(match: IMatch): boolean {
-    return moment(match.enrollment.enrollmentCloses).isBefore(new Date());
+    return moment(match.enrollment.enrollmentCloses).isBefore(this.now);
   }
 
+  /**
+   * @description Returns if match enrollment is full
+   * @param {IMatch} match
+   * @return {boolean}
+   */
   isMatchEnrollmentFull(match: IMatch): boolean {
     return match.enrollment.players.filter(player => player.status === 'going').length >= match.enrollment.maxCapacity;
   }
@@ -338,6 +372,7 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
   onUserRowSelect(event) {
     const modal = this.modalService.open(MatchDetailComponent, {
       container: 'nb-layout',
+      size: 'lg',
       keyboard: false,
       backdrop: 'static',
     });

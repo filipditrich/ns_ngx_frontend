@@ -1,5 +1,6 @@
 import { IPlace } from './place.interface';
 import { IUser } from './user.interface';
+import { IGroup } from './group.interface';
 import { IJersey } from './jersey.interface';
 import { TimestampInterface } from './timestamp.interface';
 
@@ -8,6 +9,7 @@ export interface IMatch extends TimestampInterface {
   title: string;
   date: Date;
   place: IPlace;
+  group: IGroup;
   note?: string;
   enrollment: {
     enrollmentOpens: Date,

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ToasterService } from 'angular2-toaster';
 import { AlertsService } from '../../@core/services/alerts/alerts.service';
 import { AuthService } from '../../@core/services/auth/auth.service';
-import { ErrorHelper } from '../../@core/helpers/error.helper';
 import { Router } from '@angular/router';
+import { translate, ErrorHelper } from '../../@shared/helpers';
 
 @Component({
   selector: 'ns-logout',
@@ -24,7 +24,7 @@ export class LogoutComponent implements OnInit {
         this.errorHelper.handleGenericError({ name: 'FRONTEND_ERROR', message: 'User has not been removed during the logout process.' });
       } else {
         this.router.navigate(['/auth/login']).then(() => {
-          this.toasterService.popAsync('info', 'Logged Out!', 'You have been successfully logged out.');
+          this.toasterService.popAsync('info', translate('LOGGED_OUT_TITLE'), translate('LOGGED_OUT_MSG'));
           location.reload(); // TODO: TEMPORARY FIX -> NEED SOLUTION (AKVEO BUG)
         }, error => {
           this.errorHelper.handleGenericError(error);

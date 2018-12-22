@@ -5,8 +5,8 @@ import { AnalyticsService } from '../../../@core/utils/analytics.service';
 import { LayoutService } from '../../../@core/data/layout.service';
 import { Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { ErrorHelper } from '../../../@core/helpers/error.helper';
-import { ToasterService } from 'angular2-toaster';
+import { translate } from '../../../@shared/helpers';
+// import { changeLang, LANG } from '../../../../environments/environment';
 
 @Component({
   selector: 'ns-header',
@@ -20,8 +20,8 @@ export class HeaderComponent implements OnInit {
   user: any;
 
   userMenu = [
-    // { title: 'Profile' },
-    { title: 'Log Out' },
+    { title: translate('LOG_OUT') },
+    // { title: translate('CHANGE_LANG') },
   ];
 
   constructor(private sidebarService: NbSidebarService,
@@ -29,18 +29,14 @@ export class HeaderComponent implements OnInit {
               private userService: UserService,
               private analyticsService: AnalyticsService,
               private layoutService: LayoutService,
-              private router: Router,
-              private errorHelper: ErrorHelper,
-              private toasterService: ToasterService) {
+              private router: Router) {
 
     menuService.onItemClick()
       .pipe(filter(({ tag }) => tag === tag))
       .subscribe(bag => {
-        if (bag.item.title === 'Log Out') {
-          this.router.navigate(['/auth/logout']);
-        }
-        if (bag.item.title === 'Profile') {
-          // this.router.navigate(['/user/profile']);
+        switch (bag.item.title) {
+          case translate('LOG_OUT'): this.router.navigate(['/auth/logout']); break;
+          // case translate('CHANGE_LANG'): changeLang(LANG === 'cs' ? 'en' : 'cs'); break;
         }
     });
 

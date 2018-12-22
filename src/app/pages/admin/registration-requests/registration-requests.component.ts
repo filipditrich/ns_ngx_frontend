@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table-extended';
-import { ErrorHelper } from '../../../@core/helpers/error.helper';
-import { HumanizerHelper } from '../../../@core/helpers/humanizer.helper';
 import { ToasterService } from 'angular2-toaster';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DefaultTableComponent } from '../../../@core/tables/default-table.component';
 import { RegistrationRequestsService } from './registration-requests.service';
 import { InviteModalComponent } from './invite-modal/invite-modal.component';
-import * as codeConfig from '../../../@core/config/codes.config';
+import { translate, ErrorHelper, HumanizerHelper } from '../../../@shared/helpers';
+import * as codeConfig from '../../../@shared/config/codes.config';
 
 @Component({
   selector: 'ns-registration-requests',
@@ -25,25 +24,25 @@ export class RegistrationRequestsComponent extends DefaultTableComponent impleme
     super(errorHelper, modalService);
 
     // pass in the values
-    this.localStoragePrefName = 'registrationRequests';
+    this.storagePrefName = 'registrationRequests';
     this.source = new LocalDataSource();
     this.filterOptions = {
       showAccepted: {
         value: false,
         id: 'showAccepted',
-        title: 'Show Accepted',
+        title: translate('SHOW_ACCEPTED'),
         type: 'checkbox',
       },
       showRegistered: {
         value: false,
         id: 'showRegistered',
-        title: 'Show Registered',
+        title: translate('SHOW_REGISTERED'),
         type: 'checkbox',
       },
       rowsPerPage: {
         value: 5,
         id: 'rowsPerPage',
-        title: 'Rows per page:',
+        title: translate('ROWS_PER_PAGE'),
         type: 'select',
         options: {
           multiple: false,
@@ -65,14 +64,14 @@ export class RegistrationRequestsComponent extends DefaultTableComponent impleme
         editClassFunction: row => row.data.approval.approved ? 'pointer-events-none' : '',
       },
       actions: {
-        columnTitle: 'Actions',
+        columnTitle: translate('ACTIONS'),
         edit: true,
         delete: false,
         add: false,
       },
       hideSubHeader: true,
       mode: 'external',
-      noDataMessage: 'No registration requests found',
+      noDataMessage: translate('NO_REGISTRATION_REQUESTS'),
       rowClassFunction: row => {
         const returnClasses = [];
         returnClasses.push(row.data.approval.approved ? 'row-data-approved' : null);
@@ -88,7 +87,7 @@ export class RegistrationRequestsComponent extends DefaultTableComponent impleme
       {
         order: 1,
         id: 'name',
-        title: 'Name',
+        title: translate('NAME'),
         type: 'string',
         checked: false,
         default: true,
@@ -102,7 +101,7 @@ export class RegistrationRequestsComponent extends DefaultTableComponent impleme
       {
         order: 2,
         id: 'email',
-        title: 'Email',
+        title: translate('EMAIL'),
         type: 'string',
         checked: false,
         editable: false,
@@ -114,7 +113,7 @@ export class RegistrationRequestsComponent extends DefaultTableComponent impleme
       {
         order: 3,
         id: 'requestedOn',
-        title: 'Requested On',
+        title: translate('REQUESTED_ON'),
         type: 'string',
         checked: false,
         editable: false,
@@ -124,7 +123,7 @@ export class RegistrationRequestsComponent extends DefaultTableComponent impleme
       {
         order: 4,
         id: 'approvedOn',
-        title: 'Approved On',
+        title: translate('APPROVED_ON'),
         type: 'string',
         checked: false,
         editable: false,
@@ -134,7 +133,7 @@ export class RegistrationRequestsComponent extends DefaultTableComponent impleme
       {
         order: 5,
         id: 'approvedBy',
-        title: 'Approved By',
+        title: translate('APPROVED_BY'),
         type: 'string',
         checked: false,
         editable: false,
@@ -149,7 +148,7 @@ export class RegistrationRequestsComponent extends DefaultTableComponent impleme
       {
         order: 6,
         id: 'registeredUser',
-        title: 'Registered User',
+        title: translate('USER'),
         type: 'string',
         checked: false,
         editable: false,
@@ -164,7 +163,7 @@ export class RegistrationRequestsComponent extends DefaultTableComponent impleme
       {
         order: 7,
         id: 'registrationHash',
-        title: 'Hash',
+        title: translate('HASH'),
         type: 'string',
         checked: false,
         editable: false,
@@ -214,6 +213,7 @@ export class RegistrationRequestsComponent extends DefaultTableComponent impleme
         requests = this.filterOptions.showAccepted.value ? response.output : response.output.filter(req => !req.approval.approved);
         requests = this.filterOptions.showRegistered.value ? requests : requests.filter(req => !req.registration.userRegistered);
         this.source.load(this.formatRequests(requests)).then(() => {
+          this.source.setSort([{ field: 'approvedOn', direction: 'desc' }]);
           this.applyPreferences();
           this.isLoading = false;
         });
@@ -243,24 +243,13 @@ export class RegistrationRequestsComponent extends DefaultTableComponent impleme
   onEdit(event): void {
     this.regReqService.resolveRequest(event.data._id, true).subscribe(response => {
       if (response.response.success) {
-        this.toasterService.popAsync('info', 'Registration Approved', `Registration request for '${event.data.email}' has been approved.`);
+        this.toasterService.popAsync('info', translate('REGISTRATION_APPROVED_TITLE'), translate('REGISTRATION_APPROVED_MSG', { reqEmail: event.data.email }));
         this.loadData();
       } else {
         this.errorHelper.processedButFailed(response);
       }
-    }, err => {
-      const error = !!err.error ? !!err.error.response ? err.error.response : err.error : err;
-
-      switch (error.name || error.type) {
-        case codeConfig.getCodeByName('REQUEST_ALREADY_APPROVED', 'operator').name: {
-          this.toasterService.popAsync('warning', 'Request already approved', 'This registration request has already been approved!');
-          break;
-        }
-        default: {
-          this.errorHelper.handleGenericError(err);
-          break;
-        }
-      }
+    }, error => {
+      this.errorHelper.handleGenericError(error);
     });
   }
 

@@ -4,8 +4,10 @@ import { RegisterComponent, RegistrationRequestComponent, IsRequestHashValid, Da
 import { ResetComponent , ResetRequestComponent} from './reset';
 import { LoginComponent } from './login';
 import { LogoutComponent } from './logout';
-import { NbAuthComponent } from '@nebular/auth';
-import { CheckType } from '../@core/enums/check.enum';
+import { CheckType } from '../@shared/enums';
+import { AuthComponent } from './auth.component';
+import { PreventLogged } from '../@core/services/auth.guard';
+import { CountdownComponent } from '../pages/miscellaneous/countdown/countdown.component';
 
 /**
  * @description Auth Routing
@@ -13,33 +15,46 @@ import { CheckType } from '../@core/enums/check.enum';
 const routes: Routes = [
   {
     path: '',
-    component: NbAuthComponent,
+    component: AuthComponent,
     children: [
+      {
+        path: '',
+        redirectTo: 'login',
+        pathMatch: 'full',
+      },
       {
         path: 'login',
         component: LoginComponent,
+        canActivate: [PreventLogged],
         data: { title: 'Login' },
+      },
+      {
+        path: 'cd',
+        component: CountdownComponent,
+        data: { tile: 'Countdown' },
       },
       {
         path: 'request-registration',
         component: RegistrationRequestComponent,
+        canActivate: [PreventLogged],
         data: { title: 'Registration Request' },
       },
       {
         path: 'forgotten-credentials',
         component: ResetRequestComponent,
+        canActivate: [PreventLogged],
         data: { title: 'Reset Request' },
       },
       {
         path: 'reset-credentials/:hash',
         component: ResetComponent,
-        canActivate: [IsRequestHashValid],
+        canActivate: [PreventLogged, IsRequestHashValid],
         data: { checkType: CheckType.PasswordReset, title: 'Password Reset' },
       },
       {
         path: 'registration/:hash',
         component: RegisterComponent,
-        canActivate: [IsRequestHashValid],
+        canActivate: [PreventLogged, IsRequestHashValid],
         resolve: { request: DataResolver },
         data: { checkType: CheckType.Registration, title: 'Registration' },
       },

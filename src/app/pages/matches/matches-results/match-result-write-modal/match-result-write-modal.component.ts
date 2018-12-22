@@ -1,35 +1,32 @@
-import { Component, Input, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NgSelectComponent } from '@ng-select/ng-select';
-import { JerseysService } from '../../../admin/jerseys';
+import { IMatch, MatchResult, IJersey } from '../../../../@shared/interfaces';
+import {translate, ErrorHelper, findInvalidControls} from '../../../../@shared/helpers';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { MatchesService } from '../../../admin/matches';
 import { ToasterService } from 'angular2-toaster';
-import { ErrorHelper } from '../../../../@core/helpers/error.helper';
-import {IMatch, MatchResult} from '../../../../@core/models/match.interface';
-import { IJersey } from '../../../../@core/models/jersey.interface';
+import { JerseysService } from '../../../admin/jerseys';
+import { MatchesService } from '../../../admin/matches';
 
 @Component({
   selector: 'ns-match-result-write-modal',
   templateUrl: './match-result-write-modal.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MatchResultWriteModalComponent implements OnInit {
 
   @Input() match: IMatch;
   public form: FormGroup;
-  public jerseys: IJersey[];
+  public isLoading = true;
+
   public set = [];
   public jerseySet = [];
   public statusSet = [];
+  public _jerseys: IJersey[] = [];
+  public jerseys: IJersey[];
+  public _resultOptions = [];
   public resultOptions = [
-    { value: 'win', label: 'Win' },
-    { value: 'loose', label: 'Loose' },
-    { value: 'draft', label: 'Draft' },
+    { value: MatchResult.Win, label: translate('WIN') },
+    { value: MatchResult.Loose, label: translate('LOOSE') },
   ];
-
-  @ViewChild('resultID') ngSelectResult: NgSelectComponent;
-  @ViewChild('jerseyID') ngSelectJersey: NgSelectComponent;
 
   constructor(private activeModal: NgbActiveModal,
               private jerseysService: JerseysService,
@@ -50,17 +47,21 @@ export class MatchResultWriteModalComponent implements OnInit {
 
   ngOnInit() {
     // get jerseys
+    this.result.setValue(0);
+    this.jersey.setValue(0);
     this.jerseysService.get().subscribe(response => {
       if (response.response.success) {
+        this.jerseys = response.output;
         const set = [];
         if (this.match.results) this.match.results.players.forEach(player => set.push({ jersey: player.jersey._id, status: player.status }));
-        this.set = Array.from(new Set(set));
+        this.set = Array.from(new Set(set.map(x => JSON.stringify(x))));
+        this.set = this.set.map(x => JSON.parse(x));
         this.statusSet = Array.from(new Set(this.set.map(x => x.status)));
         this.jerseySet = Array.from(new Set(this.set.map(x => x.jersey)));
-        this.jerseys = this.jerseySet.length > 1 ? response.output.filter(x => this.set.map(y => y.jersey).indexOf(x._id) >= 0) : response.output;
-        this.resultOptions = ((this.statusSet.length > 1) || (this.statusSet.length === 1 && this.statusSet[0] === MatchResult.Draft)) ?
-          this.resultOptions.filter(x => this.set.map(y => y.status).indexOf(x.value) >= 0) : this.resultOptions;
-        this.ngSelectJersey.itemsList.setItems(this.jerseys);
+        this._jerseys = this.jerseySet.length > 1 ? response.output.filter(j => this.jerseySet.indexOf(j._id) >= 0) : response.output;
+        this._resultOptions = ((this.statusSet.length > 1) || (this.statusSet.length === 1 && this.statusSet[0] === MatchResult.Draft)) ?
+          this.resultOptions.filter(x => this.statusSet.indexOf(x.value) >= 0) : this.resultOptions;
+        this.isLoading = false;
       } else {
         this.errorHelper.processedButFailed(response);
       }
@@ -73,16 +74,17 @@ export class MatchResultWriteModalComponent implements OnInit {
    * @description Changes value and items of the jersey select depending on the result set
    */
   onChangeResult() {
-    if (this.result.value) {
-      const setStateMatch = this.set.find(x => x.status === this.result.value);
-      if (this.statusSet.length > 1 && !!setStateMatch) {
-        const newItems = this.jerseys.filter(x => x._id === setStateMatch.jersey);
-        this.ngSelectJersey.itemsList.setItems(newItems);
-        this.ngSelectJersey.select(this.ngSelectJersey.itemsList.findItem(newItems[0]._id));
-        this.ngSelectJersey.focus();
-        this.ngSelectResult.focus();
+    const setStateMatch = this.set.find(x => x.status === this.result.value);
+    if (!!setStateMatch) {
+      this._jerseys = this.jerseys.filter(j => j._id === setStateMatch.jersey);
+      this.jersey.setValue(this._jerseys[0]._id);
+    } else {
+      if (this.set.length === 1 && this.resultOptions.length <= 2) {
+        this._jerseys = this.jerseys.filter(x => x._id !== this.set[0].jersey);
+        this.jersey.setValue(this._jerseys.length === 1 ? this._jerseys[0]._id : 0);
       } else {
-        this.ngSelectJersey.itemsList.setItems(this.jerseys);
+        this.jersey.setValue(0);
+        this._jerseys = [] = [ ...this.jerseys ];
       }
     }
   }
@@ -91,17 +93,19 @@ export class MatchResultWriteModalComponent implements OnInit {
    * @description Changes value and items of the result select depending on the result set
    */
   onChangeJersey() {
-    if (this.jersey.value) {
-      const setJerseyMatch = this.set.find(x => x.jersey === this.jersey.value);
-      if (this.jerseySet.length > 1 && !!setJerseyMatch) {
-        const newItems = this.resultOptions.filter(x => x.value === setJerseyMatch.status);
-        this.ngSelectResult.itemsList.setItems(newItems);
-        this.ngSelectResult.select(this.ngSelectResult.itemsList.findItem(newItems[0].value));
-        this.ngSelectResult.focus();
-        this.ngSelectJersey.focus();
+    const setJerseyMatch = this.set.find(x => x.jersey === this.jersey.value);
+    if (!!setJerseyMatch) {
+      this._resultOptions = this.resultOptions.filter(r => r.value === setJerseyMatch.status);
+      this.result.setValue(this._resultOptions[0].value);
+    } else {
+      if (this.set.length === 1 && this.resultOptions.length <= 2) {
+        this._resultOptions = this.resultOptions.filter(x => x.value !== this.set[0].status);
+        this.result.setValue(this._resultOptions[0].value);
       } else {
-        this.ngSelectResult.itemsList.setItems(this.resultOptions);
+        this.result.setValue(0);
+        this._resultOptions = [ ...this.resultOptions ];
       }
+      this._resultOptions = [ ...this.resultOptions ];
     }
   }
 
@@ -123,20 +127,21 @@ export class MatchResultWriteModalComponent implements OnInit {
 
   /**
    * @description Handler for onSubmit event
-   * @param data
    */
-  onSubmit(data) {
+  onSubmit() {
+    if (this.result.value === 0) { this.result.setErrors({ 'required' : true }); }
+    if (this.jersey.value === 0) { this.jersey.setErrors({ 'required' : true }); }
     if (!this.form.valid) {
       this.touchAllFields();
     } else {
       const input = {
         match: this.match._id,
-        jersey: data.jersey,
-        status: data.result,
+        jersey: this.jersey.value,
+        status: this.result.value,
       };
       this.matchesService.writeResults(input).subscribe(response => {
         if (response.response.success) {
-          this.toasterService.popAsync('success', 'Results written!', 'Your results were written successfully.');
+          this.toasterService.popAsync('success', translate('RESULTS_WRITTEN_TITLE'), translate('RESULTS_WRITTEN_MSG'));
           this.closeModal(true);
         } else {
           this.errorHelper.processedButFailed(response);

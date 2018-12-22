@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
-import { IRegistrationCredentials, IRegistrationRequest } from '../../@core/models/credentials.interface';
-import { IResource } from '../../@core/models/config.interface';
-import { getUrl } from '../../@core/config/endpoints.config';
+import { IRegistrationCredentials, IRegistrationRequest } from '../../@shared/interfaces/credentials.interface';
+import { IResource } from '../../@shared/interfaces/config.interface';
+import { getUrl } from '../../@shared/config/endpoints.config';
 
 
 @Injectable({
@@ -49,6 +49,14 @@ export class RegistrationService {
    */
   registerUser(hash: string, input: IRegistrationCredentials): Observable<IResource> {
     return this.http.post<IResource>(`${getUrl('operator', 'REG')}/${hash}`, { input });
+  }
+
+  /**
+   * @description Returns list of available Teams to register in
+   * @return {Observable<IResource>}
+   */
+  getRegistrationTeams(): Observable<IResource> {
+    return this.http.get<IResource>(getUrl('operator', 'GET_REG_TEAMS'));
   }
 
 }

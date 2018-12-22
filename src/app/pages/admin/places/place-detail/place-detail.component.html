@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <span>Place detail for '{{ place.name }}'</span>
+  <span>{{ 'PLACE_DETAIL_FOR' | translate }} <b>'{{ place.name }}'</b></span>
   <button class="close" aria-label="Close" (click)="closeModal()">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -12,26 +12,25 @@
 
   <hr>
 
-  <!-- TODO: Only admin -->
   <section class="row">
 
     <div class="col-sm-12 col-lg-6 p-3">
-      <h6>Created By:</h6>
+      <h6>{{ 'CREATED_BY' | translate }}:</h6>
       <span class="text-muted">{{place.createdBy.name}}</span>
     </div>
 
     <div class="col-sm-12 col-lg-6 p-3">
-      <h6>Created At:</h6>
+      <h6>{{ 'CREATED_AT' | translate }}:</h6>
       <span class="text-muted">{{place.createdAt}}</span>
     </div>
 
     <div class="col-sm-12 col-lg-6 p-3">
-      <h6>Updated By:</h6>
+      <h6>{{ 'UPDATED_BY' | translate }}:</h6>
       <span class="text-muted">{{place.updatedBy.name}}</span>
     </div>
 
     <div class="col-sm-12 col-lg-6 p-3">
-      <h6>Updated At:</h6>
+      <h6>{{ 'UPDATED_AT' | translate }}:</h6>
       <span class="text-muted">{{place.updatedAt}}</span>
     </div>
 
@@ -39,7 +38,7 @@
 
 </div>
 <div class="modal-footer flex-wrap">
-  <button class="btn btn-md btn-danger my-1" (click)="deletePlace()">Delete</button>
-  <button class="btn btn-md btn-primary my-1" (click)="editPlace()">Edit</button>
-  <button class="btn btn-md btn-secondary my-1" (click)="closeModal()">Close</button>
+  <button class="btn btn-md btn-danger my-1" (click)="deletePlace()">{{ 'DELETE' | translate }}</button>
+  <button class="btn btn-md btn-primary my-1" (click)="editPlace()">{{ 'EDIT' | translate }}</button>
+  <button class="btn btn-md btn-secondary my-1" (click)="closeModal()">{{ 'CLOSE' | translate }}</button>
 </div>

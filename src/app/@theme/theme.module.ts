@@ -48,6 +48,7 @@ import {
 } from './layouts';
 import { NbAuthModule } from '@nebular/auth';
 import { RouterModule } from '@angular/router';
+import { SharedModule } from '../@shared/shared.module';
 
 const BASE_MODULES = [CommonModule, FormsModule, ReactiveFormsModule];
 
@@ -110,7 +111,7 @@ const NB_THEME_PROVIDERS = [
 ];
 
 @NgModule({
-  imports: [...BASE_MODULES, ...NB_MODULES, RouterModule],
+  imports: [...BASE_MODULES, ...NB_MODULES, RouterModule, SharedModule],
   exports: [...BASE_MODULES, ...NB_MODULES, ...COMPONENTS, ...PIPES],
   declarations: [...COMPONENTS, ...PIPES],
   entryComponents: [...ENTRY_COMPONENTS],

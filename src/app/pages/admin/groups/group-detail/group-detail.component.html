@@ -1,0 +1,44 @@
+<div class="modal-header">
+  <span>{{ 'GROUP_DETAIL' | translate }} <b>'{{ group.name }}'</b></span>
+  <button class="close" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+
+  <header class="d-flex flex-column justify-content-center text-lg-center">
+    <h1>{{group.name}}</h1>
+  </header>
+
+  <hr>
+
+  <section class="row">
+
+    <div class="col-sm-12 col-lg-6 p-3">
+      <h6>{{ 'CREATED_BY' | translate }}:</h6>
+      <span class="text-muted">{{group.createdBy.name}}</span>
+    </div>
+
+    <div class="col-sm-12 col-lg-6 p-3">
+      <h6>{{ 'CREATED_AT' | translate }}:</h6>
+      <span class="text-muted">{{group.createdAt}}</span>
+    </div>
+
+    <div class="col-sm-12 col-lg-6 p-3">
+      <h6>{{ 'UPDATED_BY' | translate }}:</h6>
+      <span class="text-muted">{{group.updatedBy.name}}</span>
+    </div>
+
+    <div class="col-sm-12 col-lg-6 p-3">
+      <h6>{{ 'UPDATED_AT' | translate }}:</h6>
+      <span class="text-muted">{{group.updatedAt}}</span>
+    </div>
+
+  </section>
+
+</div>
+<div class="modal-footer flex-wrap">
+  <button class="btn btn-md btn-danger my-1" (click)="deleteTeam()">{{ 'DELETE' | translate }}</button>
+  <button class="btn btn-md btn-primary my-1" (click)="editTeam()">{{ 'EDIT' | translate }}</button>
+  <button class="btn btn-md btn-secondary my-1" (click)="closeModal()">{{ 'CLOSE' | translate }}</button>
+</div>

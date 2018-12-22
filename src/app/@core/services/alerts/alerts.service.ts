@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { IAlert, IAlertPayload } from '../../models/alerts.interface';
-import { AlertType } from '../../enums/alerts.enum';
+import { IAlert, IAlertPayload } from '../../../@shared/interfaces/alerts.interface';
+import { AlertType } from '../../../@shared/enums/alerts.enum';
 import { Observable } from 'rxjs/internal/Observable';
 import { filter } from 'rxjs/operators';
 import { Subject } from 'rxjs/internal/Subject';

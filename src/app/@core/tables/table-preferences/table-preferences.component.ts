@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ErrorHelper } from '../../helpers/error.helper';
+import { translate, ErrorHelper } from '../../../@shared/helpers';
 
 @Component({
   selector: 'ns-match-table-preferences',
@@ -11,7 +11,7 @@ export class TablePreferencesComponent implements OnInit {
   // input values
   @Input() filters;
   @Input() filterOptions;
-  @Input() localStoragePrefName: string;
+  @Input() storagePrefName: string;
 
   // public variables
   public FOCheckbox: any[] = [];
@@ -21,7 +21,8 @@ export class TablePreferencesComponent implements OnInit {
   };
 
   constructor(private activeModal: NgbActiveModal,
-              private errorHelper: ErrorHelper) { }
+              private errorHelper: ErrorHelper) {
+  }
 
   /**
    * @description ngOnInit
@@ -50,12 +51,23 @@ export class TablePreferencesComponent implements OnInit {
   }
 
   /**
-   * @description Handler for onChange event on Select filters
-   * @param data
+   * @description Handler for selectOnSelect event on select filters
+   * @param el
    * @param id
    */
-  selectOnChange(data, id) {
-    this.filterOptions[id].value = data.value;
+  selectOnSelect(el, id) {
+    const i = Number(Object.keys(el.target.children).filter(x => el.target.children[x].selected));
+    this.filterOptions[id].value = Number(el.target.children[i].innerText);
+  }
+
+  /**
+   * @description Returns if select's option should be as placeholder
+   * @param value
+   * @param id
+   * @return {boolean}
+   */
+  placeholderValue(value, id) {
+    return this.filterOptions[id].value === value;
   }
 
   /**
@@ -111,8 +123,8 @@ export class TablePreferencesComponent implements OnInit {
     this.filters.forEach(filter => { test.push(filter.order); });
     if (new Set(test).size !== test.length) {
       this.errorHelper.handleGenericError({
-        name: 'Sort Error',
-        message: 'An unexpected error occurred while updating sorting preferences',
+        name: translate('SORT_ERR_TITLE'),
+        message: translate('SORT_ERR_MSG'),
       });
     }
 
@@ -136,12 +148,12 @@ export class TablePreferencesComponent implements OnInit {
       filtersFormatted.push({ id: filter.id, checked: filter.checked, order: filter.order });
     });
 
-    const preferences = JSON.parse(localStorage.getItem('tablePref')) || {};
-    preferences[this.localStoragePrefName] = {
+    const preferences = JSON.parse(sessionStorage.getItem('tablePref')) || {};
+    preferences[this.storagePrefName] = {
       filters: filtersFormatted,
       filterOptions: this.filterOptions,
     };
-    localStorage.setItem('tablePref', JSON.stringify(preferences));
+    sessionStorage.setItem('tablePref', JSON.stringify(preferences));
   }
 
   /**

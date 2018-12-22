@@ -16,11 +16,14 @@ import { PlacesComponent, AddPlaceComponent, EditPlaceComponent, PlaceDetailComp
 import { TeamsComponent, AddTeamComponent, EditTeamComponent, TeamDetailComponent } from './teams';
 import { JerseysComponent, AddJerseyComponent, EditJerseyComponent, JerseyDetailComponent } from './jerseys';
 import { InviteModalComponent, InviteModalErrorComponent, RegistrationRequestsComponent } from './registration-requests';
+import { AddGroupComponent, EditGroupComponent, GroupDetailComponent, GroupsComponent } from './groups';
+import { SharedModule } from '../../@shared/shared.module';
 
 const MATCH_MANAGER = [ MatchesComponent, AddMatchComponent, EditMatchComponent ];
 const PLACE_MANAGER = [ PlacesComponent, AddPlaceComponent, EditPlaceComponent, PlaceDetailComponent ];
 const TEAM_MANAGER = [ TeamsComponent, AddTeamComponent, EditTeamComponent, TeamDetailComponent ];
 const JERSEY_MANAGER = [ JerseysComponent, AddJerseyComponent, EditJerseyComponent, JerseyDetailComponent ];
+const GROUP_MANAGER = [ GroupsComponent, AddGroupComponent, EditGroupComponent, GroupDetailComponent ];
 const REGISTRATION_REQUESTS = [ InviteModalComponent, InviteModalErrorComponent, RegistrationRequestsComponent ];
 
 @NgModule({
@@ -36,12 +39,14 @@ const REGISTRATION_REQUESTS = [ InviteModalComponent, InviteModalErrorComponent,
     OwlNativeDateTimeModule,
     SortablejsModule,
     NbSpinnerModule,
+    SharedModule,
   ],
   declarations: [
     ...MATCH_MANAGER,
     ...PLACE_MANAGER,
     ...TEAM_MANAGER,
     ...JERSEY_MANAGER,
+    ...GROUP_MANAGER,
     ...REGISTRATION_REQUESTS,
   ],
   entryComponents: [
@@ -49,6 +54,7 @@ const REGISTRATION_REQUESTS = [ InviteModalComponent, InviteModalErrorComponent,
     ...PLACE_MANAGER,
     ...TEAM_MANAGER,
     ...JERSEY_MANAGER,
+    ...GROUP_MANAGER,
     ...REGISTRATION_REQUESTS,
   ],
   providers: [

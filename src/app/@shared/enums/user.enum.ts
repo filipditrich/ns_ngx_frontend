@@ -1,6 +1,9 @@
 export enum UserRoles {
   admin = 'admin',
   player = 'player',
+  super = 'super',
+  mod = 'moderator',
+  deleted = 'deleted',
 }
 
 export namespace UserRoles {

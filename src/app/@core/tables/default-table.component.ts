@@ -1,7 +1,8 @@
 import { LocalDataSource } from '../../../../ng2-smart-table-extended-demo/dist/ng2-smart-table-extended';
 import { TablePreferencesComponent } from './table-preferences/table-preferences.component';
 import { ModalComponent } from '../../pages/ui-features/modals/modal/modal.component';
-import { ErrorHelper } from '../helpers/error.helper';
+import { ErrorHelper } from '../../@shared/helpers/error.helper';
+import { translate } from '../../@shared/helpers/translator.helper';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 /**
@@ -11,7 +12,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class DefaultTableComponent {
 
   public isLoading = true;
-  public localStoragePrefName: string = 'defaultTable';
+  public storagePrefName: string = 'defaultTable';
   public source: LocalDataSource;
 
   constructor(public errorHelper: ErrorHelper,
@@ -44,7 +45,7 @@ export class DefaultTableComponent {
    * @param input
    */
   loadPreferences(input?: any) {
-    const preferences = !!input ? input : JSON.parse(localStorage.getItem('tablePref')) ? JSON.parse(localStorage.getItem('tablePref'))[this.localStoragePrefName] : false;
+    const preferences = !!input ? input : JSON.parse(sessionStorage.getItem('tablePref')) ? JSON.parse(sessionStorage.getItem('tablePref'))[this.storagePrefName] : false;
 
     if (preferences) {
 
@@ -81,7 +82,7 @@ export class DefaultTableComponent {
     });
 
     if (this.filters.filter(filter => filter.checked).length === 0) {
-      if (!JSON.parse(localStorage.getItem('tablePref')) || !JSON.parse(localStorage.getItem('tablePref'))[this.localStoragePrefName]) {
+      if (!JSON.parse(sessionStorage.getItem('tablePref')) || !JSON.parse(sessionStorage.getItem('tablePref'))[this.storagePrefName]) {
         // no tablePreferences stored, apply default filters
         this.applyDefaults();
       } else {
@@ -90,16 +91,16 @@ export class DefaultTableComponent {
           container: 'nb-layout',
         });
 
-        modal.componentInstance.modalHeader = 'Warning!';
-        modal.componentInstance.modalContent = `You've unchecked all filters, therefore there will be no columns to show. Do you really wish to proceed?`;
+        modal.componentInstance.modalHeader = translate('UNCHECK_ALL_FILTERS_TITLE');
+        modal.componentInstance.modalContent = translate('UNCHECK_ALL_FILTERS_MSG');
         modal.componentInstance.modalButtons = [
           {
-            text: 'No, set defaults',
+            text: translate('SET_DEFAULT'),
             classes: 'btn btn-primary',
             action: () => { this.applyDefaults(); modal.close(); },
           },
           {
-            text: 'Yes, continue',
+            text: translate('CONTINUE'),
             classes: 'btn btn-secondary',
             action: () => modal.close(),
           },
@@ -151,7 +152,7 @@ export class DefaultTableComponent {
     // pass the current filters into the modal component
     modal.componentInstance.filters = this.filters;
     modal.componentInstance.filterOptions = this.filterOptions;
-    modal.componentInstance.localStoragePrefName = this.localStoragePrefName;
+    modal.componentInstance.storagePrefName = this.storagePrefName;
 
     // modify filters
     modal.result.then(output => {

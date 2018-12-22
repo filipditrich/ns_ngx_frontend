@@ -1,10 +1,10 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { PlacesService } from '../places.service';
-import { ErrorHelper } from '../../../../@core/helpers/error.helper';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToasterService } from 'angular2-toaster';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { translate, ErrorHelper } from '../../../../@shared/helpers';
 
 @Component({
   selector: 'ns-add-place',
@@ -69,7 +69,7 @@ export class AddPlaceComponent implements OnInit {
       this.placesService.create(input).subscribe(response => {
         if (response.response.success) {
           this.router.navigate(['/pages/admin/places/manager']).then(() => {
-            this.toasterService.popAsync('success', 'Place Created!', 'Place successfully created.');
+            this.toasterService.popAsync('success', translate('PLACE_CREATED_TITLE'), translate('PLACE_CREATED_MSG'));
             this.closeModal(true);
           });
         } else {

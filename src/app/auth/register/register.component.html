@@ -1,78 +1,80 @@
-<nb-auth-block>
-  <h2 class="title">Finish Registration</h2>
-  <small class="form-text sub-title">Hello{{request.name?.split(' ')[0]}}! You can finish your registration by completing this form.</small>
-  <form fullwidth novalidate="" class="ng-touched ng-dirty ng-valid form login-form row" [formGroup]="form" (submit)="onSubmit(form.value)">
+<div [nbSpinner]="isLoading" nbSpinnerMessage="{{ 'LOADING' | translate }}" nbSpinnerStatus="primary">
+  <nb-auth-block>
+    <h2 class="title">{{ 'FIN_REG_TITLE' | translate }}</h2>
+    <small class="form-text sub-title">{{ 'FIN_REG_MSG' | translate }}</small>
+    <form fullwidth novalidate="" class="ng-touched ng-dirty ng-valid form login-form row" [formGroup]="form" (submit)="onSubmit(form.value)">
 
-    <div class="form-group group d-flex flex-column col-lg-6"
-         [ngClass]="{ 'error' : name.invalid && (name.dirty || name.touched) && request.name == null }">
-      <input fullwidth id="name" name="name" nbinput formControlName="name" type="text" ng-reflect-name="name" class="input-full-width input-md ng-dirty ng-valid ng-touched" required [readonly]="request.name != null" value="{{request ? request.name : null}}">
-      <label for="name">Name</label>
-      <small class="text-danger" *ngIf="name.hasError('required') && (name.dirty || name.touched) && request.name == null">Name is required</small>
-      <small class="text-danger" *ngIf="name.hasError('minlength') && request.name == null">Name is too short (min 5 characters)</small>
-    </div>
+      <div class="form-group group d-flex flex-column col-lg-6"
+           [ngClass]="{ 'error' : name.invalid && (name.dirty || name.touched) && request.name == null }">
+        <input fullwidth id="name" name="name" nbinput formControlName="name" type="text" ng-reflect-name="name" class="input-full-width input-md ng-dirty ng-valid ng-touched" required [readonly]="request.name != null" value="{{request ? request.name : null}}">
+        <label for="name">{{ 'NAME' | translate }}</label>
+        <small class="text-danger" *ngIf="name.hasError('required') && (name.dirty || name.touched) && request.name == null">{{ 'NAME_REQUIRED' | translate }}</small>
+        <small class="text-danger" *ngIf="name.hasError('minlength') && request.name == null">{{ 'NAME_MIN' | translate:{minLength:5} }}</small>
+      </div>
 
-    <div class="form-group group d-flex flex-column col-lg-6">
-      <input fullwidth id="email" name="email" nbinput type="email" ng-reflect-name="email" class="input-full-width input-md ng-dirty ng-valid ng-touched" required readonly value="{{request ? request.email : null}}">
-      <label for="email">Email</label>
-    </div>
+      <div class="form-group group d-flex flex-column col-lg-6">
+        <input fullwidth id="email" name="email" nbinput type="email" ng-reflect-name="email" class="input-full-width input-md ng-dirty ng-valid ng-touched" required readonly value="{{request ? request.email : null}}">
+        <label for="email">{{ 'EMAIL' | translate }}</label>
+      </div>
 
-    <div class="form-group group d-flex flex-column col-lg-6"
-         [ngClass]="{ 'error' : username.invalid && (username.dirty || username.touched) }">
-      <input fullwidth id="username" name="username" nbinput formControlName="username" type="text" ng-reflect-name="username" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
-      <label for="username">Username</label>
-      <small class="text-danger" *ngIf="username.hasError('required') && (username.dirty || username.touched)">Username is required</small>
-      <small class="text-danger" *ngIf="username.hasError('minlength')">Username is too short (min 5 characters)</small>
-      <small class="text-danger" *ngIf="username.hasError('maxlength')">Username is too long (max 20 characters)</small>
-      <small class="text-danger" *ngIf="username.hasError('in-use')">Username is in use. Please choose different</small>
-      <small class="text-danger" *ngIf="username.hasError('is-upper-case') && username.value">For security reasons we only allow lowercase alphanumerics</small>
-    </div>
+      <div class="form-group group d-flex flex-column col-lg-6"
+           [ngClass]="{ 'error' : username.invalid && (username.dirty || username.touched) }">
+        <input fullwidth id="username" name="username" nbinput formControlName="username" type="text" ng-reflect-name="username" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+        <label for="username">Username</label>
+        <small class="text-danger" *ngIf="username.hasError('required') && (username.dirty || username.touched)">{{ 'USERNAME_REQUIRED' | translate }}</small>
+        <small class="text-danger" *ngIf="username.hasError('minlength')">{{ 'USERNAME_MIN' | translate:{minLength:5} }}</small>
+        <small class="text-danger" *ngIf="username.hasError('maxlength')">{{ 'USERNAME_MAX' | translate:{maxLength:5} }}</small>
+        <small class="text-danger" *ngIf="username.hasError('in-use')">{{ 'USERNAME_IN_USE' | translate }}</small>
+        <small class="text-danger" *ngIf="username.hasError('is-upper-case') && username.value">{{ 'USERNAME_ALPHANUM' | translate }}</small>
+      </div>
 
-    <div class="col-lg-6">
-      <div class="row">
-        <div class="form-group group d-flex flex-column col-sm-5"
-             [ngClass]="{ 'error' : number.invalid && (number.dirty || number.touched) }">
-          <input fullwidth id="number" name="number" nbinput formControlName="number" type="number" ng-reflect-name="number" class="input-full-width input-md ng-dirty ng-valid ng-touched" required min="0" max="999">
-          <label for="username">Jersey</label>
-          <small class="text-danger" *ngIf="number.hasError('required') && (number.dirty || number.touched)">Jersey Number is required</small>
-          <small class="text-danger" *ngIf="number.hasError('min')">Jersey number must be a positive integer</small>
-        </div>
+      <div class="col-lg-6">
+        <div class="row">
+          <div class="form-group group d-flex flex-column col-sm-5"
+               [ngClass]="{ 'error' : number.invalid && (number.dirty || number.touched) }">
+            <input fullwidth id="number" name="number" nbinput formControlName="number" type="number" ng-reflect-name="number" class="input-full-width input-md ng-dirty ng-valid ng-touched" required min="0" max="999">
+            <label for="username">{{ 'JERSEY_NUM' | translate }}</label>
+            <small class="text-danger" *ngIf="number.hasError('required') && (number.dirty || number.touched)">{{ 'JERSEY_NUM_REQUIRED' | translate }}</small>
+            <small class="text-danger" *ngIf="number.hasError('min')">{{ 'JERSEY_NUM_POSITIVE' | translate }}</small>
+          </div>
 
-        <div class="form-group group d-flex flex-column col-sm-7"
-             [ngClass]="{ 'error' : team.invalid && (team.dirty || team.touched) }">
-          <select name="team" id="team" nbinput formControlName="team" ng-reflect-name="team" class="input full-width input-md ng-dirty ng-valid ng-touched">
-            <option *ngFor="let team of teams" value="{{team._id}}">{{team.name}}</option>
-          </select>
-          <label for="username">Team</label>
-          <small class="text-danger" *ngIf="team.hasError('required') && (team.dirty || team.touched)">Team is required</small>
+          <div class="form-group group d-flex flex-column col-sm-7"
+               [ngClass]="{ 'error' : team.invalid && (team.dirty || team.touched) }">
+            <select name="team" id="team" nbinput formControlName="team" ng-reflect-name="team" class="input full-width input-md ng-dirty ng-valid ng-touched">
+              <option *ngFor="let team of teams" value="{{team._id}}">{{team.name}}</option>
+            </select>
+            <label for="username">{{ 'TEAM' | translate }}</label>
+            <small class="text-danger" *ngIf="team.hasError('required') && (team.dirty || team.touched)">{{ 'TEAM_REQUIRED' | translate }}</small>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="form-group group d-flex flex-column col-lg-6"
-         [ngClass]="{ 'error': password.hasError('required') && (password.dirty || password.touched) }">
-      <input fullwidth id="password" name="password" nbinput formControlName="password" type="password" ng-reflect-name="password" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
-      <label for="password">Password</label>
-      <div class="progress mt-2" style="height: 5px" *ngIf="!password.hasError('required')">
-        <div class="progress-bar"
-             [ngStyle]="{ 'width': 'calc((100% / 3) * ' + (password.getError('passwordStrength') ? password.getError('passwordStrength').strength : 3) }"
-             [ngClass]="{
-               'bg-danger' : password.getError('passwordStrength')?.strength === 1,
-               'bg-warning' : password.getError('passwordStrength')?.strength === 2,
-               'bg-success' : !password.hasError('passwordStrength') }"></div>
+      <div class="form-group group d-flex flex-column col-lg-6"
+           [ngClass]="{ 'error': (password.hasError('required') && (password.dirty || password.touched)) || password.hasError('new-is-old') }">
+        <input fullwidth id="password" name="password" nbinput formControlName="password" type="password" ng-reflect-name="password" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+        <label for="password">{{ 'PASSWORD' | translate }}</label>
+        <div class="progress mt-2" style="height: 5px;" *ngIf="!password.hasError('required')">
+          <div class="progress-bar"
+               [ngStyle]="{ 'width': 'calc((100% / 3) * ' + (password.getError('passwordStrength') ? password.getError('passwordStrength').strength : 3) }"
+               [ngClass]="{
+                 'bg-danger' : password.getError('passwordStrength')?.strength === 1,
+                 'bg-warning' : password.getError('passwordStrength')?.strength === 2,
+                 'bg-success' : !password.hasError('passwordStrength') }"></div>
+        </div>
+        <small class="text-danger" *ngIf="password.hasError('required') && (password.dirty || password.touched)">{{ 'PASSWORD_REQUIRED' | translate }}</small>
       </div>
-      <small class="text-danger" *ngIf="password.hasError('required') && (password.dirty || password.touched)">Password is required</small>
-    </div>
 
-    <div class="form-group group d-flex flex-column col-lg-6"
-         [ngClass]="{ 'error' : passwordSubmit.invalid && (passwordSubmit.dirty || passwordSubmit.touched) }">
-      <input fullwidth id="passwordSubmit" name="passwordSubmit" nbinput formControlName="passwordSubmit" type="password" ng-reflect-name="passwordSubmit" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
-      <label for="passwordSubmit">Confirm Password</label>
-      <small class="text-danger" *ngIf="passwordSubmit.hasError('required') && (passwordSubmit.dirty || passwordSubmit.touched)">Password Confirmation is required</small>
-      <small class="text-danger" *ngIf="form.hasError('passwordConfirmation') && password.value !== null && (passwordSubmit.dirty || passwordSubmit.touched)">Passwords do not match</small>
-    </div>
+      <div class="form-group group d-flex flex-column col-lg-6"
+           [ngClass]="{ 'error' : (passwordSubmit.invalid || (form.hasError('passwordConfirmation') && password.value !== null)) && (passwordSubmit.dirty || passwordSubmit.touched) }">
+        <input fullwidth id="passwordSubmit" name="passwordSubmit" nbinput formControlName="passwordSubmit" type="password" ng-reflect-name="passwordSubmit" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+        <label for="passwordSubmit">{{ 'PASSWORD_CONFIRM' | translate }}</label>
+        <small class="text-danger" *ngIf="passwordSubmit.hasError('required') && (passwordSubmit.dirty || passwordSubmit.touched)">{{ 'PASSWORD_CONFIRM_REQUIRED' | translate }}</small>
+        <small class="text-danger" *ngIf="form.hasError('passwordConfirmation') && password.value !== null && (passwordSubmit.dirty || passwordSubmit.touched)">{{ 'PASSWORD_DO_NOT_MATCH' | translate }}</small>
+      </div>
 
-    <div class="form-group group d-flex flex-column col-sm-12 mt-4">
-      <button fullwidth nbbutton class="col-sm-12 p-3" [ngClass]="{'btn-disabled': !form.valid && form.touched}" aria-disabled="false">Finish Registration</button>
-    </div>
-  </form>
-</nb-auth-block>
+      <div class="form-group group d-flex flex-column col-sm-12 mt-4">
+        <button fullwidth nbbutton class="btn btn-primary col-sm-12 p-3" [ngClass]="{'btn-disabled': !form.valid && form.touched}" aria-disabled="false">{{ 'FIN_REG_TITLE' | translate }}</button>
+      </div>
+    </form>
+  </nb-auth-block>
+</div>

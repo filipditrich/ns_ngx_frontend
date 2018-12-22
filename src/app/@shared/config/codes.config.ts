@@ -1,4 +1,4 @@
-import { ICode } from '../models/config.interface';
+import { ICode } from '../interfaces/config.interface';
 import { findByProp } from '../helpers/functions.helper';
 
 export let CODES = {};
