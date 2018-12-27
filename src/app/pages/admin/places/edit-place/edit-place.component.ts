@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PlacesService } from '../places.service';
 import { ToasterService } from 'angular2-toaster';
@@ -15,7 +15,6 @@ import * as codeConfig from '../../../../@shared/config/codes.config';
   selector: 'ns-edit-place',
   templateUrl: './edit-place.component.html',
   styleUrls: ['./edit-place.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditPlaceComponent implements OnInit {
 
@@ -152,6 +151,8 @@ export class EditPlaceComponent implements OnInit {
   deletePlace() {
     const modal = this.modalService.open(ModalComponent, {
       container: 'nb-layout',
+      keyboard: false,
+      backdrop: 'static',
     });
 
     modal.componentInstance.modalHeader = `${translate('DELETE')} '${this.place.name}'?`;
@@ -217,21 +218,32 @@ export class EditPlaceComponent implements OnInit {
    * @param input
    */
   submitForm(input) {
-
     if (!this.form.valid) {
       this.touchAllFields();
     } else {
-
+      this.isLoading = true;
       this.placesService.update(this.place._id, input).subscribe(response => {
         if (response.response.success) {
           this.router.navigate(['/pages/admin/places']).then(() => {
             this.toasterService.popAsync('success', translate('PLACE_UPDATED_TITLE'), translate('PLACE_UPDATED_MSG'));
+            this.isLoading = false;
           });
         } else {
+          this.isLoading = false;
           this.errorHelper.processedButFailed(response);
         }
-      }, error => {
-        this.errorHelper.handleGenericError(error);
+      }, err => {
+        this.isLoading = false;
+        const error = !!err.error ? !!err.error.response ? err.error.response : err.error : err;
+
+        switch (error.name || error.type) {
+          case 'PLACE_NAME_DUPLICATE': {
+            this.name.setErrors({ 'duplicate': true }); break;
+          }
+          default: {
+            this.errorHelper.handleGenericError(err); break;
+          }
+        }
       });
     }
   }

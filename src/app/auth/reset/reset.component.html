@@ -15,6 +15,7 @@
                  'bg-warning' : password.getError('passwordStrength')?.strength === 2,
                  'bg-success' : !password.hasError('passwordStrength') }"></div>
         </div>
+        <small class="text-muted">{{ 'PASSWORD_HINT' | translate }}</small>
         <small class="text-danger" *ngIf="password.hasError('required') && (password.dirty || password.touched)">{{ 'PASSWORD_REQUIRED' | translate }}</small>
         <small class="text-danger" *ngIf="password.hasError('new-is-old')">{{ 'PASSWORD_SAME_AS_OLD' | translate }}</small>
       </div>

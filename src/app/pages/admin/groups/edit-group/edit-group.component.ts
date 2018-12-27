@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { GroupsService } from '../groups.service';
 import { ToasterService } from 'angular2-toaster';
@@ -7,6 +7,7 @@ import { UserService } from '../../../user/user.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalComponent } from '../../../ui-features/modals/modal/modal.component';
 import { IGroup } from '../../../../@shared/interfaces';
+import { PagesMenuService } from '../../../pages-menu.service';
 import { translate, ErrorHelper } from '../../../../@shared/helpers';
 import * as moment from 'moment';
 import * as codeConfig from '../../../../@shared/config/codes.config';
@@ -15,7 +16,6 @@ import * as codeConfig from '../../../../@shared/config/codes.config';
   selector: 'ns-edit-group',
   templateUrl: './edit-group.component.html',
   styleUrls: ['./edit-group.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditGroupComponent implements OnInit {
 
@@ -32,7 +32,8 @@ export class EditGroupComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private router: Router,
               private usersService: UserService,
-              private modalService: NgbModal) {
+              private modalService: NgbModal,
+              private pagesMenuService: PagesMenuService) {
 
     /**
      * @description FormGroup
@@ -149,9 +150,11 @@ export class EditGroupComponent implements OnInit {
   /**
    * @description Deletes a Group
    */
-  deleteTeam() {
+  deleteGroup() {
     const modal = this.modalService.open(ModalComponent, {
       container: 'nb-layout',
+      keyboard: false,
+      backdrop: 'static',
     });
 
     modal.componentInstance.modalHeader = `${translate('DELETE')} '${this.group.name}'?`;
@@ -165,6 +168,7 @@ export class EditGroupComponent implements OnInit {
             if (response.response.success) {
               this.router.navigate(['/pages/admin/group']).then(() => {
                 modal.close();
+                this.pagesMenuService.refresh();
               });
             } else {
               this.errorHelper.processedButFailed(response);
@@ -217,21 +221,33 @@ export class EditGroupComponent implements OnInit {
    * @param input
    */
   submitForm(input) {
-
     if (!this.form.valid) {
       this.touchAllFields();
     } else {
-
+      this.isLoading = true;
       this.groupsService.update(this.group._id, input).subscribe(response => {
         if (response.response.success) {
           this.router.navigate(['/pages/admin/groups/']).then(() => {
             this.toasterService.popAsync('success', translate('GROUP_UPDATED_TITLE'), translate('GROUP_UPDATED_MSG'));
+            this.isLoading = false;
+            this.pagesMenuService.refresh();
           });
         } else {
+          this.isLoading = false;
           this.errorHelper.processedButFailed(response);
         }
-      }, error => {
-        this.errorHelper.handleGenericError(error);
+      }, err => {
+        this.isLoading = false;
+        const error = !!err.error ? !!err.error.response ? err.error.response : err.error : err;
+
+        switch (error.name || error.type) {
+          case 'MATCH_GROUP_NAME_DUPLICATE': {
+            this.name.setErrors({ 'duplicate': true }); break;
+          }
+          default: {
+            this.errorHelper.handleGenericError(err); break;
+          }
+        }
       });
     }
   }

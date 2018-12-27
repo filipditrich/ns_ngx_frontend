@@ -33,7 +33,7 @@ export class GroupDetailComponent implements OnInit {
   /**
    * @description Routes to the Group edit page
    */
-  editTeam() {
+  editGroup() {
     this.router.navigate(['/pages/admin/groups/edit/' + this.group._id]).then(() => {
       this.activeModal.close(false);
     });
@@ -49,9 +49,11 @@ export class GroupDetailComponent implements OnInit {
   /**
    * @description Deletes a Group
    */
-  deleteTeam() {
+  deleteGroup() {
     const modal = this.modalService.open(ModalComponent, {
       container: 'nb-layout',
+      keyboard: false,
+      backdrop: 'static',
     });
 
     this.isHidden = true;

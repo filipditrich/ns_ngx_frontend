@@ -1,18 +1,19 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { PagesComponent } from './pages.component';
-import { MatchesResultsComponent } from './matches/matches-results/matches-results.component';
+import { MatchResultsComponent } from './matches/match-results/match-results.component';
 import { AdminModule } from './admin';
 import { PlayerEnrollmentComponent } from './matches/player-enrollment/player-enrollment.component';
 import { PrintMatchComponent } from './matches/print-match/print-match.component';
 import { RoleGuard} from '../@core/services/auth.guard';
 import { UserRoles } from '../@shared/enums';
 import { MatchGroupComponent } from './matches/player-enrollment/match-group/match-group.component';
-import { MatchGroupRouterComponent } from './matches/player-enrollment/match-group/match-group.router';
+import { UserModule } from './user/user.module';
 
 /**
  * Pages routing settings
  */
+// TODO: translate data.title for routes
 const routes: Routes = [
   {
     path: '',
@@ -38,18 +39,13 @@ const routes: Routes = [
             data: { title: 'Matches' },
           },
           {
-            path: 'gnr/:group',
-            component: MatchGroupRouterComponent,
-            data: { title: 'Match Group' },
-          },
-          {
             path: 'gn/:group',
             component: MatchGroupComponent,
             data: { title: 'Match Group' },
           },
           {
             path: 'results',
-            component: MatchesResultsComponent,
+            component: MatchResultsComponent,
             data: { title: 'Match Results' },
           },
           {
@@ -62,9 +58,15 @@ const routes: Routes = [
       {
         path: 'admin',
         loadChildren: () => AdminModule,
+        // loadChildren: './admin/admin.module#AdminModule',
         canActivate: [ RoleGuard ],
         data: { roles: [ UserRoles.admin ], title: 'Admin' },
       },
+      // {
+      //   path: 'user',
+      //   loadChildren: () => UserModule,
+      //   data: { title: 'User' },
+      // },
     ],
   },
 ];

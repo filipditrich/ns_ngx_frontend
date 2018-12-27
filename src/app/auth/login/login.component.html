@@ -5,13 +5,13 @@
     <form autocomplete="" novalidate="" class="ng-touched ng-dirty ng-valid form" [formGroup]="form" (submit)="onSubmit(form.value)">
       <div class="form-group group d-flex flex-column my-4" [ngClass]="{ 'error': username.hasError('no-match') || (username.hasError('required') && (username.dirty || username.touched)) }">
         <label class="sr-only" for="input-username">{{ 'USERNAME' | translate }}</label>
-        <input fullwidth id="input-username" name="username" nbinput formControlName="username" placeholder="Username" type="text" ng-reflect-name="username" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+        <input fullwidth id="input-username" name="username" nbinput formControlName="username" placeholder="Username" type="text" ng-reflect-name="username" class="input-full-width input-md ng-dirty ng-valid ng-touched" required autocomplete="username">
         <small class="text-danger" *ngIf="username.hasError('required') && (username.dirty || username.touched)">{{ 'USERNAME_REQUIRED' | translate }}</small>
         <small class="text-danger" *ngIf="username.hasError('no-match')">{{ 'USERNAME_NO_MATCH' | translate }}</small>
       </div>
       <div class="form-group group d-flex flex-column my-4" [ngClass]="{ 'error': password.hasError('no-match') || (password.hasError('required') && (password.dirty || password.touched)) }">
         <label class="sr-only" for="input-password">{{ 'PASSWORD' | translate }}</label>
-        <input fullwidth id="input-password" name="password" nbinput formControlName="password" placeholder="Password" type="password" ng-reflect-name="password" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+        <input fullwidth id="input-password" name="password" nbinput formControlName="password" placeholder="Password" type="password" ng-reflect-name="password" class="input-full-width input-md ng-dirty ng-valid ng-touched" required autocomplete="current-password">
         <small class="text-danger" *ngIf="password.hasError('required') && (password.dirty || password.touched)">{{ 'PASSWORD_REQUIRED' | translate }}</small>
         <small class="text-danger" *ngIf="password.hasError('no-match')">{{ 'PASSWORD_INVALID' | translate }}</small>
       </div>

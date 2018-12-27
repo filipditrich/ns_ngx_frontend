@@ -76,7 +76,6 @@ const RENDERS = [ PlaceRendererComponent, EOpenRendererComponent, ECloseRenderer
   ],
   bootstrap: [AppComponent],
   providers: [
-    { provide: APP_BASE_HREF, useValue: '/' },
     { provide: HTTP_INTERCEPTORS,
       useClass: HttpHeadersInterceptor,
       multi: true },

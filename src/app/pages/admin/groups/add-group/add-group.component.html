@@ -6,7 +6,7 @@
 </div>
 <div class="modal-body row">
   <div class="col-sm-12">
-    <nb-card>
+    <nb-card [nbSpinner]="isLoading" nbSpinnerMessage="{{ 'LOADING' | translate }}" nbSpinnerStatus="primary">
 
       <nb-card-body>
         <form novalidate="" class="ng-touched ng-dirty ng-valid form" [formGroup]="form" (submit)="submitForm(form.value)">
@@ -17,6 +17,7 @@
             <label for="name">{{ 'GROUP_NAME' | translate }}*</label>
             <input fullwidth id="name" name="name" nbinput formControlName="name" type="text" ng-reflect-name="name" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
             <small class="text-danger" *ngIf="name.hasError('required') && (name.dirty || name.touched)">{{ 'GROUP_NAME_REQUIRED' | translate }}</small>
+            <small class="text-danger" *ngIf="name.hasError('duplicate')">{{ 'GROUP_NAME_DUPLICATE' | translate }}</small>
           </div>
 
           <hr>

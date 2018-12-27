@@ -25,6 +25,6 @@ export class ModalComponent {
   constructor(private activeModal: NgbActiveModal) { }
 
   closeModal() {
-    this.activeModal.close('closed from cross');
+    this.activeModal.close('cfc');
   }
 }

@@ -296,6 +296,8 @@ export class MatchesComponent extends DefaultTableComponent implements OnInit {
   onDelete(event): void {
     const modal = this.modalService.open(ModalComponent, {
       container: 'nb-layout',
+      keyboard: false,
+      backdrop: 'static',
     });
 
     modal.componentInstance.modalHeader = `${translate('DELETE')} '${event.data.title}'?`;

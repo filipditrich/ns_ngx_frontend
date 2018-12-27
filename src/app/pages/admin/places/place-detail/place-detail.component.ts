@@ -52,6 +52,8 @@ export class PlaceDetailComponent implements OnInit {
   deletePlace() {
     const modal = this.modalService.open(ModalComponent, {
       container: 'nb-layout',
+      keyboard: false,
+      backdrop: 'static',
     });
 
     this.isHidden = true;

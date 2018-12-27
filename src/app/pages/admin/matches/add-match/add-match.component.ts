@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy, OnDestroy} from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { MatchesService } from '../matches.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PlacesService } from '../../places';
@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GroupsService } from '../../groups';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalComponent } from '../../../ui-features/modals/modal/modal.component';
-import { translate, dateLessThan, ErrorHelper } from '../../../../@shared/helpers';
+import { translate, dateLessThan, ErrorHelper, isString } from '../../../../@shared/helpers';
 import * as codeConfig from '../../../../@shared/config/codes.config';
 
 @Component({
@@ -47,7 +47,7 @@ export class AddMatchComponent implements OnInit, OnDestroy {
      * @type {FormGroup}
      */
     this.form = new FormGroup({
-      title: new FormControl(null, [ Validators.required ]),
+      title: new FormControl(null, [ Validators.required, isString() ]),
       group: new FormControl(null, [ Validators.required ]),
       date: new FormControl(null, [ Validators.required ]),
       place: new FormControl(null, [ Validators.required ]),
@@ -188,6 +188,8 @@ export class AddMatchComponent implements OnInit, OnDestroy {
           const modal = this.modalService.open(ModalComponent, {
             container: 'nb-layout',
             size: 'lg',
+            keyboard: false,
+            backdrop: 'static',
           });
           this.isHidden = true;
 
@@ -234,6 +236,14 @@ export class AddMatchComponent implements OnInit, OnDestroy {
               },
             },
           ];
+          modal.result.then(reason => {
+            if (reason === 'cfc') {
+              // closed from cross => same action as when choosing to continue editing
+              this.date.setErrors({ 'duplicate' : true });
+              this.isHidden = false;
+              modal.close();
+            }
+          });
         } else {
           this.errorHelper.processedButFailed(response);
         }

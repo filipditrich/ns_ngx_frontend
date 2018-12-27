@@ -241,6 +241,7 @@ export class RegistrationRequestsComponent extends DefaultTableComponent impleme
    * @param event
    */
   onEdit(event): void {
+    this.isLoading = true;
     this.regReqService.resolveRequest(event.data._id, true).subscribe(response => {
       if (response.response.success) {
         this.toasterService.popAsync('info', translate('REGISTRATION_APPROVED_TITLE'), translate('REGISTRATION_APPROVED_MSG', { reqEmail: event.data.email }));

@@ -13,7 +13,7 @@ import { ToasterModule } from 'angular2-toaster';
 import { AlertsComponent } from '../@core/services/alerts/alerts.component';
 import { DialogsComponent } from '../@core/services/dialogs/dialogs.component';
 import { Ng2SmartTableExtendedModule} from 'ng2-smart-table-extended';
-import { MatchesResultsComponent } from './matches/matches-results/matches-results.component';
+import { MatchResultsComponent } from './matches/match-results/match-results.component';
 import { MomentModule } from 'angular2-moment';
 import { UserModule } from './user/user.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -30,12 +30,12 @@ import { GroupsService } from './admin/groups';
 import { JerseysService } from './admin/jerseys';
 import { MatchDetailComponent } from './matches/match-detail/match-detail.component';
 import { EnrolledPlayersComponent } from './matches/enrolled-players/enrolled-players.component';
-import { MatchResultWriteModalComponent } from './matches/matches-results/match-result-write-modal/match-result-write-modal.component';
-import { MatchResultModalComponent } from './matches/matches-results/match-result-modal/match-result-modal.component';
+import { MatchResultWriteModalComponent } from './matches/match-results/match-result-write-modal/match-result-write-modal.component';
+import { MatchResultModalComponent } from './matches/match-results/match-result-modal/match-result-modal.component';
 import { PrintMatchComponent } from './matches/print-match/print-match.component';
 import { SharedModule } from '../@shared/shared.module';
 import { MatchGroupComponent } from './matches/player-enrollment/match-group/match-group.component';
-import { MatchGroupRouterComponent } from './matches/player-enrollment/match-group/match-group.router';
+import { PagesMenuService } from './pages-menu.service';
 
 const PAGES_COMPONENTS = [
   AlertsComponent, DialogsComponent, PagesComponent,
@@ -59,7 +59,7 @@ const PAGES_COMPONENTS = [
   ],
   declarations: [
     ...PAGES_COMPONENTS,
-    MatchesResultsComponent,
+    MatchResultsComponent,
     PlayerEnrollmentComponent,
     MatchDetailComponent,
     EnrolledPlayersComponent,
@@ -67,7 +67,6 @@ const PAGES_COMPONENTS = [
     MatchResultModalComponent,
     PrintMatchComponent,
     MatchGroupComponent,
-    MatchGroupRouterComponent,
   ],
   entryComponents: [
     MatchDetailComponent,
@@ -84,6 +83,7 @@ const PAGES_COMPONENTS = [
     PlacesService,
     TeamsService,
     GroupsService,
+    PagesMenuService,
     [PreventLogged],
     [AuthGuard],
     [RoleGuard],

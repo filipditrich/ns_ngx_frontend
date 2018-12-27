@@ -15,6 +15,7 @@ export class AddPlaceComponent implements OnInit {
 
   // public variables
   public form: FormGroup;
+  public isLoading = false;
 
   constructor(private placesService: PlacesService,
               private errorHelper: ErrorHelper,
@@ -61,22 +62,33 @@ export class AddPlaceComponent implements OnInit {
    * @param input
    */
   submitForm(input) {
-
     if (!this.form.valid) {
       this.touchAllFields();
     } else {
-
+      this.isLoading = true;
       this.placesService.create(input).subscribe(response => {
         if (response.response.success) {
           this.router.navigate(['/pages/admin/places/manager']).then(() => {
             this.toasterService.popAsync('success', translate('PLACE_CREATED_TITLE'), translate('PLACE_CREATED_MSG'));
+            this.isLoading = false;
             this.closeModal(true);
           });
         } else {
+          this.isLoading = false;
           this.errorHelper.processedButFailed(response);
         }
-      }, error => {
-        this.errorHelper.handleGenericError(error);
+      }, err => {
+        this.isLoading = false;
+        const error = !!err.error ? !!err.error.response ? err.error.response : err.error : err;
+
+        switch (error.name || error.type) {
+          case 'PLACE_NAME_DUPLICATE': {
+            this.name.setErrors({ 'duplicate': true }); break;
+          }
+          default: {
+            this.errorHelper.handleGenericError(err); break;
+          }
+        }
       });
     }
   }

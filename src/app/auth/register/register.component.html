@@ -9,7 +9,7 @@
         <input fullwidth id="name" name="name" nbinput formControlName="name" type="text" ng-reflect-name="name" class="input-full-width input-md ng-dirty ng-valid ng-touched" required [readonly]="request.name != null" value="{{request ? request.name : null}}">
         <label for="name">{{ 'NAME' | translate }}</label>
         <small class="text-danger" *ngIf="name.hasError('required') && (name.dirty || name.touched) && request.name == null">{{ 'NAME_REQUIRED' | translate }}</small>
-        <small class="text-danger" *ngIf="name.hasError('minlength') && request.name == null">{{ 'NAME_MIN' | translate:{minLength:5} }}</small>
+        <small class="text-danger" *ngIf="name.hasError('minlength') && request.name == null">{{ 'NAME_MIN' | translate:{minLength:2} }}</small>
       </div>
 
       <div class="form-group group d-flex flex-column col-lg-6">
@@ -19,11 +19,18 @@
 
       <div class="form-group group d-flex flex-column col-lg-6"
            [ngClass]="{ 'error' : username.invalid && (username.dirty || username.touched) }">
-        <input fullwidth id="username" name="username" nbinput formControlName="username" type="text" ng-reflect-name="username" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+
+        <div class="input-with-buttons prepend">
+          <input fullwidth id="username" name="username" nbinput formControlName="username" type="text" ng-reflect-name="username" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+          <div class="buttons">
+            <button type="button"><i class="icon ion-ios-at"></i></button>
+          </div>
+        </div>
+
         <label for="username">{{ 'USERNAME' | translate }}</label>
         <small class="text-danger" *ngIf="username.hasError('required') && (username.dirty || username.touched)">{{ 'USERNAME_REQUIRED' | translate }}</small>
-        <small class="text-danger" *ngIf="username.hasError('minlength')">{{ 'USERNAME_MIN' | translate:{minLength:5} }}</small>
-        <small class="text-danger" *ngIf="username.hasError('maxlength')">{{ 'USERNAME_MAX' | translate:{maxLength:5} }}</small>
+        <small class="text-danger" *ngIf="username.hasError('minlength')">{{ 'USERNAME_MIN' | translate:{minLength:2} }}</small>
+        <small class="text-danger" *ngIf="username.hasError('maxlength')">{{ 'USERNAME_MAX' | translate:{maxLength:32} }}</small>
         <small class="text-danger" *ngIf="username.hasError('in-use')">{{ 'USERNAME_IN_USE' | translate }}</small>
         <small class="text-danger" *ngIf="username.hasError('is-upper-case') && username.value">{{ 'USERNAME_UNMATCH' | translate }}</small>
       </div>
@@ -62,6 +69,7 @@
                  'bg-warning' : password.getError('passwordStrength')?.strength === 2,
                  'bg-success' : !password.hasError('passwordStrength') }"></div>
         </div>
+        <small class="text-muted" *ngIf="password.getError('passwordStrength')?.strength === 1">{{ 'PASSWORD_HINT' | translate }}</small>
         <small class="text-danger" *ngIf="password.hasError('required') && (password.dirty || password.touched)">{{ 'PASSWORD_REQUIRED' | translate }}</small>
       </div>
 

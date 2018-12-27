@@ -19,6 +19,7 @@
               <label for="title">{{ 'TITLE' | translate }}*</label>
               <input fullwidth id="title" name="title" nbinput formControlName="title" type="text" ng-reflect-name="title" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
               <small class="text-danger" *ngIf="title.hasError('required') && (title.dirty || title.touched)">{{ 'TITLE_REQUIRED' | translate }}</small>
+              <small class="text-danger" *ngIf="title.hasError('isString')">{{ 'MATCH_TITLE_NOT_STRING' | translate }}</small>
             </div>
 
             <!-- Group -->
@@ -48,7 +49,7 @@
             <div class="form-group group d-flex flex-column col-sm-6"
                  [ngClass]="{ 'error' : date.invalid && (date.dirty || date.touched) }">
               <label for="title">{{ 'DATE' | translate }}*</label>
-              <div class="calendar">
+              <div class="input-with-buttons append">
 
                 <input
                   [owlDateTimeTrigger]="dt"
@@ -99,7 +100,7 @@
                  'error' : (enrollmentOpens.invalid && (enrollmentOpens.dirty || enrollmentOpens.touched)) || form.hasError('dateLessThan'),
                  'disabled' : !date.value }">
               <label for="enrollmentOpens">{{ 'EOPEN' | translate }}</label>
-              <div class="calendar">
+              <div class="input-with-buttons append">
 
                 <input
                   [owlDateTimeTrigger]="enrollmentOpensODT"
@@ -131,7 +132,7 @@
                  'error' : (enrollmentCloses.invalid && (enrollmentCloses.dirty || enrollmentCloses.touched)) || form.hasError('dateLessThan'),
                  'disabled' : !date.value }">
               <label for="enrollmentCloses">{{ 'ECLOSE' | translate }}</label>
-              <div class="calendar">
+              <div class="input-with-buttons append">
 
                 <input
                   [owlDateTimeTrigger]="enrollmentClosesODT"

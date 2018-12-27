@@ -9,6 +9,7 @@ import { DefaultTableComponent } from '../../../@core/tables/default-table.compo
 import { GroupsService } from './groups.service';
 import { GroupDetailComponent } from './group-detail/group-detail.component';
 import { AddGroupComponent } from './add-group/add-group.component';
+import { PagesMenuService } from '../../pages-menu.service';
 import { translate, ErrorHelper, HumanizerHelper } from '../../../@shared/helpers';
 import * as codeConfig from '../../../@shared/config/codes.config';
 
@@ -24,7 +25,8 @@ export class GroupsComponent extends DefaultTableComponent implements OnInit {
               private userService: UserService,
               private router: Router,
               public modalService: NgbModal,
-              public errorHelper: ErrorHelper) {
+              public errorHelper: ErrorHelper,
+              private pagesMenuService: PagesMenuService) {
 
     super(errorHelper, modalService);
 
@@ -181,6 +183,8 @@ export class GroupsComponent extends DefaultTableComponent implements OnInit {
   onDelete(event): void {
     const modal = this.modalService.open(ModalComponent, {
       container: 'nb-layout',
+      keyboard: false,
+      backdrop: 'static',
     });
 
     modal.componentInstance.modalHeader = `${translate('DELETE')} '${event.data.name}'?`;
@@ -200,6 +204,7 @@ export class GroupsComponent extends DefaultTableComponent implements OnInit {
               this.toasterService.popAsync('success', translate('GROUP_DELETED_TITLE'), translate('GROUP_DELETED_MSG'));
               modal.close();
               this.loadData();
+              this.pagesMenuService.refresh();
             } else {
               this.errorHelper.processedButFailed(response);
             }
@@ -223,7 +228,10 @@ export class GroupsComponent extends DefaultTableComponent implements OnInit {
     });
 
     modal.result.then(bool => {
-      if (bool) this.loadData();
+      if (bool) {
+        this.loadData();
+        this.pagesMenuService.refresh();
+      }
     }, error => null);
   }
 

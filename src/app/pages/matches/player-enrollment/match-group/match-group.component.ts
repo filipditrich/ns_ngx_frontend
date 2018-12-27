@@ -31,21 +31,24 @@ export class MatchGroupComponent extends PlayerEnrollmentComponent implements On
   }
 
   ngOnInit() {
-    const groupName = this.activatedRoute.snapshot.paramMap.get('group').replace('-', ' ').toLowerCase();
-    this.groupsService.getByName(groupName).subscribe(response => {
-      if (response.response.success) {
-        this.matchGroup = response.output.name;
-        this.storagePrefName = `${this.matchGroup.replace(' ', '').toLowerCase()}Group`;
-        this.loadData();
-        this.loadPreferences();
-      } else {
+    this.activatedRoute.paramMap.subscribe(map => {
+      const stripped = map.get('group').replace('-', ' ');
+      const ogn = this.activatedRoute.snapshot.queryParamMap.get('ogn');
+      this.groupsService.getByName(ogn).subscribe(response => {
+        if (response.response.success) {
+          this.matchGroup = response.output.name;
+          this.storagePrefName = `${stripped.replace('-', '_').toLowerCase()}Group`;
+          this.loadData();
+          this.loadPreferences();
+        } else {
+          this.router.navigate(['/pages/matches']).then(() => {
+            this.errorHelper.processedButFailed(response);
+          });
+        }
+      }, error => {
         this.router.navigate(['/pages/matches']).then(() => {
-          this.errorHelper.processedButFailed(response);
+          this.errorHelper.handleGenericError(error);
         });
-      }
-    }, error => {
-      this.router.navigate(['/pages/matches']).then(() => {
-        this.errorHelper.handleGenericError(error);
       });
     });
   }

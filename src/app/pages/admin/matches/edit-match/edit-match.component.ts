@@ -9,7 +9,7 @@ import { GroupsService } from '../../groups';
 import { IMatch } from '../../../../@shared/interfaces';
 import { ModalComponent } from '../../../ui-features/modals/modal/modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { translate, ErrorHelper } from '../../../../@shared/helpers';
+import { translate, ErrorHelper, isString } from '../../../../@shared/helpers';
 import * as codeConfig from '../../../../@shared/config/codes.config';
 import * as moment from 'moment';
 
@@ -45,7 +45,7 @@ export class EditMatchComponent implements OnInit {
      * @type {FormGroup}
      */
     this.form = new FormGroup({
-      title: new FormControl(null, [ Validators.required ]),
+      title: new FormControl(null, [ Validators.required, isString() ]),
       date: new FormControl(null, [ Validators.required ]),
       place: new FormControl(null, [ Validators.required ]),
       group: new FormControl(null, [ Validators.required ]),
@@ -289,6 +289,8 @@ export class EditMatchComponent implements OnInit {
   deleteMatch() {
     const modal = this.modalService.open(ModalComponent, {
       container: 'nb-layout',
+      keyboard: false,
+      backdrop: 'static',
     });
 
     modal.componentInstance.modalHeader = `${translate('DELETE')} '${this.match.title}'?`;

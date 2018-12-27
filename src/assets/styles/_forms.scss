@@ -145,7 +145,7 @@
       }
     }
 
-    .calendar {
+    .input-with-buttons {
       display: flex;
       position: relative;
 
@@ -157,7 +157,6 @@
         line-height: 24px;
         background-color: $text_5;
         border: 1px solid $text_3;
-        border-radius: 5px 0 0 5px;
       }
 
       input[readonly] ~ .buttons,
@@ -179,14 +178,38 @@
           padding: 10px;
         }
 
-        button:first-of-type {
-          border-left: none;
-        }
+      }
 
-        button:last-of-type {
+      &.prepend {
+        input {
           border-radius: 0 5px 5px 0;
         }
+        .buttons {
+          order: -1;
+          button:last-of-type {
+            border-right: none;
+          }
 
+          button:first-of-type {
+            border-radius: 5px 0 0 5px;
+          }
+        }
+      }
+
+      &.append {
+        input {
+          border-radius: 5px 0 0 5px;
+        }
+        .buttons {
+          order: 1;
+          button:first-of-type {
+            border-left: none;
+          }
+
+          button:last-of-type {
+            border-radius: 0 5px 5px 0;
+          }
+        }
       }
 
     }

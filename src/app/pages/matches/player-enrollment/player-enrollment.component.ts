@@ -8,7 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DefaultTableComponent } from '../../../@core/tables/default-table.component';
 import { MatchDetailComponent } from '../match-detail/match-detail.component';
 import { ModalComponent } from '../../ui-features/modals/modal/modal.component';
-import { IMatch } from '../../../@shared/interfaces';
+import {EnrollmentStatus, IMatch} from '../../../@shared/interfaces';
 import { Router } from '@angular/router';
 import { translate, ErrorHelper, HumanizerHelper } from '../../../@shared/helpers';
 import * as moment from 'moment';
@@ -83,7 +83,9 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
           const returnClass = [];
 
           returnClass.push(!!userEnrollment && userEnrollment.status === 'skipping' ? 'bg-danger text-white pointer-events-none' : null);
-          returnClass.push(this.isMatchEnrollmentClosed(row.data) ? 'pointer-events-none disabled' : null);
+          returnClass.push(this.isMatchEnrollmentAfterClose(row.data) && userEnrollment.status !== 'going' ? 'pointer-events-none disabled' : null);
+          returnClass.push(this.isMatchEnrollmentBeforeOpen(row.data) ? 'pointer-events-none disabled' : null);
+          returnClass.push(this.isMatchInPast(row.data) ? 'pointer-events-none disabled' : null);
           return returnClass.filter(filterClass => filterClass !== null).join(' ');
         },
       },
@@ -109,7 +111,7 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
         const returnClass = [];
 
         // TODO: ERROR WITH THESE CLASSES WHEN CLICKING (AFTERITHASBEENCHECKED). LICK MY BALLS WITH THIS BS
-        // returnClass.push(this.isMatchEnrollmentClosed(row.data) && !this.isMatchInPast(row.data) ? 'row-data-warning' : null);
+        returnClass.push(this.isMatchEnrollmentClosed(row.data) && !this.isMatchInPast(row.data) ? 'row-data-warning' : null);
         returnClass.push(this.isMatchEnrollmentFull(row.data) && !!userEnrollment && userEnrollment.status !== 'going' ? 'row-data-danger' : null);
         return returnClass.filter(filterClass => filterClass !== null).join(' ');
 
@@ -261,12 +263,48 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
    * @param {Boolean} bool
    */
   enrollSelf(event, bool: Boolean) {
-    const status = bool ? 'going' : 'skipping';
+    const status = bool ? EnrollmentStatus.Going : EnrollmentStatus.Skipping;
     const enrollment = { status };
     this.isLoading = true;
+
+    if (this.isMatchEnrollmentAfterClose(event.data)
+      && status === EnrollmentStatus.Skipping) {
+      // changing status to 'Skipping' after enrollment is closed
+      // warn user, that this is irreversible (cannot enroll afterwards)
+      const conf = this.modalService.open(ModalComponent, {
+        container: 'nb-layout',
+        keyboard: false,
+        backdrop: 'static',
+      });
+
+      conf.componentInstance.modalHeader = translate('WARNING');
+      conf.componentInstance.modalContent = translate('ENROLL_STATUS_CHANGE_IRR_MSG');
+      conf.componentInstance.modalButtons = [
+        {
+          text: translate('CANCEL'),
+          classes: 'btn-secondary',
+          action: () => { conf.close(); this.isLoading = false; },
+        },
+        {
+          text: translate('UNDERSTAND'),
+          classes: 'btn-danger',
+          action: () => { conf.close(); this.sendEnrollRequest(event, enrollment); },
+        },
+      ];
+    } else {
+      this.sendEnrollRequest(event, enrollment);
+    }
+  }
+
+  /**
+   * @description Sends enroll request
+   * @param event
+   * @param enrollment
+   */
+  sendEnrollRequest(event, enrollment) {
     this.matchesService.enrollSelf(event.data._id, enrollment).subscribe(response => {
       if (response.response.success) {
-        const playerStatus = status.toUpperCase();
+        const playerStatus = enrollment.status.toUpperCase();
         this.toasterService.popAsync('success', translate('ENROLLED_TITLE'),  translate('ENROLLED_MSG', { enrollmentStatus: translate(playerStatus) }));
         this.loadData();
       } else {
@@ -298,6 +336,8 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
     if (moment(match.enrollment.enrollmentCloses).isAfter(this.now)) {
       const modal = this.modalService.open(ModalComponent, {
         container: 'nb-layout',
+        keyboard: false,
+        backdrop: 'static',
       });
       modal.componentInstance.modalHeader = translate('PRINT_ENROLLMENT_LIST_TITLE');
       modal.componentInstance.modalContent = translate('PRINT_ENROLLMENT_LIST_MSG', { enrollmentCloses: this.humanizer.date(match.enrollment.enrollmentCloses) });
@@ -344,7 +384,7 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
    * @return {boolean}
    */
   isMatchInPast(match: IMatch): boolean {
-    return moment(match.date).isSameOrBefore(this.now);
+    return moment(match.date).isBefore(this.now);
   }
 
   /**
@@ -353,7 +393,26 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
    * @return {boolean}
    */
   isMatchEnrollmentClosed(match: IMatch): boolean {
+    return moment(match.enrollment.enrollmentCloses).isBefore(this.now)
+      || moment(match.enrollment.enrollmentOpens).isAfter(this.now);
+  }
+
+  /**
+   * @description Returns if match enrollment is already closed
+   * @param {IMatch} match
+   * @return {boolean}
+   */
+  isMatchEnrollmentAfterClose(match: IMatch): boolean {
     return moment(match.enrollment.enrollmentCloses).isBefore(this.now);
+  }
+
+  /**
+   * @description Returns if match enrollment is not yet opened
+   * @param {IMatch} match
+   * @return {boolean}
+   */
+  isMatchEnrollmentBeforeOpen(match: IMatch): boolean {
+    return moment(match.enrollment.enrollmentOpens).isAfter(this.now);
   }
 
   /**

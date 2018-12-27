@@ -14,7 +14,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
       <!-- Date Picker -->
       <div class="form-group group d-flex flex-column col-sm-12"
            [ngClass]="{ 'error' : date.invalid && (date.dirty || date.touched) }">
-        <div class="calendar">
+        <div class="input-with-buttons append">
 
           <input
             [owlDateTimeTrigger]="dateODT"

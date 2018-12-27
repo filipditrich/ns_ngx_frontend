@@ -79,9 +79,14 @@ export class MatchesService {
     return this.http.post<IResource>(`${getUrl('core', 'MATCH_ENROLLMENT')}`, { input });
   }
 
-
-  writeResults(input: any): Observable<IResource> {
-    return this.http.post<IResource>(getUrl('core', 'WRITE_MATCH_RESULTS'), { input });
+  /**
+   * @description Request for Match Result write
+   * @param input
+   * @param {string} id
+   * @return {Observable<IResource>}
+   */
+  writeResults(input: any, id?: string): Observable<IResource> {
+    return this.http.post<IResource>(`${getUrl('core', 'WRITE_MATCH_RESULTS')}/${!!id ? id : ''}`, { input });
   }
 
 }

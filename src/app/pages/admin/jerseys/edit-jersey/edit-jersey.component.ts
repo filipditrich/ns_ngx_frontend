@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { JerseysService } from '../jerseys.service';
 import { ToasterService } from 'angular2-toaster';
@@ -15,7 +15,6 @@ import * as codeConfig from '../../../../@shared/config/codes.config';
   selector: 'ns-edit-jersey',
   templateUrl: './edit-jersey.component.html',
   styleUrls: ['./edit-jersey.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditJerseyComponent implements OnInit {
 
@@ -152,6 +151,8 @@ export class EditJerseyComponent implements OnInit {
   deleteJersey() {
     const modal = this.modalService.open(ModalComponent, {
       container: 'nb-layout',
+      keyboard: false,
+      backdrop: 'static',
     });
 
     modal.componentInstance.modalHeader = `${translate('DELETE')} '${this.jersey.name}'?`;
@@ -217,21 +218,32 @@ export class EditJerseyComponent implements OnInit {
    * @param input
    */
   submitForm(input) {
-
     if (!this.form.valid) {
       this.touchAllFields();
     } else {
-
+      this.isLoading = true;
       this.jerseysService.update(this.jersey._id, input).subscribe(response => {
         if (response.response.success) {
           this.router.navigate(['/pages/admin/jerseys']).then(() => {
             this.toasterService.popAsync('success', translate('JERSEY_UPDATED_TITLE'), translate('JERSEY_UPDATED_MSG'));
+            this.isLoading = false;
           });
         } else {
+          this.isLoading = false;
           this.errorHelper.processedButFailed(response);
         }
-      }, error => {
-        this.errorHelper.handleGenericError(error);
+      }, err => {
+        this.isLoading = false;
+        const error = !!err.error ? !!err.error.response ? err.error.response : err.error : err;
+
+        switch (error.name || error.type) {
+          case 'JERSEY_NAME_DUPLICATE': {
+            this.name.setErrors({ 'duplicate': true }); break;
+          }
+          default: {
+            this.errorHelper.handleGenericError(err); break;
+          }
+        }
       });
     }
   }

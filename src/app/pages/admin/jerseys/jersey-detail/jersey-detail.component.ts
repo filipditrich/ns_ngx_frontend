@@ -52,6 +52,8 @@ export class JerseyDetailComponent implements OnInit {
   deleteJersey() {
     const modal = this.modalService.open(ModalComponent, {
       container: 'nb-layout',
+      keyboard: false,
+      backdrop: 'static',
     });
 
     this.isHidden = true;

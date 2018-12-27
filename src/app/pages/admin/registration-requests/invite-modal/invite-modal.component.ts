@@ -21,6 +21,7 @@ export class InviteModalComponent implements OnInit {
   public form: FormGroup;
   public invitationEmails = [];
   public isHidden = false;
+  public isLoading = false;
 
   constructor(private activeModal: NgbActiveModal,
               private router: Router,
@@ -103,6 +104,7 @@ export class InviteModalComponent implements OnInit {
     if (!this.form.valid && this.email.value) {
       this.email.markAsTouched();
     } else {
+      this.isLoading = true;
       if (!!this.email.value) {
         this.invitationEmails.push(this.email.value);
       }

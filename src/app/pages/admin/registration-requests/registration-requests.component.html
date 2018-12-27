@@ -25,6 +25,25 @@
 
         </table>
       </div>
+
+      <!-- Legend -->
+      <div class="col-sm-12 d-flex flex-wrap">
+        <div class="d-flex align-items-center mr-sm-0 mr-lg-4">
+          <span
+            class="row-data-approved"
+            [ngStyle]="{ width: '16px', height: '16px', 'border-radius': '50%' }">
+          </span>
+          <h6 class="text-muted ml-2 mb-0">{{ 'REG_REQ_APPROVED' | translate }}</h6>
+        </div>
+
+        <div class="d-flex align-items-center">
+          <span
+            class="row-data-approved row-data-registered"
+            [ngStyle]="{ width: '16px', height: '16px', 'border-radius': '50%' }">
+          </span>
+          <h6 class="text-muted ml-2 mb-0">{{ 'REG_REQ_REGISTERED' | translate }}</h6>
+        </div>
+      </div>
     </div>
   </nb-card-body>
 </nb-card>

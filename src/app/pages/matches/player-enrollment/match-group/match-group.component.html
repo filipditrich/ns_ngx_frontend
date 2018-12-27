@@ -25,6 +25,33 @@
 
         </table>
       </div>
+
+      <!-- Legend -->
+      <div class="col-sm-12 d-flex flex-wrap">
+        <div class="d-flex align-items-center mr-4">
+          <span
+            class="row-data-warning"
+            [ngStyle]="{ width: '16px', height: '16px', 'border-radius': '50%' }">
+          </span>
+          <h6 class="text-muted ml-2 mb-0">{{ 'ENROLLMENT_LOCKED' | translate }}</h6>
+        </div>
+
+        <div class="d-flex align-items-center mr-4">
+          <span
+            class="row-data-danger"
+            [ngStyle]="{ width: '16px', height: '16px', 'border-radius': '50%' }">
+          </span>
+          <h6 class="text-muted ml-2 mb-0">{{ 'ENROLLMENT_FULL' | translate }}</h6>
+        </div>
+
+        <div class="d-flex align-items-center mr-4">
+          <span
+            class="data-row-old"
+            [ngStyle]="{ width: '16px', height: '16px', 'border-radius': '50%' }">
+          </span>
+          <h6 class="text-muted ml-2 mb-0">{{ 'MATCH_IN_PAST' | translate }}</h6>
+        </div>
+      </div>
     </div>
   </nb-card-body>
 </nb-card>

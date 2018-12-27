@@ -7,7 +7,7 @@
 
           <thead>
             <div class="stc-head d-flex justify-content-end align-items-center">
-              <h2 class="m-0 flex-grow-1">{{ 'MATCHES' | translate }}</h2>
+              <h2 class="m-0 flex-grow-1">{{ 'PLAYED_MATCHES' | translate }}</h2>
               <i class="icon ion-md-cog cursor-pointer fs-large" (click)="openPreferences()"></i>
             </div>
           </thead>
@@ -16,10 +16,7 @@
             <ng2-smart-table-extended
               [settings]="settings"
               [source]="source"
-              (delete)="enrollSelf($event, false)"
-              (edit)="enrollSelf($event, true)"
-              (custom)="onPrint($event)"
-              (userRowSelect)="onUserRowSelect($event)">
+              (edit)="editResults($event)">
             </ng2-smart-table-extended>
           </tbody>
 
@@ -30,10 +27,10 @@
       <div class="col-sm-12 d-flex flex-wrap">
         <div class="d-flex align-items-center mr-4">
           <span
-            class="row-data-warning"
+            class="row-data-written data-row-old"
             [ngStyle]="{ width: '16px', height: '16px', 'border-radius': '50%' }">
           </span>
-          <h6 class="text-muted ml-2 mb-0">{{ 'ENROLLMENT_LOCKED' | translate }}</h6>
+          <h6 class="text-muted ml-2 mb-0">{{ 'MATCH_RESULT_WRITTEN' | translate }}</h6>
         </div>
 
         <div class="d-flex align-items-center mr-4">
@@ -41,16 +38,24 @@
             class="row-data-danger"
             [ngStyle]="{ width: '16px', height: '16px', 'border-radius': '50%' }">
           </span>
-          <h6 class="text-muted ml-2 mb-0">{{ 'ENROLLMENT_FULL' | translate }}</h6>
+          <h6 class="text-muted ml-2 mb-0">{{ 'LOOSE' | translate }}</h6>
         </div>
 
         <div class="d-flex align-items-center mr-4">
           <span
-            class="data-row-old"
+            class="row-data-success"
             [ngStyle]="{ width: '16px', height: '16px', 'border-radius': '50%' }">
           </span>
-          <h6 class="text-muted ml-2 mb-0">{{ 'MATCH_IN_PAST' | translate }}</h6>
+          <h6 class="text-muted ml-2 mb-0">{{ 'WIN' | translate }}</h6>
         </div>
+
+        <!--<div class="d-flex align-items-center mr-4">-->
+          <!--<span-->
+            <!--class="row-data-warning"-->
+            <!--[ngStyle]="{ width: '16px', height: '16px', 'border-radius': '50%' }">-->
+          <!--</span>-->
+          <!--<h6 class="text-muted ml-2 mb-0">{{ 'DRAFT' | translate }}</h6>-->
+        <!--</div>-->
       </div>
     </div>
   </nb-card-body>

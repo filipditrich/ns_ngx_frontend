@@ -51,7 +51,7 @@
           <tr *ngFor="let player of match?.enrollment.players; let i = index">
             <th scope="row">{{i}}</th>
             <td>{{player.info.name}} (#{{player.info.number}})</td>
-            <td>@{{player.info.username}}</td>
+            <td>{{player.info.username}}</td>
             <td>{{player.enrolledOn}}</td>
           </tr>
           </tbody>

@@ -89,6 +89,8 @@ export class DefaultTableComponent {
         // user unchecked all filters intentionally
         const modal = this.modalService.open(ModalComponent, {
           container: 'nb-layout',
+          keyboard: false,
+          backdrop: 'static',
         });
 
         modal.componentInstance.modalHeader = translate('UNCHECK_ALL_FILTERS_TITLE');
@@ -147,6 +149,8 @@ export class DefaultTableComponent {
     // create the modal instance
     const modal = this.modalService.open(TablePreferencesComponent, {
       container: 'nb-layout',
+      keyboard: false,
+      backdrop: 'static',
     });
 
     // pass the current filters into the modal component

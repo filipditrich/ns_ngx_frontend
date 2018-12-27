@@ -14,10 +14,10 @@ import * as codeConfig from '../../../@shared/config/codes.config';
 
 @Component({
   selector: 'ns-matches-results',
-  templateUrl: './matches-results.component.html',
-  styleUrls: ['./matches-results.component.scss'],
+  templateUrl: './match-results.component.html',
+  styleUrls: ['./match-results.component.scss'],
 })
-export class MatchesResultsComponent extends DefaultTableComponent implements OnInit {
+export class MatchResultsComponent extends DefaultTableComponent implements OnInit {
 
   constructor(private matchesService: MatchesService,
               public errorHelper: ErrorHelper,
@@ -43,10 +43,6 @@ export class MatchesResultsComponent extends DefaultTableComponent implements On
         title: translate('ROWS_PER_PAGE'),
         type: 'select',
         options: {
-          multiple: false,
-          closeOnSelect: true,
-          clearable: false,
-          searchable: false,
           items: [
             { label: '5', value: 5 },
             { label: '10', value: 10 },
@@ -58,10 +54,7 @@ export class MatchesResultsComponent extends DefaultTableComponent implements On
     };
     this.settings = {
       edit: {
-        editButtonContent: `<i class="icon ion-md-add fs-large"></i>`,
-        editClassFunction: row => {
-          return this.isWritten(row.data) ? 'pointer-events-none' : '';
-        },
+        editButtonContent: `<i class="icon nb-edit fs-large"></i>`,
       },
       hideSubHeader: true,
       mode: 'external',
@@ -254,8 +247,11 @@ export class MatchesResultsComponent extends DefaultTableComponent implements On
   editResults(event) {
     const modal = this.modalService.open(MatchResultWriteModalComponent, {
       container: 'nb-layout',
+      keyboard: false,
+      backdrop: 'static',
     });
     modal.componentInstance.match = event.data;
+    modal.componentInstance.update = this.isWritten(event.data);
 
     modal.result.then(bool => {
       if (bool) this.loadData();

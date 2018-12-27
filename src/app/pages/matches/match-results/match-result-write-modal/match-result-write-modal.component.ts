@@ -1,11 +1,12 @@
-import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { IMatch, MatchResult, IJersey } from '../../../../@shared/interfaces';
-import {translate, ErrorHelper, findInvalidControls} from '../../../../@shared/helpers';
+import { IMatch, MatchResult, IJersey, IMatchResultPlayers } from '../../../../@shared/interfaces';
+import { translate, ErrorHelper } from '../../../../@shared/helpers';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToasterService } from 'angular2-toaster';
 import { JerseysService } from '../../../admin/jerseys';
 import { MatchesService } from '../../../admin/matches';
+import { UserService } from '../../../user/user.service';
 
 @Component({
   selector: 'ns-match-result-write-modal',
@@ -14,9 +15,11 @@ import { MatchesService } from '../../../admin/matches';
 export class MatchResultWriteModalComponent implements OnInit {
 
   @Input() match: IMatch;
+  @Input() update: boolean;
   public form: FormGroup;
   public isLoading = true;
 
+  public userResult: IMatchResultPlayers;
   public set = [];
   public jerseySet = [];
   public statusSet = [];
@@ -32,7 +35,8 @@ export class MatchResultWriteModalComponent implements OnInit {
               private jerseysService: JerseysService,
               private errorHelper: ErrorHelper,
               private matchesService: MatchesService,
-              private toasterService: ToasterService) {
+              private toasterService: ToasterService,
+              private userService: UserService) {
 
     // form
     this.form = new FormGroup({
@@ -47,13 +51,15 @@ export class MatchResultWriteModalComponent implements OnInit {
 
   ngOnInit() {
     // get jerseys
-    this.result.setValue(0);
-    this.jersey.setValue(0);
     this.jerseysService.get().subscribe(response => {
       if (response.response.success) {
         this.jerseys = response.output;
         const set = [];
-        if (this.match.results) this.match.results.players.forEach(player => set.push({ jersey: player.jersey._id, status: player.status }));
+        if (this.match.results) {
+          const results = !this.update ? this.match.results.players
+            : this.match.results.players.filter(x => x.player !== this.userService.getCurrentUser('_id'));
+          results.forEach(player => set.push({ jersey: player.jersey._id, status: player.status }));
+        }
         this.set = Array.from(new Set(set.map(x => JSON.stringify(x))));
         this.set = this.set.map(x => JSON.parse(x));
         this.statusSet = Array.from(new Set(this.set.map(x => x.status)));
@@ -62,6 +68,17 @@ export class MatchResultWriteModalComponent implements OnInit {
         this._resultOptions = ((this.statusSet.length > 1) || (this.statusSet.length === 1 && this.statusSet[0] === MatchResult.Draft)) ?
           this.resultOptions.filter(x => this.statusSet.indexOf(x.value) >= 0) : this.resultOptions;
         this.isLoading = false;
+        // set default values
+        if (this.update) {
+          this.userResult = this.match.results.players.find(x => x.player === this.userService.getCurrentUser('_id'));
+          if (this._jerseys.map(x => x._id).indexOf(this.userResult.jersey._id) >= 0) {
+            this.jersey.setValue(this.userResult.jersey._id);
+            this.result.setValue(this.userResult.status);
+          }
+        } else {
+          this.result.setValue(0);
+          this.jersey.setValue(0);
+        }
       } else {
         this.errorHelper.processedButFailed(response);
       }
@@ -138,16 +155,17 @@ export class MatchResultWriteModalComponent implements OnInit {
         jersey: this.jersey.value,
         status: this.result.value,
       };
-      this.matchesService.writeResults(input).subscribe(response => {
-        if (response.response.success) {
-          this.toasterService.popAsync('success', translate('RESULTS_WRITTEN_TITLE'), translate('RESULTS_WRITTEN_MSG'));
-          this.closeModal(true);
-        } else {
-          this.errorHelper.processedButFailed(response);
-        }
-      }, error => {
-        this.errorHelper.handleGenericError(error);
-      });
+      this.matchesService.writeResults(input, this.update ? this.userResult._id : '')
+        .subscribe(response => {
+          if (response.response.success) {
+            this.toasterService.popAsync('success', translate('RESULTS_WRITTEN_TITLE'), translate('RESULTS_WRITTEN_MSG'));
+            this.closeModal(true);
+          } else {
+            this.errorHelper.processedButFailed(response);
+          }
+        }, error => {
+          this.errorHelper.handleGenericError(error);
+        });
     }
   }
 
