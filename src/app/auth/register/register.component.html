@@ -19,14 +19,7 @@
 
       <div class="form-group group d-flex flex-column col-lg-6"
            [ngClass]="{ 'error' : username.invalid && (username.dirty || username.touched) }">
-
-        <div class="input-with-buttons prepend">
-          <input fullwidth id="username" name="username" nbinput formControlName="username" type="text" ng-reflect-name="username" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
-          <div class="buttons">
-            <button type="button"><i class="icon ion-ios-at"></i></button>
-          </div>
-        </div>
-
+        <input fullwidth id="username" name="username" nbinput formControlName="username" type="text" ng-reflect-name="username" class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
         <label for="username">{{ 'USERNAME' | translate }}</label>
         <small class="text-danger" *ngIf="username.hasError('required') && (username.dirty || username.touched)">{{ 'USERNAME_REQUIRED' | translate }}</small>
         <small class="text-danger" *ngIf="username.hasError('minlength')">{{ 'USERNAME_MIN' | translate:{minLength:2} }}</small>

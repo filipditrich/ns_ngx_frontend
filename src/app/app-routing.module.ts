@@ -16,14 +16,14 @@ const routes: Routes = [
   },
   {
     path: 'pages',
-    loadChildren: () => PagesModule,
-    // loadChildren: './pages/pages.module#PagesModule',
+    // loadChildren: () => PagesModule,
+    loadChildren: './pages/pages.module#PagesModule',
     canActivate: [ AuthGuard ],
   },
   {
     path: 'auth',
-    loadChildren: () => AuthModule,
-    // loadChildren: './auth/auth.module#AuthModule',
+    // loadChildren: () => AuthModule,
+    loadChildren: './auth/auth.module#AuthModule',
   },
   {
     path: '**',

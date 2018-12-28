@@ -57,8 +57,8 @@ const routes: Routes = [
       },
       {
         path: 'admin',
-        loadChildren: () => AdminModule,
-        // loadChildren: './admin/admin.module#AdminModule',
+        // loadChildren: () => AdminModule,
+        loadChildren: './admin/admin.module#AdminModule',
         canActivate: [ RoleGuard ],
         data: { roles: [ UserRoles.admin ], title: 'Admin' },
       },
