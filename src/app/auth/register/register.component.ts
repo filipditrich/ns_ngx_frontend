@@ -47,7 +47,7 @@ export class RegisterComponent implements OnInit {
         Validators.required, passwordStrength(),
       ]),
       number: new FormControl(null, [
-        Validators.required, Validators.min(0),
+        Validators.min(0),
       ]),
       team: new FormControl(null, [
         Validators.required,

@@ -33,7 +33,7 @@
           <div class="form-group group d-flex flex-column col-sm-5"
                [ngClass]="{ 'error' : number.invalid && (number.dirty || number.touched) }">
             <input fullwidth id="number" name="number" nbinput formControlName="number" type="number" ng-reflect-name="number" class="input-full-width input-md ng-dirty ng-valid ng-touched" required min="0" max="999">
-            <label for="username">{{ 'JERSEY_NUM' | translate }}</label>
+            <label for="number">{{ 'JERSEY_NUM' | translate }}</label>
             <small class="text-danger" *ngIf="number.hasError('required') && (number.dirty || number.touched)">{{ 'JERSEY_NUM_REQUIRED' | translate }}</small>
             <small class="text-danger" *ngIf="number.hasError('min')">{{ 'JERSEY_NUM_POSITIVE' | translate }}</small>
           </div>
