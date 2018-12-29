@@ -1,0 +1,14 @@
+@media all {
+  .page-break	{ display: none !important; }
+}
+@media print {
+
+
+  .menu-sidebar, nav { display: none !important; }
+
+  body, html, nb-card {
+    width: 100%;
+  }
+}
+
+

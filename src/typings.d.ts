@@ -13,3 +13,7 @@ interface NodeModule {
 declare var tinymce: any;
 
 declare var echarts: any;
+
+interface JQueryStatic {
+  print(options?: any, callback?: Function): any;
+}

@@ -8,11 +8,11 @@ import { IMatch, EnrollmentStatus } from '../../../@shared/interfaces/match.inte
 import { translate } from '../../../@shared/helpers/translator.helper';
 import * as codeConfig from '../../../@shared/config/codes.config';
 import * as JSPDF from 'jspdf';
-import * as html2canvas from 'html2canvas';
+import * as removeAccents from 'remove-accents';
 
 @Component({
   selector: 'ns-print-match',
-  templateUrl: './print-match.component.html',
+  templateUrl: './print-match.component.html'
 })
 export class PrintMatchComponent implements OnInit {
 
@@ -31,6 +31,10 @@ export class PrintMatchComponent implements OnInit {
   ngOnInit() {
     this.matchService.get(this.activatedRoute.snapshot.params['id']).subscribe(response => {
       if (response.response.success) {
+        let resMatch = response.output[0].enrollment.players
+        resMatch.forEach((player) => {
+          player.info.name = removeAccents(player.info.name)
+        })
         this.match = this.humanizer.datesInMatch(response.output[0]);
         this.match.enrollment.players.filter(x => x.status === EnrollmentStatus.Going);
         this.isLoading = false;
@@ -68,15 +72,14 @@ export class PrintMatchComponent implements OnInit {
   /**
    * @description Generate a PDF file
    */
+  /**
+   * @description Generate a PDF file
+   */
   printDetails() {
-    html2canvas(this.content.nativeElement).then(canvas => {
-      const pdf = new JSPDF();
-      const imgData  = canvas.toDataURL('image/jpeg', 1.0);
-      pdf.addImage(imgData, 'a4', 0, 0);
-      pdf.save('print.pdf');
-    }).catch(error => {
-      this.errorHelper.handleGenericError(error);
-    });
+    const pdf = new JSPDF('p', 'pt');
+    pdf.fromHTML(document.getElementById('content'), 10, 10);
+    pdf.setFont('times', 'roman')
+    pdf.save('print.pdf');
   }
 
 }
