@@ -19,6 +19,8 @@ import * as codeConfig from '../../../@shared/config/codes.config';
 })
 export class MatchResultsComponent extends DefaultTableComponent implements OnInit {
 
+  public totalWin = 0;
+  public totalLoose = 0;
   constructor(private matchesService: MatchesService,
               public errorHelper: ErrorHelper,
               private humanizer: HumanizerHelper,
@@ -194,6 +196,13 @@ export class MatchResultsComponent extends DefaultTableComponent implements OnIn
         const UID = this.userService.getCurrentUser('_id');
         const matches: IMatch[] = response.output.filter(x => moment(x.date).isSameOrBefore(new Date()));
         const enrolled = matches.filter(x => x.enrollment.players.filter(y => y.player === UID && y.status === 'going').length > 0);
+        const results = matches.filter(x => !!x.results && x.results.players.findIndex(y => y.player === UID) >= 0);
+        this.totalWin = 0;
+        this.totalLoose = 0;
+        for (const rec of results) {
+          this.totalWin += rec.results.players.filter(x => x.player === UID && x.status === 'win').length;
+          this.totalLoose += rec.results.players.filter(x => x.player === UID && x.status === 'loose').length;
+        }
         const filtered = this.filterOptions.showWritten.value ? enrolled : enrolled.filter(x => !this.isWritten(x));
         this.source.load(filtered).then(() => {
           this.source.setSort([{ field: 'date', direction: 'desc' }]);
