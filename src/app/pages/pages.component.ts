@@ -20,6 +20,8 @@ export class PagesComponent implements OnInit {
     this.pagesMenuService.generate();
     this.pagesMenuService.menuItems.subscribe((menuItems: NbMenuItem[]) => {
       // TODO: fix/workaround - ExpressionChangedAfterItHasBeenCheckedError (max-height)
+      // idk why but this shit now works, but Ima still going to leave this here
+      // ok I take that back, its not working again. wtf
       this.menuService.collapseAll();
       this.menuService.addItems(menuItems);
     });

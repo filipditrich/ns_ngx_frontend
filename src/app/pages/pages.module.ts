@@ -40,6 +40,7 @@ import { GoldenStickComponent } from './club-awards/golden-stick/golden-stick.co
 import { TripleClubComponent } from './club-awards/triple-club/triple-club.component';
 import { RepresentationComponent } from './club-awards/representation/representation.component';
 import { RealisationTeamComponent } from './realisation-team/realisation-team.component';
+import { SettingsComponent } from './settings/settings.component';
 
 const PAGES_COMPONENTS = [
   AlertsComponent, DialogsComponent, PagesComponent,
@@ -75,6 +76,7 @@ const PAGES_COMPONENTS = [
     TripleClubComponent,
     RepresentationComponent,
     RealisationTeamComponent,
+    SettingsComponent,
   ],
   entryComponents: [
     MatchDetailComponent,

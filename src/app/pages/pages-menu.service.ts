@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
+import { UserRoles } from '../@shared/enums';
 import { GroupsService } from './admin/groups/groups.service';
 import { ErrorHelper, translate } from '../@shared/helpers';
 import { NbMenuItem } from '@nebular/theme';
@@ -9,7 +10,40 @@ import * as diacritics from 'diacritics';
 })
 export class PagesMenuService {
 
+  public user = JSON.parse(sessionStorage.getItem('user'));
+  public isAdmin = !!this.user ? this.user.roles.some(role => role.indexOf(UserRoles.admin) >= 0) : false;
   public MENU_ITEMS: NbMenuItem[] = [
+    {
+      title: translate('ADMIN'),
+      icon: 'icon ion-ios-rocket',
+      hidden: !this.isAdmin,
+      children: [
+        {
+          title: translate('MATCH_MANAGER'),
+          link: '/pages/admin/matches/manager',
+        },
+        {
+          title: translate('GROUP_MANAGER'),
+          link: '/pages/admin/groups/manager',
+        },
+        {
+          title: translate('TEAM_MANAGER'),
+          link: '/pages/admin/teams/manager',
+        },
+        {
+          title: translate('PLACE_MANAGER'),
+          link: '/pages/admin/places/manager',
+        },
+        {
+          title: translate('JERSEY_MANAGER'),
+          link: '/pages/admin/jerseys/manager',
+        },
+        {
+          title: translate('REGISTRATION_REQUESTS'),
+          link: '/pages/admin/registration-requests',
+        },
+      ],
+    },
     {
       title: translate('MATCHES'),
       icon: 'icon ion-ios-flag',
@@ -25,72 +59,44 @@ export class PagesMenuService {
         },
       ],
     },
-    // {
-    //   title: translate('USER'),
-    //   icon: 'icon ion-ios-person',
-    //   link: '/pages/user',
-    //   pathMatch: 'partly',
-    // },
-    // {
-    //   title: translate('SETTINGS'),
-    //   icon: 'icon ion-ios-cog',
-    //   link: '/pages/user',
-    //   pathMatch: 'partly',
-    // },
+    {
+      title: translate('PROFILE'),
+      // icon: 'icon ion-ios-person',
+      group: true,
+      link: '/pages/user',
+    },
     {
       title: translate('REALISATION_TEAM'),
-      icon: 'icon ion-ios-people',
+      // icon: 'icon ion-ios-people',
+      group: true,
       link: '/pages/realisation-team',
     },
     {
       title: translate('CLUB_AWARDS'),
-      icon: 'icon ion-ios-trophy',
-      children: [
-        {
-          title: translate('GOLDEN_STICK'),
-          link: '/pages/club-awards/golden-stick',
-        },
-        {
-          title: translate('TRIPLE_CLUB'),
-          link: '/pages/club-awards/triple-club',
-        },
-        {
-          title: translate('REPRESENTATION'),
-          link: '/pages/club-awards/representation',
-        },
-      ],
+      // icon: 'icon ion-ios-trophy',
+      group: true,
+      // children: [
+      //   {
+      //     title: translate('GOLDEN_STICK'),
+      //     link: '/pages/club-awards/golden-stick',
+      //   },
+      //   {
+      //     title: translate('TRIPLE_CLUB'),
+      //     link: '/pages/club-awards/triple-club',
+      //   },
+      //   {
+      //     title: translate('REPRESENTATION'),
+      //     link: '/pages/club-awards/representation',
+      //   },
+      // ],
+    },
+    {
+      title: translate('SETTINGS'),
+      // icon: 'icon ion-ios-cog',
+      link: '/pages/settings',
+      group: true,
     },
   ];
-  public ADMIN_LINKS: NbMenuItem = {
-    title: translate('ADMIN'),
-    icon: 'icon ion-ios-rocket',
-    children: [
-      {
-        title: translate('MATCH_MANAGER'),
-        link: '/pages/admin/matches/manager',
-      },
-      {
-        title: translate('GROUP_MANAGER'),
-        link: '/pages/admin/groups/manager',
-      },
-      {
-        title: translate('TEAM_MANAGER'),
-        link: '/pages/admin/teams/manager',
-      },
-      {
-        title: translate('PLACE_MANAGER'),
-        link: '/pages/admin/places/manager',
-      },
-      {
-        title: translate('JERSEY_MANAGER'),
-        link: '/pages/admin/jerseys/manager',
-      },
-      {
-        title: translate('REGISTRATION_REQUESTS'),
-        link: '/pages/admin/registration-requests',
-      },
-    ],
-  };
   public canRefresh = true;
   @Output() menuItems: EventEmitter<NbMenuItem[]> = new EventEmitter<NbMenuItem[]>();
 
@@ -131,10 +137,6 @@ export class PagesMenuService {
    * @description Emits the changed Menu Item set
    */
   apply(): void {
-    const user = JSON.parse(sessionStorage.getItem('user'));
-    const isAdmin = !!user ? user.roles.some(role => role.indexOf('admin') >= 0) : false;
-    const adminIndex = this.MENU_ITEMS.findIndex(obj => obj.title === translate('ADMIN')) >= 0;
-    if (!adminIndex && isAdmin) { this.MENU_ITEMS.unshift(this.ADMIN_LINKS); }
     if (this.canRefresh) {
       this.menuItems.emit(this.MENU_ITEMS);
       this.canRefresh = false;

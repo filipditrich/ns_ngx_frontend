@@ -2,14 +2,30 @@ import { LANG } from '../../../environments/environment';
 
 export let translateIdList = {
   ADMIN: { cs: 'Administrátor', en: 'Administrator' },
+  HOME: { cs: 'Domů', en: 'Home' },
+  MATCH_GROUP: {cs: 'Skupina zápasů', en: 'Match group'},
+  MATCH_DETAIL: {cs: 'Detail zápasu', en: 'Match detail'},
+  GOLDEN_STICK: { cs: 'Zlatá hokejka', en: 'Golden stick' },
+  TRIPLE_CLUB: { cs: 'Triple club', en: 'Triple club' },
+  REPRESENTATION: { cs: 'Reprezentace', en: 'Representation' },
+  NOT_FOUND: { cs: 'Nenalezeno', en: 'Not found' },
+  PROFILE: { cs: 'Profil', en: 'Profile' },
   MATCHES: { cs: 'Zápasy', en: 'Matches' },
   MATCH_RESULTS: { cs: 'Výsledky', en: 'Match results' },
   MATCH_MANAGER: { cs: 'Správce zápasů', en: 'Match manager' },
+  EDIT_MATCH: { cs: 'Upravit zápas', en: 'Edit match' },
   GROUP_MANAGER: { cs: 'Správce skupin', en: 'Group manager' },
+  EDIT_GROUP: { cs: 'Upravit skupinu', en: 'Edit group' },
   TEAM_MANAGER: { cs: 'Správce týmů', en: 'Team manager' },
+  EDIT_TEAM: { cs: 'Upravit tým', en: 'Edit team' },
   PLACE_MANAGER: { cs: 'Správce míst', en: 'Place manager' },
+  EDIT_PLACE: { cs: 'Upravit míst', en: 'Edit place' },
   JERSEY_MANAGER: { cs: 'Správce dresů', en: 'Jersey manager' },
+  EDIT_JERSEY: { cs: 'Upravit dres', en: 'Edit jersey' },
   REGISTRATION_REQUESTS: { cs: 'Registrační žádosti', en: 'Registration requests' },
+  REALISATION_TEAM: { cs: 'Realizační tým', en: 'Realisation team' },
+  CLUB_AWARDS: { cs: 'Klubová ocenění', en: 'Club awards' },
+  SETTINGS: { cs: 'Nastavení', en: 'Settings' },
 };
 
 /**

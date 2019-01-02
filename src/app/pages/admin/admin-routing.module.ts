@@ -1,5 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
+import { translate } from '../../@shared/helpers';
 
 import { MatchesComponent, EditMatchComponent } from './matches';
 import { PlacesComponent, EditPlaceComponent } from './places';
@@ -21,7 +22,7 @@ const routes: Routes = [
   {
     path: 'registration-requests',
     component: RegistrationRequestsComponent,
-    data: { title: 'Registration Requests' },
+    data: { title: translate('REGISTRATION_REQUESTS') },
   },
 
   {
@@ -32,8 +33,8 @@ const routes: Routes = [
         pathMatch: 'full',
         redirectTo: 'manager',
       },
-      { path: 'manager', component: MatchesComponent, data: { title: 'Match Manager' } },
-      { path: 'edit/:id', component: EditMatchComponent, data: { title: 'Edit Match' } },
+      { path: 'manager', component: MatchesComponent, data: { title: translate('MATCH_MANAGER') } },
+      { path: 'edit/:id', component: EditMatchComponent, data: { title: translate('EDIT_MATCH') } },
     ],
   },
 
@@ -45,8 +46,8 @@ const routes: Routes = [
         pathMatch: 'full',
         redirectTo: 'manager',
       },
-      { path: 'manager', component: PlacesComponent, data: { title: 'Place Manager' } },
-      { path: 'edit/:id', component: EditPlaceComponent, data: { title: 'Edit Place' } },
+      { path: 'manager', component: PlacesComponent, data: { title: translate('PLACE_MANAGER') } },
+      { path: 'edit/:id', component: EditPlaceComponent, data: { title: translate('EDIT_PLACE') } },
     ],
   },
 
@@ -58,8 +59,8 @@ const routes: Routes = [
         pathMatch: 'full',
         redirectTo: 'manager',
       },
-      { path: 'manager', component: JerseysComponent, data: { title: 'Jersey Manager' } },
-      { path: 'edit/:id', component: EditJerseyComponent, data: { title: 'Edit Jersey' } },
+      { path: 'manager', component: JerseysComponent, data: { title: translate('JERSEY_MANAGER') } },
+      { path: 'edit/:id', component: EditJerseyComponent, data: { title: translate('EDIT_JERSEY') } },
     ],
   },
 
@@ -71,8 +72,8 @@ const routes: Routes = [
         pathMatch: 'full',
         redirectTo: 'manager',
       },
-      { path: 'manager', component: TeamsComponent, data: { title: 'Team Manager' } },
-      { path: 'edit/:id', component: EditTeamComponent, data: { title: 'Edit Team' } },
+      { path: 'manager', component: TeamsComponent, data: { title: translate('TEAM_MANAGER') } },
+      { path: 'edit/:id', component: EditTeamComponent, data: { title: translate('EDIT_TEAM') } },
     ],
   },
 
@@ -84,8 +85,8 @@ const routes: Routes = [
         pathMatch: 'full',
         redirectTo: 'manager',
       },
-      { path: 'manager', component: GroupsComponent, data: { title: 'Group Manager' } },
-      { path: 'edit/:id', component: EditGroupComponent, data: { title: 'Edit Group' } },
+      { path: 'manager', component: GroupsComponent, data: { title: translate('GROUP_MANAGER') } },
+      { path: 'edit/:id', component: EditGroupComponent, data: { title: translate('EDIT_GROUP') } },
     ],
   },
 ];

@@ -15,7 +15,7 @@ export const environment = {
 export const APIRoot = 'http://localhost:4000';
 // export const APIRoot = 'http://167.99.142.181:4000';
 // export const APIRoot = 'http://192.168.1.93:4000';
-export let LANG = 'en';
+export let LANG = 'cs';
 export function changeLang(lang: string): void {
   LANG = lang;
 }
