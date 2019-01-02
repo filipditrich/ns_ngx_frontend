@@ -1,11 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HumanizerHelper } from '../../../@shared/helpers/humanizer.helper';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatchesService } from '../../admin/matches';
 import { ToasterService } from 'angular2-toaster';
-import { ErrorHelper } from '../../../@shared/helpers/error.helper';
-import { IMatch, EnrollmentStatus } from '../../../@shared/interfaces/match.interface';
-import { translate } from '../../../@shared/helpers/translator.helper';
+import { ErrorHelper, HumanizerHelper, translate } from '../../../@shared/helpers';
+import { ModalComponent } from '../../ui-features/modals/modal/modal.component';
+import { IMatch, EnrollmentStatus } from '../../../@shared/interfaces';
 import * as codeConfig from '../../../@shared/config/codes.config';
 import * as JSPDF from 'jspdf';
 import * as html2canvas from 'html2canvas';
@@ -13,6 +13,7 @@ import * as html2canvas from 'html2canvas';
 @Component({
   selector: 'ns-print-match',
   templateUrl: './print-match.component.html',
+  styleUrls: ['./print-match.component.scss'],
 })
 export class PrintMatchComponent implements OnInit {
 
@@ -26,15 +27,16 @@ export class PrintMatchComponent implements OnInit {
               private humanizer: HumanizerHelper,
               private activatedRoute: ActivatedRoute,
               private router: Router,
-              private toasterService: ToasterService) { }
+              private toasterService: ToasterService,
+              private modalService: NgbModal) { }
 
   ngOnInit() {
     this.matchService.get(this.activatedRoute.snapshot.params['id']).subscribe(response => {
       if (response.response.success) {
         this.match = this.humanizer.datesInMatch(response.output[0]);
-        this.match.enrollment.players.filter(x => x.status === EnrollmentStatus.Going);
+        this.match.enrollment.players = this.match.enrollment.players
+          .filter(x => x.status === EnrollmentStatus.Going);
         this.isLoading = false;
-        setTimeout(() => { this.printDetails(); }, 1000);
       } else {
         this.errorHelper.processedButFailed(response);
       }
@@ -68,12 +70,53 @@ export class PrintMatchComponent implements OnInit {
   /**
    * @description Generate a PDF file
    */
-  printDetails() {
+  printDetails(save = true) {
+    this.isLoading = true;
     html2canvas(this.content.nativeElement).then(canvas => {
       const pdf = new JSPDF();
       const imgData  = canvas.toDataURL('image/jpeg', 1.0);
-      pdf.addImage(imgData, 'a4', 0, 0);
-      pdf.save('print.pdf');
+      const imgWidth = 210;
+      const pageHeight = 295;
+      const imgHeight = canvas.height * imgWidth / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+      if (save) {
+        pdf.save(`${this.match.title}.pdf`);
+        this.isLoading = false;
+      } else {
+        const modal = this.modalService.open(ModalComponent, {
+          container: 'nb-layout',
+          keyboard: false,
+          backdrop: 'static',
+        });
+        modal.componentInstance.modalHeader = translate('WARNING');
+        modal.componentInstance.modalContent = translate('ADBLOCK_NOTICE_MSG');
+        modal.componentInstance.modalButtons = [
+          {
+            text: translate('ADBLOCK_NOTICE_DISABLED'),
+            classes: 'btn btn-primary',
+            action: () => {
+              modal.close();
+              this.isLoading = false;
+              pdf.autoPrint();
+              window.open(pdf.output('bloburl'), '_blank');
+            },
+          },
+          {
+            text: translate('CANCEL'),
+            classes: 'btn btn-secondary',
+            action: () => { modal.close(); this.isLoading = false; },
+          },
+        ];
+      }
     }).catch(error => {
       this.errorHelper.handleGenericError(error);
     });

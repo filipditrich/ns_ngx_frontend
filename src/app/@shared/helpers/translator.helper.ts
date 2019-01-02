@@ -26,6 +26,16 @@ export let translateIdList = {
   REALISATION_TEAM: { cs: 'Realizační tým', en: 'Realisation team' },
   CLUB_AWARDS: { cs: 'Klubová ocenění', en: 'Club awards' },
   SETTINGS: { cs: 'Nastavení', en: 'Settings' },
+  ADBLOCK_NOTICE_MSG: {
+    cs: 'Akci nelze provést s aktivním AdBlockem. Pokud jej využívate, vypnětě ho prosím a pokračujte.',
+    en: 'This action cannot be done with active AdBlock. If you are using one, please disable it for now.',
+  },
+  ADBLOCK_NOTICE_DISABLED: {
+    cs: 'AdBlock nemám aktivní',
+    en: 'I don\'t have an active AdBlock',
+  },
+  PRINT: { cs: 'Tisknout', en: 'Print' },
+  SAVE: { cs: 'Uložit', en: 'Save' },
 };
 
 /**
