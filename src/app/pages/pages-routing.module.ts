@@ -1,5 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
+import { translate } from '../@shared/helpers';
 import { PagesComponent } from './pages.component';
 import { MatchResultsComponent } from './matches/match-results/match-results.component';
 import { AdminModule } from './admin';
@@ -22,7 +23,7 @@ const routes: Routes = [
   {
     path: '',
     component: PagesComponent,
-    data: { title: 'Home' },
+    data: { title: translate('HOME') },
     children: [
       {
         path: '',
@@ -40,22 +41,22 @@ const routes: Routes = [
           {
             path: 'all',
             component: PlayerEnrollmentComponent,
-            data: { title: 'Matches' },
+            data: { title: translate('MATCHES') },
           },
           {
             path: 'gn/:group',
             component: MatchGroupComponent,
-            data: { title: 'Match Group' },
+            data: { title: translate('MATCH_GROUP') },
           },
           {
             path: 'results',
             component: MatchResultsComponent,
-            data: { title: 'Match Results' },
+            data: { title: translate('MATCH_RESULTS') },
           },
           {
             path: 'print/:id',
             component: PrintMatchComponent,
-            data: { title: 'Match Print' },
+            data: { title: translate('MATCH_DETAIL') },
           },
         ],
       },
@@ -74,29 +75,32 @@ const routes: Routes = [
           {
             path: 'golden-stick',
             component: GoldenStickComponent,
+            data: { title: translate('GOLDEN_STICK') },
           },
           {
             path: 'triple-club',
             component: TripleClubComponent,
+            data: { title: translate('TRIPLE_CLUB') },
           },
           {
             path: 'representation',
             component: RepresentationComponent,
+            data: { title: translate('REPRESENTATION') },
           },
         ],
       },
       {
         path: 'admin',
-        loadChildren: () => AdminModule,
-        // loadChildren: './admin/admin.module#AdminModule',
         canActivate: [ RoleGuard ],
-        data: { roles: [ UserRoles.admin ], title: 'Admin' },
+        data: { roles: [ UserRoles.admin ], title: translate('ADMIN') },
+        // loadChildren: './admin/admin.module#AdminModule',
+        loadChildren: () => AdminModule,
       },
-      // {
-      //   path: 'user',
-      //   loadChildren: () => UserModule,
-      //   data: { title: 'User' },
-      // },
+      {
+        path: 'user',
+        data: { title: translate('USER') },
+        loadChildren: () => UserModule,
+      },
     ],
   },
 ];

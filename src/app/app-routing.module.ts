@@ -1,6 +1,7 @@
 import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { AuthGuard } from './@core/services/auth.guard';
+import { translate } from './@shared/helpers';
 import { PagesModule } from './pages';
 import { AuthModule } from './auth';
 import { NotFoundComponent } from './pages/miscellaneous/not-found/not-found.component';
@@ -16,20 +17,20 @@ const routes: Routes = [
   },
   {
     path: 'pages',
-    loadChildren: () => PagesModule,
-    // loadChildren: './pages/pages.module#PagesModule',
     canActivate: [ AuthGuard ],
+    // loadChildren: './pages/pages.module#PagesModule',
+    loadChildren: () => PagesModule,
   },
   {
     path: 'auth',
-    loadChildren: () => AuthModule,
     // loadChildren: './auth/auth.module#AuthModule',
+    loadChildren: () => AuthModule,
   },
   {
     path: '**',
     component: NotFoundComponent,
     data: {
-      title: 'Not Found',
+      title: translate('NOT_FOUND'),
     },
   },
 ];
