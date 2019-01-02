@@ -36,6 +36,10 @@ import { PrintMatchComponent } from './matches/print-match/print-match.component
 import { SharedModule } from '../@shared/shared.module';
 import { MatchGroupComponent } from './matches/player-enrollment/match-group/match-group.component';
 import { PagesMenuService } from './pages-menu.service';
+import { GoldenStickComponent } from './club-awards/golden-stick/golden-stick.component';
+import { TripleClubComponent } from './club-awards/triple-club/triple-club.component';
+import { RepresentationComponent } from './club-awards/representation/representation.component';
+import { RealisationTeamComponent } from './realisation-team/realisation-team.component';
 
 const PAGES_COMPONENTS = [
   AlertsComponent, DialogsComponent, PagesComponent,
@@ -67,6 +71,10 @@ const PAGES_COMPONENTS = [
     MatchResultModalComponent,
     PrintMatchComponent,
     MatchGroupComponent,
+    GoldenStickComponent,
+    TripleClubComponent,
+    RepresentationComponent,
+    RealisationTeamComponent,
   ],
   entryComponents: [
     MatchDetailComponent,

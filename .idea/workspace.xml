@@ -5,15 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="eff4af00-2703-4a6e-b91c-75a5e4a1e23a" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/app/auth/register/register.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/auth/register/register.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/auth/register/register.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/auth/register/register.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/phill.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app-routing.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/pages/pages-menu.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/pages/pages-menu.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/pages/pages-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/pages/pages-routing.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/pages/pages.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/pages/pages.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/environments/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/environments/environment.ts" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/dist/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
-    <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -23,20 +32,7 @@
     <favorites_list name="ns_frontend_ngx" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="register.component.ts" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/app/auth/register/register.component.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
-              <caret line="49" column="8" selection-start-line="49" selection-start-column="8" selection-end-line="49" selection-end-column="8" />
-              <folding>
-                <element signature="e#0#50#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -50,7 +46,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>:5</find>
       <find>@</find>
       <find>@{</find>
       <find>&quot;calendar</find>
@@ -80,6 +75,7 @@
       <find>isMatchEnrollmentClosed</find>
       <find>idea</find>
       <find>number</find>
+      <find>ng2-smart-table {</find>
     </findStrings>
     <replaceStrings>
       <replace>34.333333</replace>
@@ -117,8 +113,8 @@
       <dir>$PROJECT_DIR$/src/app/auth</dir>
       <dir>$PROJECT_DIR$/src</dir>
       <dir>$PROJECT_DIR$/src/app</dir>
-      <dir>$PROJECT_DIR$</dir>
       <dir>$PROJECT_DIR$/node_modules</dir>
+      <dir>$PROJECT_DIR$</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
@@ -132,9 +128,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/app/pages/admin/teams/add-team/add-team.component.ts" />
-        <option value="$PROJECT_DIR$/src/app/pages/admin/jerseys/edit-jersey/edit-jersey.component.html" />
-        <option value="$PROJECT_DIR$/src/app/pages/admin/places/edit-place/edit-place.component.html" />
         <option value="$PROJECT_DIR$/src/app/pages/admin/teams/edit-team/edit-team.component.html" />
         <option value="$PROJECT_DIR$/src/app/pages/admin/groups/edit-group/edit-group.component.html" />
         <option value="$PROJECT_DIR$/src/app/pages/admin/groups/add-group/add-group.component.ts" />
@@ -146,7 +139,6 @@
         <option value="$PROJECT_DIR$/src/app/auth/login/login.component.html" />
         <option value="$PROJECT_DIR$/src/app/pages/matches/player-enrollment/match-group/match-group.component.ts" />
         <option value="$PROJECT_DIR$/src/app/pages/pages.module.ts" />
-        <option value="$PROJECT_DIR$/src/app/pages/pages-menu.service.ts" />
         <option value="$PROJECT_DIR$/src/app/@core/tables/default-table.component.ts" />
         <option value="$PROJECT_DIR$/src/app/pages/admin/teams/teams.component.ts" />
         <option value="$PROJECT_DIR$/src/app/pages/matches/matches-results/matches-results.component.ts" />
@@ -179,34 +171,21 @@
         <option value="$PROJECT_DIR$/src/app/pages/matches/player-enrollment/player-enrollment.component.ts" />
         <option value="$PROJECT_DIR$/src/app/pages/matches/match-results/match-results.component.ts" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/src/app/app-routing.module.ts" />
-        <option value="$PROJECT_DIR$/src/app/pages/pages-routing.module.ts" />
         <option value="$PROJECT_DIR$/src/app/auth/register/register.component.ts" />
         <option value="$PROJECT_DIR$/src/app/auth/register/register.component.html" />
+        <option value="$PROJECT_DIR$/src/app/app-routing.module.ts" />
+        <option value="$PROJECT_DIR$/src/environments/environment.ts" />
+        <option value="$PROJECT_DIR$/src/app/@theme/styles/styles.scss" />
+        <option value="$PROJECT_DIR$/node_modules/@nebular/theme/styles/global/tables/_smart-table.theme.scss" />
+        <option value="$PROJECT_DIR$/src/app/pages/pages-routing.module.ts" />
+        <option value="$PROJECT_DIR$/src/app/pages/pages-menu.service.ts" />
       </list>
     </option>
   </component>
-  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER">
-    <package-json value="$PROJECT_DIR$/package.json" />
-  </component>
-  <component name="JsGulpfileManager">
-    <detection-done>true</detection-done>
-    <sorting>DEFINITION_ORDER</sorting>
-  </component>
-  <component name="NodeModulesDirectoryManager">
-    <handled-path value="$PROJECT_DIR$/node_modules" />
-  </component>
-  <component name="NodePackageJsonFileManager">
-    <packageJsonPaths>
-      <path value="$PROJECT_DIR$/ng2-smart-table-extended-demo/dist/ng2-smart-table-extended/package.json" />
-      <path value="$PROJECT_DIR$/package.json" />
-    </packageJsonPaths>
-  </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="22" />
-    <option name="width" value="1366" />
-    <option name="height" value="699" />
+    <option name="y" value="23" />
+    <option name="width" value="1280" />
+    <option name="height" value="731" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -216,43 +195,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="ns_frontend_ngx" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ns_frontend_ngx" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ns_frontend_ngx" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ns_frontend_ngx" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ns_frontend_ngx" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ns_frontend_ngx" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ns_frontend_ngx" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ns_frontend_ngx" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="auth" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ns_frontend_ngx" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ns_frontend_ngx" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="auth" type="462c0819:PsiDirectoryNode" />
-              <item name="register" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="Scope">
         <subPane subId="Default">
           <expand>
@@ -278,12 +220,51 @@
           <select />
         </subPane>
       </pane>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="frontend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="frontend" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="frontend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="frontend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="frontend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="frontend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+              <item name="realisation-team" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file:///Users/phill/Desktop/NorthernStars/new/ns_frontend_ngx/src/app/pages/admin/matches/matches.service.ts&#10;valida&#9;FILE&#9;file:///Users/phill/Desktop/NorthernStars/new/ns_frontend_ngx/src/app/@shared/helpers/validators.helper.ts&#10;NbMenuItem&#9;null&#9;null&#10;HumanizerHe&#9;FILE&#9;file:///Users/phill/Desktop/NorthernStars/new/ns_frontend_ngx/src/app/@shared/helpers/humanizer.helper.ts&#10;IEnroll&#9;null&#9;null&#10;IMat&#9;null&#9;null&#10;IT&#9;FILE&#9;file:///Users/phill/Desktop/NorthernStars/new/ns_frontend_ngx/src/app/@core/models/team.interface.ts&#10;sty&#9;FILE&#9;file:///Users/phill/Desktop/NorthernStars/new/ns_frontend_ngx/src/app/@theme/styles/styles.scss&#10;st&#9;FILE&#9;file:///Users/phill/Desktop/NorthernStars/new/ns_frontend_ngx/src/app/@theme/styles/styles.scss&#10;nbSide&#9;null&#9;null&#10;enroll&#9;FILE&#9;file:///Users/phill/Desktop/NorthernStars/new/ns_frontend_ngx/src/app/pages/admin/matches/enrolled-players/enrolled-players.component.ts&#10;users&#9;FILE&#9;file:///Users/phill/Desktop/NorthernStars/new/ns_frontend_ngx/src/app/@core/tables/editors/users.editor.ts&#10;enrolled-pl&#9;FILE&#9;file:///Users/phill/Desktop/NorthernStars/new/ns_frontend_ngx/src/app/pages/admin/matches/enrolled-players/enrolled-players.component.html&#10;styles&#9;FILE&#9;file:///Users/phill/Desktop/NorthernStars/new/ns_frontend_ngx/src/app/@theme/styles/styles.scss&#10;NgbModalO&#9;null&#9;null&#10;epl&#9;null&#9;null&#10;enrollmentPl&#9;null&#9;null&#10;modalCompo&#9;FILE&#9;file:///Users/phill/Desktop/NorthernStars/new/ns_frontend_ngx/src/app/pages/ui-features/modals/modal/modal.component.ts&#10;style&#9;FILE&#9;file:///Users/phill/Desktop/NorthernStars/new/ns_frontend_ngx/src/app/@theme/styles/styles.scss&#10;match&#9;FILE&#9;file:///Users/phill/Desktop/NorthernStars/new/ns_frontend_ngx/src/app/pages/matches/matches.component.ts&#10;registration&#9;null&#9;null&#10;NbReset&#9;null&#9;null&#10;Nbreset&#9;null&#9;null&#10;logout&#9;null&#9;null" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="editor.config.ad.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="list.type.of.created.stylesheet" value="SCSS" />
     <property name="node.js.detected.package.stylelint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -295,6 +276,7 @@
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.TypeScript" />
     <property name="ts.external.directory.path" value="$PROJECT_DIR$/node_modules/typescript/lib" />
   </component>
   <component name="RecentsManager">
@@ -384,11 +366,13 @@
       <workItem from="1545827609852" duration="12603000" />
       <workItem from="1545859942845" duration="24823000" />
       <workItem from="1546002232783" duration="1380000" />
+      <workItem from="1546385233075" duration="433000" />
+      <workItem from="1546385725503" duration="4603000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="768373000" />
+    <option name="totallyTimeSpent" value="773409000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -400,90 +384,60 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1366" height="699" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="23" width="1280" height="731" extended-state="0" />
     <layout>
-      <window_info anchor="bottom" id="TypeScript" order="9" weight="0.16645327" />
-      <window_info active="true" content_ui="combo" id="Project" order="3" sideWeight="0.48351648" visible="true" weight="0.2550186" />
-      <window_info anchor="bottom" id="TODO" order="7" weight="0.2099872" />
-      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5028499" side_tool="true" weight="0.22535211" />
-      <window_info anchor="bottom" id="Version Control" order="11" weight="0.3290653" />
-      <window_info id="npm" order="1" side_tool="true" />
-      <window_info anchor="bottom" id="Run" order="3" weight="0.25224072" />
       <window_info id="Structure" order="0" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4971501" visible="true" weight="0.1910299" />
-      <window_info id="Favorites" order="2" sideWeight="0.51648355" side_tool="true" weight="0.16579926" />
-      <window_info anchor="bottom" id="Debug" order="4" weight="0.4" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info id="npm" order="1" side_tool="true" />
+      <window_info id="Favorites" order="2" sideWeight="0.518225" side_tool="true" weight="0.25496426" />
+      <window_info active="true" content_ui="combo" id="Project" order="3" sideWeight="0.48177496" visible="true" weight="0.25496426" />
       <window_info anchor="bottom" id="Inspection Results" order="0" weight="0.47119078" />
       <window_info anchor="bottom" id="Message" order="1" />
-      <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="Find" order="2" weight="0.3290653" />
+      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.49960285" weight="0.251981" />
+      <window_info anchor="bottom" id="Debug" order="4" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="7" weight="0.2099872" />
+      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="TypeScript" order="9" sideWeight="0.49960285" weight="0.16640253" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49642575" visible="true" weight="0.14580032" />
+      <window_info anchor="bottom" id="Version Control" order="11" weight="0.3290653" />
+      <window_info anchor="bottom" x="323" y="342" width="633" height="92" id="Event Log" order="12" sideWeight="0.50357425" side_tool="true" type="WINDOWED" weight="0.14580032" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
     <layout-to-restore>
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
-      <window_info id="npm" order="1" side_tool="true" />
-      <window_info anchor="bottom" id="Run" order="3" weight="0.25224072" />
-      <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
-      <window_info active="true" content_ui="combo" id="Project" order="3" sideWeight="0.48351648" visible="true" weight="0.18049398" />
       <window_info id="Structure" order="0" side_tool="true" weight="0.25" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="TODO" order="7" weight="0.2099872" />
-      <window_info anchor="bottom" id="TypeScript" order="9" weight="0.16645327" />
+      <window_info id="npm" order="1" side_tool="true" />
+      <window_info id="Favorites" order="2" sideWeight="0.51648355" side_tool="true" weight="0.16579926" />
+      <window_info active="true" content_ui="combo" id="Project" order="3" sideWeight="0.48351648" visible="true" weight="0.18049398" />
       <window_info anchor="bottom" id="Inspection Results" order="0" weight="0.47119078" />
       <window_info anchor="bottom" id="Message" order="1" />
-      <window_info anchor="bottom" id="Debug" order="4" weight="0.4" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4971501" visible="true" weight="0.15620999" />
-      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5028499" side_tool="true" weight="0.22535211" />
-      <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
-      <window_info anchor="bottom" id="Version Control" order="11" weight="0.3290653" />
       <window_info anchor="bottom" id="Find" order="2" weight="0.3290653" />
-      <window_info id="Favorites" order="2" sideWeight="0.51648355" side_tool="true" weight="0.16579926" />
+      <window_info anchor="bottom" id="Run" order="3" weight="0.25224072" />
+      <window_info anchor="bottom" id="Debug" order="4" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="7" weight="0.2099872" />
+      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="TypeScript" order="9" weight="0.16645327" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4971501" visible="true" weight="0.15620999" />
+      <window_info anchor="bottom" id="Version Control" order="11" weight="0.3290653" />
+      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5028499" side_tool="true" weight="0.22535211" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
-    <option name="exactExcludedFiles">
-      <list>
-        <option value="$PROJECT_DIR$/../ngx_frontend/node_modules/karma/config.tpl.js" />
-      </list>
-    </option>
-  </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <option name="time" value="42" />
-    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/app/@shared/enums/regexp.enum.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/@shared/enums/regexp.enum.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/app-routing.module.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-110">
-          <folding>
-            <element signature="e#0#69#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -494,15 +448,107 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="10" column="10" lean-forward="true" selection-start-line="10" selection-start-column="10" selection-end-line="10" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/index.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/auth/register/register.component.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="49" column="8" selection-start-line="49" selection-start-column="8" selection-end-line="49" selection-end-column="8" />
+        <state relative-caret-position="192">
+          <caret line="12" column="29" lean-forward="true" selection-start-line="12" selection-start-column="29" selection-end-line="12" selection-end-column="29" />
           <folding>
             <element signature="e#0#50#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/app-routing.module.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="236">
+          <caret line="25" column="7" selection-start-line="25" selection-start-column="7" selection-end-line="25" selection-end-column="7" />
+          <folding>
+            <element signature="e#0#69#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/environments/environment.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="368">
+          <caret line="23" column="6" selection-start-line="23" selection-start-column="6" selection-end-line="23" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/assets/styles/_smart-table.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-369">
+          <caret line="8" column="14" lean-forward="true" selection-start-line="8" selection-start-column="14" selection-end-line="8" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/@nebular/theme/styles/global/tables/_smart-table.theme.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="222">
+          <caret line="77" column="7" lean-forward="true" selection-start-line="77" selection-start-column="7" selection-end-line="77" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/@theme/styles/styles.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="97">
+          <caret line="22" column="8" lean-forward="true" selection-start-line="22" selection-start-column="8" selection-end-line="22" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/pages/pages-menu.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="141">
+          <caret line="15" column="19" lean-forward="true" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#65#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/pages/pages.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#50#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/pages/pages-routing.module.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="199">
+          <caret line="94" column="10" selection-start-line="94" selection-start-column="10" selection-end-line="94" selection-end-column="10" />
+          <folding>
+            <element signature="e#0#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>

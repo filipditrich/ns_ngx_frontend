@@ -9,6 +9,10 @@ import { RoleGuard} from '../@core/services/auth.guard';
 import { UserRoles } from '../@shared/enums';
 import { MatchGroupComponent } from './matches/player-enrollment/match-group/match-group.component';
 import { UserModule } from './user/user.module';
+import { GoldenStickComponent } from './club-awards/golden-stick/golden-stick.component';
+import { TripleClubComponent } from './club-awards/triple-club/triple-club.component';
+import { RepresentationComponent } from './club-awards/representation/representation.component';
+import { RealisationTeamComponent } from './realisation-team/realisation-team.component';
 
 /**
  * Pages routing settings
@@ -56,9 +60,35 @@ const routes: Routes = [
         ],
       },
       {
+        path: 'realisation-team',
+        component: RealisationTeamComponent,
+      },
+      {
+        path: 'club-awards',
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: 'golden-stick',
+          },
+          {
+            path: 'golden-stick',
+            component: GoldenStickComponent,
+          },
+          {
+            path: 'triple-club',
+            component: TripleClubComponent,
+          },
+          {
+            path: 'representation',
+            component: RepresentationComponent,
+          },
+        ],
+      },
+      {
         path: 'admin',
-        // loadChildren: () => AdminModule,
-        loadChildren: './admin/admin.module#AdminModule',
+        loadChildren: () => AdminModule,
+        // loadChildren: './admin/admin.module#AdminModule',
         canActivate: [ RoleGuard ],
         data: { roles: [ UserRoles.admin ], title: 'Admin' },
       },

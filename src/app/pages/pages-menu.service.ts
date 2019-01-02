@@ -17,7 +17,7 @@ export class PagesMenuService {
     },
     {
       title: translate('MATCH_RESULTS'),
-      icon: 'icon ion-ios-trophy',
+      icon: 'icon ion-ios-stats',
       children: [
         {
           title: translate('WRITE_RESULTS'),
@@ -37,6 +37,29 @@ export class PagesMenuService {
     //   link: '/pages/user',
     //   pathMatch: 'partly',
     // },
+    {
+      title: translate('REALISATION_TEAM'),
+      icon: 'icon ion-ios-people',
+      link: '/pages/realisation-team',
+    },
+    {
+      title: translate('CLUB_AWARDS'),
+      icon: 'icon ion-ios-trophy',
+      children: [
+        {
+          title: translate('GOLDEN_STICK'),
+          link: '/pages/club-awards/golden-stick',
+        },
+        {
+          title: translate('TRIPLE_CLUB'),
+          link: '/pages/club-awards/triple-club',
+        },
+        {
+          title: translate('REPRESENTATION'),
+          link: '/pages/club-awards/representation',
+        },
+      ],
+    },
   ];
   public ADMIN_LINKS: NbMenuItem = {
     title: translate('ADMIN'),
