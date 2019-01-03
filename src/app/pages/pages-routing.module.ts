@@ -107,14 +107,14 @@ const routes: Routes = [
         path: 'admin',
         canActivate: [ RoleGuard ],
         data: { roles: [ UserRoles.admin ], title: translate('ADMIN') },
-        loadChildren: './admin/admin.module#AdminModule',
-        // loadChildren: () => AdminModule,
+        // loadChildren: './admin/admin.module#AdminModule',
+        loadChildren: () => AdminModule,
       },
       {
         path: 'user',
         data: { title: translate('PROFILE') },
-        // loadChildren: () => UserModule,
-        loadChildren: './user/user.module#UserModule',
+        // loadChildren: './user/user.module#UserModule',
+        loadChildren: () => UserModule,
       },
       {
         path: 'settings',

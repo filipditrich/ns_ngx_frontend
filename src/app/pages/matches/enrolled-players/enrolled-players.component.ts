@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import {EnrollmentStatus} from '../../../@shared/interfaces';
 import { MatchesService } from '../../admin/matches/matches.service';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToasterService } from 'angular2-toaster';
@@ -60,6 +61,9 @@ export class EnrolledPlayersComponent implements OnInit {
       delete: false,
       columnTitle: translate('ACTIONS'),
     },
+    rowClassFunction: row => {
+      return row.data.status === EnrollmentStatus.Going ? 'row-data-success' : 'row-data-danger';
+    },
     hideSubHeader: true,
     noDataMessage: translate('NO_PLAYERS'),
     columns: {
@@ -84,6 +88,7 @@ export class EnrolledPlayersComponent implements OnInit {
           type: 'custom',
           component: DatetimeEditorComponent,
         },
+        valuePrepareFunction: val => this.humanizer.date(val),
       },
       status: {
         title: translate('STATUS'),
