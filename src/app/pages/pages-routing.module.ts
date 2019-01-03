@@ -1,6 +1,8 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { translate } from '../@shared/helpers';
+import { GalleryComponent } from './gallery/gallery.component';
+import { NewsComponent } from './news/news.component';
 import { PagesComponent } from './pages.component';
 import { MatchResultsComponent } from './matches/match-results/match-results.component';
 import { AdminModule } from './admin';
@@ -90,6 +92,16 @@ const routes: Routes = [
             data: { title: translate('REPRESENTATION') },
           },
         ],
+      },
+      {
+        path: 'gallery',
+        component: GalleryComponent,
+        data: { title: translate('GALLERY') },
+      },
+      {
+        path: 'news',
+        component: NewsComponent,
+        data: { title: translate('NEWS') },
       },
       {
         path: 'admin',
