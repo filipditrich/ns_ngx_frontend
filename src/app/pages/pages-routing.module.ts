@@ -1,6 +1,5 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import {environment} from '../../environments/environment';
 import { translate } from '../@shared/helpers';
 import { GalleryComponent } from './gallery/gallery.component';
 import { NewsComponent } from './news/news.component';
@@ -22,7 +21,7 @@ import { RealisationTeamComponent } from './realisation-team/realisation-team.co
 /**
  * Pages routing settings
  */
-// TODO: translate data.title for routes
+// TODO: loadChildren fix for prod and dev environment
 const routes: Routes = [
   {
     path: '',
@@ -108,12 +107,14 @@ const routes: Routes = [
         path: 'admin',
         canActivate: [ RoleGuard ],
         data: { roles: [ UserRoles.admin ], title: translate('ADMIN') },
-        loadChildren: environment.production ? './admin/admin.module#AdminModule' : () => AdminModule,
+        loadChildren: './admin/admin.module#AdminModule',
+        // loadChildren: () => AdminModule,
       },
       {
         path: 'user',
         data: { title: translate('PROFILE') },
-        loadChildren: environment.production ? './user/user.module#UserModule' : () => UserModule,
+        // loadChildren: () => UserModule,
+        loadChildren: './user/user.module#UserModule',
       },
       {
         path: 'settings',

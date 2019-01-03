@@ -1,6 +1,5 @@
 import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { environment } from '../environments/environment';
 import { AuthGuard } from './@core/services/auth.guard';
 import { translate } from './@shared/helpers';
 import { PagesModule } from './pages';
@@ -19,11 +18,13 @@ const routes: Routes = [
   {
     path: 'pages',
     canActivate: [ AuthGuard ],
-    loadChildren: environment.production ? './pages/pages.module#PagesModule' : () => PagesModule,
+    loadChildren: './pages/pages.module#PagesModule',
+    // loadChildren: () => PagesModule,
   },
   {
     path: 'auth',
-    loadChildren: environment.production ? './auth/auth.module#AuthModule' : () => AuthModule,
+    loadChildren: './auth/auth.module#AuthModule',
+    // loadChildren: () => AuthModule,
   },
   {
     path: '**',

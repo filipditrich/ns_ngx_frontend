@@ -12,7 +12,7 @@ import { ViewCell } from 'ng2-smart-table-extended';
         </div>
       </ng-container>
       <div *ngIf="renderValue.length > 5" class="open-more ml-2">+{{renderValue.length - 5}} more</div>
-      <div *ngIf="renderValue.length === 0">no players</div>
+      <div *ngIf="renderValue.length === 0">{{ 'NO_PLAYERS' | translate }}</div>
     </div>
   `,
 })
