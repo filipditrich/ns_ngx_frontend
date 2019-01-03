@@ -1,4 +1,5 @@
 import { IPlace } from './place.interface';
+import { ITeam } from './team.interface';
 import { IUser } from './user.interface';
 import { IGroup } from './group.interface';
 import { IJersey } from './jersey.interface';
@@ -16,6 +17,12 @@ export interface IMatch extends TimestampInterface {
     enrollmentCloses: Date,
     maxCapacity: Number,
     players: IEnrollmentPlayer[],
+  };
+  reminder: {
+    reminderDate: Date;
+    remind: boolean;
+    hasBeenReminded: boolean;
+    reminderTeams: ITeam[];
   };
   results?: IMatchResult;
   cancelled?: boolean;

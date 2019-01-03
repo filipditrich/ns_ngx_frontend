@@ -160,6 +160,60 @@
 
           <hr>
 
+          <!-- Reminders -->
+          <div class="row">
+
+            <!-- Reminder Date -->
+            <div class="form-group group d-flex flex-column col-sm-6"
+                 [ngClass]="{
+                 'error' : (reminderDate.invalid && (reminderDate.dirty || reminderDate.touched)) || form.hasError('dateLessThan'),
+                 'disabled' : !date.value }">
+              <label for="reminderDate">{{ 'REMINDER_DATE' | translate }}</label>
+              <div class="input-with-buttons append">
+
+                <input
+                  [owlDateTimeTrigger]="reminderDateODT"
+                  [owlDateTime]="reminderDateODT"
+                  [min]="now"
+                  [max]="enrollmentCloses.value"
+                  id="reminderDate" name="reminderDate" formControlName="reminderDate" ng-reflect-name="reminderDate"
+                  class="input-full-width input-md ng-dirty ng-valid ng-touched" required>
+
+                <owl-date-time
+                  autoClose
+                  dataType="string"
+                  pickerMode="dialog"
+                  #reminderDateODT>
+                </owl-date-time>
+
+                <div class="buttons">
+                  <button type="button"><i class="icon ion-ios-calendar"></i></button>
+                </div>
+
+              </div>
+              <small class="text-danger" *ngIf="reminderDate.invalid && (reminderDate.dirty || reminderDate.touched)">{{ 'DATE_INVALID' | translate }}</small>
+            </div>
+
+            <!-- Reminder Teams -->
+            <div class="form-group group d-flex flex-column col-sm-6"
+                 [ngClass]="{ 'error' : reminderTeams.invalid && (reminderTeams.dirty || reminderTeams.touched) }">
+              <label for="reminderTeams">{{ 'REMINDER_TEAMS' | translate }}</label>
+              <ng-select
+                #reminderTeamsID
+                [items]="teamsArray"
+                [multiple]="true"
+                [clearable]="true"
+                [closeOnSelect]="false"
+                [bindValue]="'_id'"
+                [bindLabel]="'name'"
+                id="reminderTeams" class="ng-select-input-custom flex-grow-1">
+              </ng-select>
+              <small class="text-danger" *ngIf="reminderTeams.invalid && (reminderTeams.dirty || reminderTeams.touched)">{{ 'REMINDER_TEAMS_INVALID' | translate }}</small>
+
+            </div>
+
+          </div>
+
           <!-- Note -->
           <div class="form-group group d-flex flex-column">
             <label for="title">{{ 'NOTE' | translate }}</label>

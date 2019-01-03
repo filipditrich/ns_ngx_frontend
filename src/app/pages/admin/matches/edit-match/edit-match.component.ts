@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
+import {NgSelectComponent} from '@ng-select/ng-select';
+import {TeamsService} from '../../teams';
 import { MatchesService } from '../matches.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PlacesService } from '../../places';
@@ -25,14 +27,18 @@ export class EditMatchComponent implements OnInit {
   public form: FormGroup;
   public placesArray = [];
   public groupsArray = [];
+  public teamsArray = [];
   public usersArray = [];
   public now = new Date();
   public match: IMatch;
   public isLoading = true;
 
+  @ViewChild('reminderTeamsID') ngReminderTeams: NgSelectComponent;
+
   constructor(private matchesService: MatchesService,
               private errorHelper: ErrorHelper,
               private placesService: PlacesService,
+              private teamsService: TeamsService,
               private groupsService: GroupsService,
               private toasterService: ToasterService,
               private activatedRoute: ActivatedRoute,
@@ -53,6 +59,8 @@ export class EditMatchComponent implements OnInit {
       enrollmentOpens: new FormControl(null, []),
       enrollmentCloses: new FormControl(null, []),
       maxCap: new FormControl(null, [ Validators.required, Validators.min(1) ]),
+      reminderDate: new FormControl(null, []),
+      reminderTeams: new FormControl(null, []),
       createdAt: new FormControl(null, [ Validators.required ]),
       createdBy: new FormControl(null, [ Validators.required ]),
       updatedAt: new FormControl(null, [ Validators.required ]),
@@ -70,6 +78,8 @@ export class EditMatchComponent implements OnInit {
   get enrollmentOpens() { return this.form.get('enrollmentOpens'); }
   get enrollmentCloses() { return this.form.get('enrollmentCloses'); }
   get maxCap() { return this.form.get('maxCap'); }
+  get reminderDate() { return this.form.get('reminderDate'); }
+  get reminderTeams() { return this.form.get('reminderTeams'); }
   get createdAt() { return this.form.get('createdAt'); }
   get createdBy() { return this.form.get('createdBy'); }
   get updatedAt() { return this.form.get('updatedAt'); }
@@ -79,7 +89,7 @@ export class EditMatchComponent implements OnInit {
    * @description ngOnInit
    */
   ngOnInit() {
-    Promise.all([ this.getPlaces(), this.getUsers(), this.getGroups() ] ).then(() => {
+    Promise.all([ this.getPlaces(), this.getUsers(), this.getGroups(), this.getTeams() ] ).then(() => {
       this.matchesService.get(this.activatedRoute.snapshot.params['id']).subscribe(response => {
         if (response.response.success) {
           this.match = response.output[0];
@@ -90,9 +100,23 @@ export class EditMatchComponent implements OnInit {
           this.maxCap.setValue(this.match.enrollment.maxCapacity);
           this.enrollmentOpens.setValue(new Date(this.match.enrollment.enrollmentOpens));
           this.enrollmentCloses.setValue(new Date(this.match.enrollment.enrollmentCloses));
+          this.reminderDate.setValue(new Date(this.match.reminder.reminderDate));
           this.note.setValue(this.match.note);
           this.createdAt.setValue(this.match.createdAt);
           this.updatedAt.setValue(this.match.updatedAt);
+
+          // reminder teams
+          for (const t of this.match.reminder.reminderTeams) {
+            const label = this.teamsArray.find(x => x._id === t._id);
+            if (label) {
+              this.ngReminderTeams.itemsList.addItem(label);
+              const team = this.ngReminderTeams.itemsList.findByLabel(label.name);
+              if (team) this.ngReminderTeams.select(team);
+            }
+          }
+          this.ngReminderTeams.focus();
+          document.getElementById('title').focus();
+          document.getElementById('title').blur();
 
           // place field
           if (!!this.match.place && this.match.place._id) {
@@ -219,6 +243,10 @@ export class EditMatchComponent implements OnInit {
            (moment(this.enrollmentOpens.value).isSame(this.match.enrollment.enrollmentOpens)) &&
            (moment(this.enrollmentCloses.value).isSame(this.match.enrollment.enrollmentCloses)) &&
            (this.note.value === this.match.note) &&
+           (moment(this.reminderDate.value).isSame(this.match.reminder.reminderDate)) &&
+           (this.match.reminder.reminderTeams.map(a => a._id)
+             .filter(x => this.ngReminderTeams.itemsList.selectedItems
+               .map((b: any) => b.value._id).indexOf(x) < 0).length === 0) &&
            (this.createdBy.value === this.match.createdBy._id) &&
            (this.updatedBy.value === this.match.updatedBy._id) &&
            (moment(this.createdAt.value).isSame(this.match.createdAt)) &&
@@ -240,6 +268,26 @@ export class EditMatchComponent implements OnInit {
         }
       }, err => {
         reject(err);
+      });
+    });
+  }
+
+  /**
+   * @description Loads Teams from Server
+   * @return {Promise<any>}
+   */
+  getTeams() {
+    return new Promise((resolve, reject) => {
+      this.teamsService.get().subscribe(response => {
+        if (response.response.success) {
+          this.teamsArray = response.output;
+          resolve();
+        } else {
+          this.errorHelper.processedButFailed(response);
+          reject(response);
+        }
+      }, error => {
+        reject(error);
       });
     });
   }
@@ -351,6 +399,9 @@ export class EditMatchComponent implements OnInit {
       input['enrollment']['enrollmentOpens'] = input.enrollmentOpens;
       input['enrollment']['enrollmentCloses'] = input.enrollmentCloses;
       input['enrollment']['maxCapacity'] = input.maxCap;
+      input['reminder'] = this.match.reminder;
+      input['reminder']['reminderDate'] = input.reminderDate;
+      input['reminder']['reminderTeams'] = this.ngReminderTeams.itemsList.selectedItems.map((x: any) => x.value._id);
       this.matchesService.update(this.match._id, input).subscribe(response => {
         if (response.response.success) {
           this.router.navigate(['/pages/admin/matches']).then(() => {

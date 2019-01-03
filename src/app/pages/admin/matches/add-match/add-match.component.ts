@@ -1,4 +1,6 @@
-import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy, OnDestroy, ViewChild } from '@angular/core';
+import { NgSelectComponent } from '@ng-select/ng-select';
+import { TeamsService } from '../../teams';
 import { MatchesService } from '../matches.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PlacesService } from '../../places';
@@ -25,16 +27,19 @@ export class AddMatchComponent implements OnInit, OnDestroy {
   public form: FormGroup;
   public placesArray = [];
   public groupsArray = [];
+  public teamsArray = [];
   public now = new Date();
   public match: any;
   public isLoading = true;
   public isHidden = false;
   public doCheck = true;
+  @ViewChild('reminderTeamsID') ngReminderTeams: NgSelectComponent;
 
   constructor(private matchesService: MatchesService,
               private errorHelper: ErrorHelper,
               private placesService: PlacesService,
               private groupsService: GroupsService,
+              private teamsService: TeamsService,
               private toasterService: ToasterService,
               private activatedRoute: ActivatedRoute,
               private router: Router,
@@ -55,6 +60,8 @@ export class AddMatchComponent implements OnInit, OnDestroy {
       note: new FormControl(null, []),
       enrollmentOpens: new FormControl(null, []),
       enrollmentCloses: new FormControl(null, []),
+      reminderDate: new FormControl(null, []),
+      reminderTeams: new FormControl(null, []),
     }, {
       validators: dateLessThan('enrollmentOpens', 'enrollmentCloses'),
     });
@@ -70,12 +77,14 @@ export class AddMatchComponent implements OnInit, OnDestroy {
   get enrollmentOpens() { return this.form.get('enrollmentOpens'); }
   get enrollmentCloses() { return this.form.get('enrollmentCloses'); }
   get maxCap() { return this.form.get('maxCap'); }
+  get reminderDate() { return this.form.get('reminderDate'); }
+  get reminderTeams() { return this.form.get('reminderTeams'); }
 
   /**
    * @description ngOnInit
    */
   ngOnInit() {
-    Promise.all([ this.getPlaces(), this.getGroups() ]).then(() => {
+    Promise.all([ this.getPlaces(), this.getGroups(), this.getTeams() ]).then(() => {
       this.isLoading = false;
       this.group.setValue(0, { onlySelf: true });
       this.place.setValue(0, { onlySelf: true });
@@ -114,6 +123,26 @@ export class AddMatchComponent implements OnInit, OnDestroy {
         }
       }, err => {
         reject(err);
+      });
+    });
+  }
+
+  /**
+   * @description Loads Teams from Server
+   * @return {Promise<any>}
+   */
+  getTeams() {
+    return new Promise((resolve, reject) => {
+      this.teamsService.get().subscribe(response => {
+        if (response.response.success) {
+          this.teamsArray = response.output;
+          resolve();
+        } else {
+          this.errorHelper.processedButFailed(response);
+          reject(response);
+        }
+      }, error => {
+        reject(error);
       });
     });
   }
@@ -172,10 +201,16 @@ export class AddMatchComponent implements OnInit, OnDestroy {
     if (!this.form.valid) {
       this.touchAllFields();
     } else {
+      // re-format enrollment
       input['enrollment'] = {};
       input['enrollment']['enrollmentOpens'] = input.enrollmentOpens;
       input['enrollment']['enrollmentCloses'] = input.enrollmentCloses;
       input['enrollment']['maxCapacity'] = input.maxCap;
+      // re-format reminder
+      input['reminder'] = {};
+      input['reminder']['reminderDate'] = input.reminderDate;
+      input['reminder']['reminderTeams'] = this.ngReminderTeams.itemsList.selectedItems.map((x: any) => x.value._id);
+      // call the service
       this.matchesService.create(input).subscribe(response => {
         if (response.response.success) {
           this.router.navigate(['/pages/admin/matches/manager']).then(() => {
