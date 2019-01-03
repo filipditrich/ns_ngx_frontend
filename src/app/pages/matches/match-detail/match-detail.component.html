@@ -7,9 +7,9 @@
 <div class="modal-body">
 
   <header class="d-flex flex-column justify-content-center text-lg-center">
-    <h1>{{match.title}}</h1>
-    <span class="text-muted">{{match.place.name}}</span>
-    <span class="text-muted">{{match.date}}</span>
+    <h1>{{ match.title }}</h1>
+    <span class="text-muted">{{ match.place.name }}</span>
+    <span class="text-muted">{{ match.date | localDate}}</span>
   </header>
 
   <hr>
@@ -18,22 +18,22 @@
 
     <div class="col-sm-12 col-md-6 col-lg-4 p-3">
       <h6>{{ 'GROUP' | translate }}:</h6>
-      <span class="text-muted">{{match.group.name}}</span>
+      <span class="text-muted">{{ match.group.name }}</span>
     </div>
 
     <div class="col-sm-12 col-md-6 col-lg-4 p-3">
       <h6>{{ 'EMAX' | translate }}:</h6>
-      <span class="text-muted">{{maxCapacity}}</span>
+      <span class="text-muted">{{ maxCapacity }}</span>
     </div>
 
     <div class="col-sm-12 col-md-6 col-lg-4 p-3">
       <h6>{{ 'EOPEN' | translate }}:</h6>
-      <span class="text-muted">{{match.enrollment.enrollmentOpens || 'not-specified'}}</span>
+      <span class="text-muted">{{ match.enrollment.enrollmentOpens | localDate }}</span>
     </div>
 
     <div class="col-sm-12 col-md-6 col-lg-4 p-3">
       <h6>{{ 'ECLOSE' | translate }}:</h6>
-      <span class="text-muted">{{match.enrollment.enrollmentCloses || 'not-specified'}}</span>
+      <span class="text-muted">{{ match.enrollment.enrollmentCloses | localDate }}</span>
     </div>
 
     <div class="col-sm-12 col-md-6 col-lg-4 p-3">
@@ -41,17 +41,17 @@
       <div class="profile-picture-row d-flex" (click)="openMore()">
         <ng-container *ngFor="let player of match.enrollment.players; let i = index">
           <div *ngIf="i < 5"
-               class="profile-picture round small cursor-pointer" title="{{player.info.name}}"
+               class="profile-picture round small cursor-pointer" title="{{ player.info.name }}"
                [attr.ns-jersey-number]="'#' + player.info.number"></div>
         </ng-container>
-        <div *ngIf="match.enrollment.players.length > 5" class="cursor-pointer open-more ml-2" (click)="openMore()">+{{match.enrollment.players.length - 5}} more</div>
+        <div *ngIf="match.enrollment.players.length > 5" class="cursor-pointer open-more ml-2" (click)="openMore()">+{{ match.enrollment.players.length - 5 }} {{ 'MORE' | translate }}</div>
         <div *ngIf="match.enrollment.players.length === 0">{{ 'NO_PLAYERS' | translate }}</div>
       </div>
     </div>
 
     <div class="col-sm-12 col-md-6 col-lg-4 p-3">
       <h6>{{ 'NOTE' | translate }}:</h6>
-      <span class="text-muted">{{match.note || '---'}}</span>
+      <span class="text-muted">{{ match.note || '---' }}</span>
     </div>
 
   </section>
@@ -62,22 +62,22 @@
 
     <div class="col-sm-12 col-md-6 col-lg-4 p-3">
       <h6>{{ 'CREATED_BY' | translate }}:</h6>
-      <span class="text-muted">{{match.createdBy.name}}</span>
+      <span class="text-muted">{{ match.createdBy.name }}</span>
     </div>
 
     <div class="col-sm-12 col-md-6 col-lg-4 p-3">
       <h6>{{ 'CREATED_AT' | translate }}:</h6>
-      <span class="text-muted">{{match.createdAt}}</span>
+      <span class="text-muted">{{ match.createdAt | localDate }}</span>
     </div>
 
     <div class="col-sm-12 col-md-6 col-lg-4 p-3">
       <h6>{{ 'UPDATED_BY' | translate }}:</h6>
-      <span class="text-muted">{{match.updatedBy.name}}</span>
+      <span class="text-muted">{{ match.updatedBy.name }}</span>
     </div>
 
     <div class="col-sm-12 col-md-6 col-lg-4 p-3">
       <h6>{{ 'UPDATED_AT' | translate }}:</h6>
-      <span class="text-muted">{{match.updatedAt}}</span>
+      <span class="text-muted">{{ match.updatedAt | localDate}}</span>
     </div>
 
   </section>

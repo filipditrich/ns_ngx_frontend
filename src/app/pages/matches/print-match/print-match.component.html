@@ -7,7 +7,7 @@
           <button [routerLink]="['/pages/matches/']" class="close float-left mr-3">
             <i class="icon ion-ios-arrow-back fs-larger"></i>
           </button>
-          {{ 'MATCH_DETAIL_FOR' | translate }} '<b>{{match?.title}}</b>'
+          {{ 'MATCH_DETAIL_FOR' | translate }} '<b>{{ match?.title }}</b>'
         </h2>
         <div class="d-flex">
           <button class="btn btn-primary mx-2" (click)="printDetails(false)">
@@ -18,8 +18,8 @@
           </button>
         </div>
       </div>
-      {{ 'PLACE' | translate}}: <span class="text-muted fs-big">{{match?.place.name}}</span><br>
-      {{ 'DATE' | translate }}: <span class="text-muted fs-big">{{match?.date}}</span>
+      {{ 'PLACE' | translate}}: <span class="text-muted fs-big">{{ match?.place.name }}</span><br>
+      {{ 'DATE' | translate }}: <span class="text-muted fs-big">{{ match?.date | localDate }}</span>
     </nb-card-header>
 
     <nb-card-body>
@@ -27,22 +27,22 @@
       <div class="row">
         <div class="col-sm-12 col-lg-6 p-3">
           <h4>{{ 'EOPEN' | translate }}:</h4>
-          <span class="text-muted">{{match?.enrollment.enrollmentOpens || 'not-specified'}}</span>
+          <span class="text-muted">{{ match?.enrollment.enrollmentOpens | localDate }}</span>
         </div>
 
         <div class="col-sm-12 col-lg-6 p-3">
           <h4>{{ 'ECLOSE' | translate }}:</h4>
-          <span class="text-muted">{{match?.enrollment.enrollmentCloses || 'not-specified'}}</span>
+          <span class="text-muted">{{ match?.enrollment.enrollmentCloses | localDate }}</span>
         </div>
 
         <div class="col-sm-12 col-lg-6 p-3">
           <h4>{{ 'EPLAYERS' | translate }}:</h4>
-          <span class="text-muted">{{playersEnrolled()}}</span>
+          <span class="text-muted">{{ playersEnrolled() }}</span>
         </div>
 
         <div class="col-sm-12 col-lg-6 p-3">
           <h4>{{ 'NOTE' | translate }}:</h4>
-          <span class="text-muted">{{match?.note || '---'}}</span>
+          <span class="text-muted">{{ match?.note || '---' }}</span>
         </div>
       </div>
 
@@ -59,10 +59,10 @@
           </thead>
           <tbody>
             <tr *ngFor="let player of match?.enrollment.players; let i = index">
-              <th scope="row">{{i+1}}</th>
-              <td>{{player.info.name}} (#{{player.info.number}})</td>
-              <td>{{player.info.username}}</td>
-              <td>{{player.enrolledOn}}</td>
+              <th scope="row">{{ i+1 }}</th>
+              <td>{{ player.info.name }} (#{{ player.info.number }})</td>
+              <td>{{ player.info.username }}</td>
+              <td>{{ player.enrolledOn }}</td>
             </tr>
           </tbody>
         </table>

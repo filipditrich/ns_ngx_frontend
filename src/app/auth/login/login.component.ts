@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
-import { LoginService } from './login.service';
-import { AlertsService } from '../../@core/services/alerts/alerts.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../@core/services/auth/auth.service';
-import { ToasterService } from 'angular2-toaster';
-import { translate, ErrorHelper, sysInfo } from '../../@shared/helpers';
-import { environment } from '../../../environments/environment';
-import * as codeConfig from '../../@shared/config/codes.config';
+import {HttpClient} from '@angular/common/http';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ToasterService} from 'angular2-toaster';
 import * as moment from 'moment';
+import {AlertsService} from '../../@core/services/alerts/alerts.service';
+import {AuthService} from '../../@core/services/auth/auth.service';
+import * as codeConfig from '../../@shared/config/codes.config';
+import {UserRoles} from '../../@shared/enums';
+import {ErrorHelper, sysInfo, translate} from '../../@shared/helpers';
+import {LoginService} from './login.service';
 
 @Component({
   selector: 'ns-login',
@@ -63,12 +63,8 @@ export class LoginComponent implements OnInit {
       this.username.markAsTouched();
       this.password.markAsTouched();
     } else {
-      if (environment.production && moment(new Date()).isBefore(new Date(sysInfo('launchDate')))) {
-        this.router.navigate(['/auth/cd']);
-      } else {
-        if (!this.isLoading) {
-          this.callLoginSvc(input);
-        }
+      if (!this.isLoading) {
+        this.callLoginSvc(input);
       }
     }
   }
@@ -81,17 +77,22 @@ export class LoginComponent implements OnInit {
     this.isLoading = true;
     this.loginService.logInRequest(input).subscribe(response => {
       if (response.response.success && response.token) {
-        AuthService.storeUserData(response.user, response.token);
-        const returnUrl = this.route.snapshot.queryParamMap.has('return') ? this.route.snapshot.queryParamMap.get('return') : false;
-        this.router.navigate([returnUrl || '/pages/']).then(() => {
-          this.toasterService.popAsync('success', translate('LOGGED_IN_TITLE'), translate('LOGGED_IN_MSG'));
-          const rememberMe = !!this.rememberMe.value ? this.rememberMe.value ? 'true' : 'false' : 'false';
-          localStorage.setItem('rememberMe', rememberMe);
-          this.isLoading = false;
-        }).catch(error => {
-          this.errorHelper.handleGenericError(error);
-          this.isLoading = false;
-        });
+        if (moment(new Date()).isBefore(new Date(sysInfo('launchDate')))
+          && response.user.roles.indexOf(UserRoles.admin) < 0) {
+          this.router.navigate(['/auth/cd']);
+        } else {
+          AuthService.storeUserData(response.user, response.token);
+          const returnUrl = this.route.snapshot.queryParamMap.has('return') ? this.route.snapshot.queryParamMap.get('return') : false;
+          this.router.navigate([returnUrl || '/pages/']).then(() => {
+            this.toasterService.popAsync('success', translate('LOGGED_IN_TITLE'), translate('LOGGED_IN_MSG'));
+            const rememberMe = !!this.rememberMe.value ? this.rememberMe.value ? 'true' : 'false' : 'false';
+            localStorage.setItem('rememberMe', rememberMe);
+            this.isLoading = false;
+          }).catch(error => {
+            this.errorHelper.handleGenericError(error);
+            this.isLoading = false;
+          });
+        }
       } else {
         // no token or success
         this.isLoading = false;

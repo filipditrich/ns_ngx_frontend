@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SysInfoPipe, TranslatePipe } from './pipes';
 import { HumanizerHelper } from './helpers';
+import { LocalDatePipe } from './pipes/local-date.pipe';
 
 @NgModule({
   imports: [
@@ -10,6 +11,7 @@ import { HumanizerHelper } from './helpers';
   declarations: [
     TranslatePipe,
     SysInfoPipe,
+    LocalDatePipe,
   ],
   providers: [
     HumanizerHelper,
@@ -17,6 +19,7 @@ import { HumanizerHelper } from './helpers';
   exports: [
     TranslatePipe,
     SysInfoPipe,
+    LocalDatePipe,
   ],
 })
 export class SharedModule { }

@@ -36,7 +36,6 @@ export class MatchDetailComponent implements OnInit {
               private userService: UserService) { }
 
   ngOnInit() {
-    this.match = this.humanizer.datesInMatch(this.match);
     this.admin = ['admin'].some(role => this.userService.getCurrentUser('roles').indexOf(role) >= 0);
     this.maxCapacity = `${this.match.enrollment.players.filter(player => player.status === 'going').length}/${this.match.enrollment.maxCapacity}`;
   }

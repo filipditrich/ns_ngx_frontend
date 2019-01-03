@@ -33,7 +33,6 @@ export class PrintMatchComponent implements OnInit {
   ngOnInit() {
     this.matchService.get(this.activatedRoute.snapshot.params['id']).subscribe(response => {
       if (response.response.success) {
-        this.match = this.humanizer.datesInMatch(response.output[0]);
         this.match.enrollment.players = this.match.enrollment.players
           .filter(x => x.status === EnrollmentStatus.Going);
         this.isLoading = false;

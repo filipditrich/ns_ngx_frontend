@@ -20,9 +20,6 @@ import { SortablejsModule } from 'angular-sortablejs';
 import { ModalComponent } from './pages/ui-features/modals/modal/modal.component';
 import { Ng2SmartTableExtendedModule } from 'ng2-smart-table-extended';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { PlaceRendererComponent } from './@core/tables/renderers/place.renderer';
-import { EOpenRendererComponent } from './@core/tables/renderers/eopen.renderer';
-import { ECloseRendererComponent } from './@core/tables/renderers/eclose.renderer';
 import { UsersEditorComponent } from './@core/tables/editors/users.editor';
 import { DatetimeEditorComponent } from './@core/tables/editors/datetime.editor';
 import { EPlayersStatusEditorComponent } from './@core/tables/editors/eplayers-status.editor';
@@ -36,7 +33,7 @@ export function PreloadInitializerProviderFactory(provider: PreloadInitializer) 
 }
 
 const EDITORS = [ UsersEditorComponent, DatetimeEditorComponent, EPlayersStatusEditorComponent ];
-const RENDERS = [ PlaceRendererComponent, EOpenRendererComponent, ECloseRendererComponent, EPlayersRendererComponent ];
+const RENDERS = [ EPlayersRendererComponent ];
 
 @NgModule({
   imports: [

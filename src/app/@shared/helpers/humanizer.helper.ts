@@ -1,6 +1,4 @@
 import * as moment from 'moment';
-import { PlacesService } from '../../pages/admin/places/places.service';
-import { ErrorHelper } from './error.helper';
 import { Injectable } from '@angular/core';
 import { getLang } from './translator.helper';
 
@@ -9,8 +7,7 @@ import { getLang } from './translator.helper';
 })
 export class HumanizerHelper {
 
-  constructor(private placesService: PlacesService,
-              private errorHelper: ErrorHelper) { }
+  constructor() { }
 
   /**
    * @description Formats single date
@@ -22,19 +19,6 @@ export class HumanizerHelper {
       date = moment(new Date(date), getLang()).locale('en');
     }
     return moment(new Date(date)).locale(getLang()).format('lll');
-  }
-
-  /**
-   * @description Formats all dates in matches array
-   * @param matchArray
-   * @return {any}
-   */
-  datesInArray(matchArray) {
-    const formatted = [];
-    matchArray.forEach(match => {
-      formatted.push(this.datesInMatch(match));
-    });
-    return matchArray;
   }
 
   /**
@@ -51,6 +35,7 @@ export class HumanizerHelper {
       player.enrolledOn = this.date(player.enrolledOn);
       players.push(player);
     });
+    match.reminder.reminderDate = this.date(match.reminder.reminderDate);
     match.enrollment.players = players;
     match = this.timestampDates(match);
     return match;
@@ -64,63 +49,6 @@ export class HumanizerHelper {
     input.createdAt = this.date(input.createdAt);
     input.updatedAt = this.date(input.updatedAt);
     return input;
-  }
-
-  /**
-   * @description Replaces single place ObjectID with actual name
-   * @param place
-   */
-  place(place) {
-    this.placesService.get().subscribe(response => {
-      if (response.response.success) {
-        return response.output.filter(x => x._id === place).name;
-      } else {
-        this.errorHelper.processedButFailed(response);
-      }
-    }, error => {
-      this.errorHelper.handleGenericError(error);
-    });
-  }
-
-  /**
-   * @description Replaces place ObjectIDs with actual name
-   * @param matchArray
-   * @return {Promise<any>}
-   */
-  places(matchArray) {
-    return new Promise((resolve, reject) => {
-      this.placesService.get().subscribe(response => {
-        if (response.response.success) {
-
-          const places = response.output;
-          const formatted = [];
-          matchArray.forEach(match => {
-            match.place = places.filter(x => x._id === match.place);
-            formatted.push(match);
-          });
-          resolve(formatted);
-
-        } else {
-          reject(response);
-        }
-      }, error => {
-        reject(error);
-      });
-    });
-  }
-
-  /**
-   * @description Formats whole match array
-   * @param matchArray
-   */
-  formatMatchArray(matchArray) {
-    return new Promise((resolve, reject) => {
-      this.places(matchArray).then(output1 => {
-        resolve(this.datesInArray(output1));
-      }).catch(error => {
-        reject(error);
-      });
-    });
   }
 
 }
