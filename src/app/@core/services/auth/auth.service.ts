@@ -10,12 +10,12 @@ export class AuthService {
   public static storeUserData(user: IUser, token: string) {
     user.token = token;
     user.roles.sort();
-    sessionStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('user', JSON.stringify(user));
   }
 
   public static logOut() {
     return new Promise(resolve => {
-      sessionStorage.removeItem('user');
+      localStorage.removeItem('user');
       resolve();
     });
   }
@@ -28,7 +28,7 @@ export class AuthService {
   }
 
   loadToken() {
-    const user = sessionStorage.getItem('user');
+    const user = localStorage.getItem('user');
     return user ? JSON.parse(user).token : false;
   }
 

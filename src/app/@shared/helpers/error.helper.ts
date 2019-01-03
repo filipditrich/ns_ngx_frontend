@@ -28,7 +28,7 @@ export class ErrorHelper {
         this.router.navigate(['/auth/login'], { queryParams: { return: this.router.url } })
           .then(() => {
             let toast: Toast;
-            const hasBeenLogged = sessionStorage.getItem('user') || false;
+            const hasBeenLogged = localStorage.getItem('user') || false;
 
             if (hasBeenLogged) {
               toast = {

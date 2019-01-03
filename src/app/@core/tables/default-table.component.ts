@@ -45,7 +45,7 @@ export class DefaultTableComponent {
    * @param input
    */
   loadPreferences(input?: any) {
-    const preferences = !!input ? input : JSON.parse(sessionStorage.getItem('tablePref')) ? JSON.parse(sessionStorage.getItem('tablePref'))[this.storagePrefName] : false;
+    const preferences = !!input ? input : JSON.parse(localStorage.getItem('tablePref')) ? JSON.parse(localStorage.getItem('tablePref'))[this.storagePrefName] : false;
 
     if (preferences) {
 
@@ -82,7 +82,7 @@ export class DefaultTableComponent {
     });
 
     if (this.filters.filter(filter => filter.checked).length === 0) {
-      if (!JSON.parse(sessionStorage.getItem('tablePref')) || !JSON.parse(sessionStorage.getItem('tablePref'))[this.storagePrefName]) {
+      if (!JSON.parse(localStorage.getItem('tablePref')) || !JSON.parse(localStorage.getItem('tablePref'))[this.storagePrefName]) {
         // no tablePreferences stored, apply default filters
         this.applyDefaults();
       } else {

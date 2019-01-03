@@ -20,7 +20,7 @@ export class HttpHeadersInterceptor implements HttpInterceptor {
     // Preserve originally passed headers
     for (const key of req.headers.keys()) { newHeaders = newHeaders.set(key, req.headers.getAll(key)); }
 
-    const token = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')).token : false;
+    const token = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).token : false;
 
     // Append additional headers
     newHeaders = newHeaders.set('Content-Type', 'application/json');

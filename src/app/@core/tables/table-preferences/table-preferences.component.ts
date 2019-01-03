@@ -148,12 +148,12 @@ export class TablePreferencesComponent implements OnInit {
       filtersFormatted.push({ id: filter.id, checked: filter.checked, order: filter.order });
     });
 
-    const preferences = JSON.parse(sessionStorage.getItem('tablePref')) || {};
+    const preferences = JSON.parse(localStorage.getItem('tablePref')) || {};
     preferences[this.storagePrefName] = {
       filters: filtersFormatted,
       filterOptions: this.filterOptions,
     };
-    sessionStorage.setItem('tablePref', JSON.stringify(preferences));
+    localStorage.setItem('tablePref', JSON.stringify(preferences));
   }
 
   /**

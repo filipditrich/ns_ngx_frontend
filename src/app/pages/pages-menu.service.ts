@@ -10,7 +10,7 @@ import * as diacritics from 'diacritics';
 })
 export class PagesMenuService {
 
-  public user = JSON.parse(sessionStorage.getItem('user'));
+  public user = JSON.parse(localStorage.getItem('user'));
   public isAdmin = !!this.user ? this.user.roles.some(role => role.indexOf(UserRoles.admin) >= 0) : false;
   public MENU_ITEMS: NbMenuItem[] = [
     {

@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
       this.router.navigate(['/auth/login'], { queryParams: { return: '/pages' } })
         .then(() => {
           let toast: Toast;
-          const hasBeenLogged = sessionStorage.getItem('user') || false;
+          const hasBeenLogged = localStorage.getItem('user') || false;
 
           if (hasBeenLogged) {
             toast = {
@@ -77,7 +77,7 @@ export class PreventLogged implements CanActivate {
 
 @Injectable()
 export class RoleCheck {
-  private user = JSON.parse(sessionStorage.getItem('user'));
+  private user = JSON.parse(localStorage.getItem('user'));
   private privileged = ['admin', 'sysadmin'];
   private moderator = ['moderator'];
 
@@ -104,7 +104,7 @@ export class RoleGuard implements CanActivate, CanActivateChild {
 
 
   resolve(route, state) {
-    const userRoles = !!JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).roles : null;
+    const userRoles = !!JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).roles : null;
     const allowed = route.data['roles'];
 
     if (!!userRoles && allowed.some(a => userRoles.indexOf(a) >= 0)) {

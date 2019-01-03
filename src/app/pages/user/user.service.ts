@@ -11,7 +11,7 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getCurrentUser(attr?: string) {
-    return !!attr ? JSON.parse(sessionStorage.getItem('user'))[attr] : JSON.parse(sessionStorage.getItem('user')) || false;
+    return !!attr ? JSON.parse(localStorage.getItem('user'))[attr] : JSON.parse(localStorage.getItem('user')) || false;
   }
 
   // TODO - Observable<Interface>

@@ -20,7 +20,7 @@ export class LogoutComponent implements OnInit {
 
   ngOnInit() {
     AuthService.logOut().then(() => {
-      if (sessionStorage.getItem('user')) {
+      if (localStorage.getItem('user')) {
         this.errorHelper.handleGenericError({ name: 'FRONTEND_ERROR', message: 'User has not been removed during the logout process.' });
       } else {
         this.router.navigate(['/auth/login']).then(() => {

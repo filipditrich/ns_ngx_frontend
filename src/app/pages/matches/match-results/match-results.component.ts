@@ -34,7 +34,7 @@ export class MatchResultsComponent extends DefaultTableComponent implements OnIn
     this.source = new LocalDataSource();
     this.filterOptions = {
       showWritten: {
-        value: false,
+        value: true,
         id: 'showWritten',
         title: translate('SHOW_WRITTEN'),
         type: 'checkbox',
@@ -146,7 +146,7 @@ export class MatchResultsComponent extends DefaultTableComponent implements OnIn
         type: 'string',
         checked: false,
         editable: false,
-        default: false,
+        default: true,
         sortable: false,
         valuePrepareFunction: (cell, row) => {
           const UID = this.userService.getCurrentUser('_id');
@@ -160,7 +160,7 @@ export class MatchResultsComponent extends DefaultTableComponent implements OnIn
         type: 'string',
         checked: false,
         editable: false,
-        default: false,
+        default: true,
         sortable: false,
         valuePrepareFunction: (cell, row) => {
           const UID = this.userService.getCurrentUser('_id');
