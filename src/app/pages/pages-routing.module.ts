@@ -1,5 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
+import {environment} from '../../environments/environment';
 import { translate } from '../@shared/helpers';
 import { GalleryComponent } from './gallery/gallery.component';
 import { NewsComponent } from './news/news.component';
@@ -107,13 +108,12 @@ const routes: Routes = [
         path: 'admin',
         canActivate: [ RoleGuard ],
         data: { roles: [ UserRoles.admin ], title: translate('ADMIN') },
-        // loadChildren: './admin/admin.module#AdminModule',
-        loadChildren: () => AdminModule,
+        loadChildren: environment.production ? './admin/admin.module#AdminModule' : () => AdminModule,
       },
       {
         path: 'user',
         data: { title: translate('PROFILE') },
-        loadChildren: () => UserModule,
+        loadChildren: environment.production ? './user/user.module#UserModule' : () => UserModule,
       },
       {
         path: 'settings',

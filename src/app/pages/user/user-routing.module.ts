@@ -7,15 +7,15 @@ const routes: Routes = [{
   path: '',
   component: UserComponent,
   children: [
-    {
-      path: '',
-      redirectTo: 'profile',
-      pathMatch: 'full',
-    },
-    {
-      path: 'profile',
-      component: ProfileComponent,
-    },
+    // {
+    //   path: '',
+    //   redirectTo: 'profile',
+    //   pathMatch: 'full',
+    // },
+    // {
+    //   path: 'profile',
+    //   component: ProfileComponent,
+    // },
   ],
 }];
 
