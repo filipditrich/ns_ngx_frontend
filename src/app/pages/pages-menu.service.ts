@@ -60,6 +60,18 @@ export class PagesMenuService {
       ],
     },
     {
+      title: translate('NEWS'),
+      // icon: 'icon ion-ios-trending-up',
+      group: true,
+      link: '/pages/news',
+    },
+    {
+      title: translate('GALLERY'),
+      // icon: 'icon ion-ios-images',
+      group: true,
+      link: '/pages/gallery',
+    },
+    {
       title: translate('PROFILE'),
       // icon: 'icon ion-ios-person',
       group: true,

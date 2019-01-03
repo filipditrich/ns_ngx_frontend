@@ -49,7 +49,7 @@
       <div class="row">
 
         <table class="table">
-          <thead class="thead-dark">
+          <thead class="thead-light">
           <tr>
             <th scope="col">#</th>
             <th scope="col">{{ 'NAME' | translate }}</th>
@@ -60,9 +60,9 @@
           <tbody>
             <tr *ngFor="let player of match?.enrollment.players; let i = index">
               <th scope="row">{{ i+1 }}</th>
-              <td>{{ player.info.name }} (#{{ player.info.number }})</td>
-              <td>{{ player.info.username }}</td>
-              <td>{{ player.enrolledOn }}</td>
+              <td>{{ player.info.name }}</td>
+              <td><b>#{{ player.info.number }}</b> {{ player.info.username }}</td>
+              <td>{{ player.enrolledOn | localDate }}</td>
             </tr>
           </tbody>
         </table>

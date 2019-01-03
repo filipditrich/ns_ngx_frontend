@@ -41,6 +41,8 @@ import { TripleClubComponent } from './club-awards/triple-club/triple-club.compo
 import { RepresentationComponent } from './club-awards/representation/representation.component';
 import { RealisationTeamComponent } from './realisation-team/realisation-team.component';
 import { SettingsComponent } from './settings/settings.component';
+import { GalleryComponent } from './gallery/gallery.component';
+import { NewsComponent } from './news/news.component';
 
 const PAGES_COMPONENTS = [
   AlertsComponent, DialogsComponent, PagesComponent,
@@ -77,6 +79,8 @@ const PAGES_COMPONENTS = [
     RepresentationComponent,
     RealisationTeamComponent,
     SettingsComponent,
+    GalleryComponent,
+    NewsComponent,
   ],
   entryComponents: [
     MatchDetailComponent,
