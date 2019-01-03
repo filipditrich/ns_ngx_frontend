@@ -7,7 +7,7 @@ import { sysInfo } from '../../../@shared/helpers';
   template: `
     <div class="w-100 d-flex flex-wrap justify-content-between">
       <span>{{ 'copyright' | sysinfo }} <a [href]="aou" class="link">{{ 'appOwnerName' | sysinfo }}</a></span>
-      <span>by <a [href]="acu" class="link">{{ 'appCreatorName' | sysinfo }}</a></span>
+      <!--<span>by <a [href]="acu" class="link">{{ 'appCreatorName' | sysinfo }}</a></span>-->
     </div>
   `,
 })

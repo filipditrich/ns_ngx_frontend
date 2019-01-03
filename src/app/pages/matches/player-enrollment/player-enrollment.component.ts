@@ -70,7 +70,7 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
           const userEnrollment = row.data.enrollment.players.filter(player => player.player === UID)[0];
           const returnClass = [];
 
-          returnClass.push(!!userEnrollment && userEnrollment.status === 'going' ? 'bg-success text-white pointer-events-none' : null);
+          returnClass.push(!!userEnrollment && userEnrollment.status === 'going' ? 'bg-primary text-white pointer-events-none' : null);
           returnClass.push(this.isMatchEnrollmentClosed(row.data) || (this.isMatchEnrollmentFull(row.data) && !!userEnrollment && userEnrollment.status !== 'going') ? 'pointer-events-none disabled' : null);
           return returnClass.filter(filterClass => filterClass !== null).join(' ');
         },
