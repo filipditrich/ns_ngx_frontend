@@ -41,8 +41,10 @@
       <div class="profile-picture-row d-flex" (click)="openMore()">
         <ng-container *ngFor="let player of match.enrollment.players; let i = index">
           <div *ngIf="i < 5"
-               class="profile-picture round small cursor-pointer" title="{{ player.info.name }}"
-               [attr.ns-jersey-number]="'#' + player.info.number"></div>
+               class="profile-picture round small" title="{{player.info.name}}"
+               [attr.ns-jersey-number]="'#' + player.info.number"
+               [ngClass]="{ 'border-success' : player.status === 'going', 'border-danger': player.status === 'skipping' }">
+          </div>
         </ng-container>
         <div *ngIf="match.enrollment.players.length > 5" class="cursor-pointer open-more ml-2" (click)="openMore()">+{{ match.enrollment.players.length - 5 }} {{ 'MORE' | translate }}</div>
         <div *ngIf="match.enrollment.players.length === 0">{{ 'NO_PLAYERS' | translate }}</div>
