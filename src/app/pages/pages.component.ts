@@ -10,7 +10,7 @@ import { PagesMenuService } from './pages-menu.service';
       <router-outlet></router-outlet>
     </ns-sample-layout>
   `,
-  styles: ['/deep/ .menu-group { cursor: not-allowed; opacity: 0.65 }'],
+  styleUrls: [ './pages.component.scss' ],
   // workaround for not having the 'disabled' option for certain menu items
 })
 export class PagesComponent implements OnInit {

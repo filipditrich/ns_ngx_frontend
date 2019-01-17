@@ -1,3 +1,20 @@
-<p>
-  realisation-team works!
-</p>
+<div class="row justify-content-center align-items-stretch">
+
+  <nb-card
+    *ngFor="let user of team"
+    accent="primary"
+    class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mx-2">
+    <nb-card-body>
+      <h2>{{ user.username }}</h2>
+      <small class="text-muted">{{ user.teamFunction }}</small>
+    </nb-card-body>
+    <nb-card-footer class="d-flex align-items-center justify-content-around">
+      <a
+        *ngFor="let contact of user.contacts"
+        [href]="contact.value">
+        <i class="icon fs-large {{ contact.icon }}"></i>
+      </a>
+    </nb-card-footer>
+  </nb-card>
+
+</div>

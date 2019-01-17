@@ -83,8 +83,7 @@ export class PlayerEnrollmentComponent extends DefaultTableComponent implements 
           const returnClass = [];
 
           returnClass.push(!!userEnrollment && userEnrollment.status === 'skipping' ? 'bg-danger text-white pointer-events-none' : null);
-          returnClass.push(this.isMatchEnrollmentAfterClose(row.data) && userEnrollment.status !== 'going' ? 'pointer-events-none disabled' : null);
-          returnClass.push(this.isMatchEnrollmentBeforeOpen(row.data) ? 'pointer-events-none disabled' : null);
+          returnClass.push(this.isMatchEnrollmentBeforeOpen(row.data) || this.isMatchEnrollmentAfterClose(row.data) ? 'pointer-events-none disabled' : null);
           returnClass.push(this.isMatchInPast(row.data) ? 'pointer-events-none disabled' : null);
           return returnClass.filter(filterClass => filterClass !== null).join(' ');
         },

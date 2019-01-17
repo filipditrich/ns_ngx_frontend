@@ -79,8 +79,7 @@ export class PagesMenuService {
     },
     {
       title: translate('REALISATION_TEAM'),
-      // icon: 'icon ion-ios-people',
-      group: true,
+      icon: 'icon ion-ios-people',
       link: '/pages/realisation-team',
     },
     {

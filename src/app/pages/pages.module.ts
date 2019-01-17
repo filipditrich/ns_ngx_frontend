@@ -23,7 +23,7 @@ import { UserService} from './user/user.service';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { SortablejsModule } from 'angular-sortablejs';
 import { PlayerEnrollmentComponent } from './matches/player-enrollment/player-enrollment.component';
-import { NbSpinnerModule } from '@nebular/theme';
+import { NbSpinnerModule, NbUserModule } from '@nebular/theme';
 import { PlacesService } from './admin/places';
 import { TeamsService } from './admin/teams';
 import { GroupsService } from './admin/groups';
@@ -63,6 +63,7 @@ const PAGES_COMPONENTS = [
     SortablejsModule,
     NbSpinnerModule,
     SharedModule,
+    NbUserModule,
   ],
   declarations: [
     ...PAGES_COMPONENTS,

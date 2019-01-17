@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
-import { ILoginResponse, ICredentials } from '../../@shared/interfaces';
+import {ILoginResponse, ICredentials, IResource} from '../../@shared/interfaces';
 import { HttpClient } from '@angular/common/http';
 import { getUrl } from '../../@shared/config/endpoints.config';
 
@@ -14,10 +14,10 @@ export class LoginService {
   /**
    * @description Login
    * @param {ICredentials} credentials
-   * @return {Observable<ILoginResponse>}
+   * @return {Observable<IResource>}
    */
-  logInRequest(credentials: ICredentials): Observable<ILoginResponse> {
-    return this.http.post<ILoginResponse>(`${getUrl('operator', 'LOGIN')}`, credentials);
+  logInRequest(credentials: ICredentials): Observable<IResource> {
+    return this.http.post<IResource>(`${getUrl('operator', 'LOGIN')}`, credentials);
   }
 
 }

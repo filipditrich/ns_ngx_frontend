@@ -76,12 +76,12 @@ export class LoginComponent implements OnInit {
   callLoginSvc(input) {
     this.isLoading = true;
     this.loginService.logInRequest(input).subscribe(response => {
-      if (response.response.success && response.token) {
+      if (response.response.success && response.output.token) {
         if (moment(new Date()).isBefore(new Date(sysInfo('launchDate')))
-          && response.user.roles.indexOf(UserRoles.admin) < 0) {
+          && response.output.user.roles.indexOf(UserRoles.admin) < 0) {
           this.router.navigate(['/auth/cd']);
         } else {
-          AuthService.storeUserData(response.user, response.token);
+          AuthService.storeUserData(response.output.user, response.output.token);
           const returnUrl = this.route.snapshot.queryParamMap.has('return') ? this.route.snapshot.queryParamMap.get('return') : false;
           this.router.navigate([returnUrl || '/pages/']).then(() => {
             this.toasterService.popAsync('success', translate('LOGGED_IN_TITLE'), translate('LOGGED_IN_MSG'));
